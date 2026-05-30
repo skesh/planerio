@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(npx biome *)",
+      "Bash(./node_modules/.bin/biome check *)",
+      "Bash(biome check *)",
+      "Bash(biome *)"
+    ]
+  }
+}
