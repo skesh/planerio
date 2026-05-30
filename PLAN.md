@@ -18,6 +18,15 @@
 - [ ] Добавить раздел повторяющихся задач
 - [ ] Добавить Victor Mono шрифт
 
+## Монорепо / конфиги
+- [x] Удалить `packages/` (пустые eslint-config, typescript-config, biome-config, ui)
+- [x] Удалить `turbo/generators`
+- [x] Убрать `prettier`, заменить скрипт `format` на biome
+- [x] Исправить алиасы в `components.json` (`@/components/ui` → `@/shared/ui`)
+- [ ] Обновить `turbo.json` — убрать next.js outputs (`.next/**`), актуально только для electron
+- [ ] Почистить `README.md` в корне (дефолтный от create-turbo)
+- [ ] Удалить `apps/electron/PLAN.md` и `apps/electron/CLAUDE.md` (перенесены в корень)
+
 ## Фичи
 - [ ] Загрузка задач из директории (поддержка синтаксиса из plan.md)
 - [ ] Миграция на Temporal API — дождаться нативной поддержки ES2026, заменить date-fns
