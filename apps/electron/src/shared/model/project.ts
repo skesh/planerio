@@ -1,15 +1,18 @@
-import { nanoid } from 'nanoid'
+import { nanoid } from "nanoid"
 
 export class Project {
   id: string
   name: string
   description: string
-  todoIds: string[]
+
+  createdAt: string
+  updatedAt: string
 
   constructor(project?: Partial<Project>) {
     this.id = project?.id || nanoid()
-    this.name = project?.name || ''
-    this.description = project?.description || ''
-    this.todoIds = project?.todoIds || []
+    this.name = project?.name || ""
+    this.description = project?.description || ""
+    this.createdAt = project?.createdAt || new Date().toISOString()
+    this.updatedAt = project?.updatedAt || new Date().toISOString()
   }
 }

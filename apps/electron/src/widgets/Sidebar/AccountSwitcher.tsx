@@ -1,6 +1,6 @@
 import { ChevronsUpDown, LogOut, Plus, RefreshCcw, UserRound } from "lucide-react"
 import { useState } from "react"
-import { logout, switchAccount } from "@/features/auth/authService"
+import { logout, switchAccount, sync } from "@/features/auth/authService"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -54,7 +54,7 @@ export function AccountSwitcher() {
                 </DropdownMenuItem>
                 {activeAccount && (
                   <>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => sync() }>
                       <RefreshCcw />
                       Sync
                     </DropdownMenuItem>

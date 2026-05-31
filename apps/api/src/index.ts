@@ -4,6 +4,7 @@ import jwt from "@fastify/jwt"
 import Fastify from "fastify"
 
 import { authRoutes } from "./routes/auth.js"
+import { projectRoutes } from "./routes/projects.js"
 import { todosRoutes } from "./routes/todos.js"
 
 const app = Fastify({ logger: true })
@@ -21,6 +22,7 @@ await app.register(jwt, {
 
 await app.register(authRoutes, { prefix: "/auth" })
 await app.register(todosRoutes, { prefix: "/todos" })
+await app.register(projectRoutes, { prefix: "/projects" })
 
 app.get("/health", async () => ({ status: "ok" }))
 

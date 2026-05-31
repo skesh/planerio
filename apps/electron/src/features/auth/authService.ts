@@ -3,6 +3,7 @@ import type { Account } from "@/store/authStore"
 import { useAuthStore } from "@/store/authStore"
 import { useProjectStore } from "@/store/projectsStore"
 import { useTodoStore } from "@/store/todosStore"
+import { getNewProjects, getNewTodos } from "../todo/todoService"
 
 const SYNC_INTERVAL = 10 * 60 * 1000
 
@@ -88,11 +89,27 @@ export async function switchAccount(accountId: string) {
   }
 }
 
-export async function sync(accountId: string) {
+export async function sync(accountId?: string) {
+  const { accounts, activeAccountId } = useAuthStore.getState()
+  const jwt = accounts.find((a) => a.id === activeAccountId)?.token
   // TODO: реализовать когда API готов
-  const newAccounts = useAuthStore
-    .getState()
-    .accounts.map((a) => (a.id === accountId ? { ...a, lastSync: Date.now() } : a))
-  await window.ipcRenderer.auth.set("accounts", newAccounts)
-  useAuthStore.setState({ accounts: newAccounts })
+  const projects = getNewProjects()
+  const projectsRes = await fetch(`${API_URL}/projects/sync`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${jwt}` },
+    body: JSON.stringify([...projects]),
+  })
+  if (!projectsRes.ok) throw new Error("Projects sync failed")
+
+  const todos = getNewTodos()
+  await fetch(`${API_URL}/todos/sync`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${jwt}` },
+    body: JSON.stringify([...todos]),
+  })
+  // const newAccounts = useAuthStore
+  //   .getState()
+  //   .accounts.map((a) => (a.id === accountId ? { ...a, lastSync: Date.now() } : a))
+  // await window.ipcRenderer.auth.set("accounts", newAccounts)
+  // useAuthStore.setState({ accounts: newAccounts })
 }
