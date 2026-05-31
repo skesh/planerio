@@ -1,9 +1,13 @@
+import { FlameIcon, X } from "lucide-react"
+import { useEffect, useRef } from "react"
+import { Controller, useForm } from "react-hook-form"
+import { Button } from "@/shared/ui/button"
+import { DatePickerField } from "@/shared/ui/DatePickerField.tsx"
+import { MultiSelect } from "@/shared/ui/MultiSelect.tsx"
+
 import { useProjectSelectors } from "@/store/projectsStore.ts"
 import { useTodoActions, useTodoSelectors } from "@/store/todosStore"
 import { type UIState, useUiActions } from "@/store/uiStore.ts"
-import { FlameIcon } from "lucide-react"
-import { useEffect, useRef } from "react"
-import { Controller, useForm } from "react-hook-form"
 import type { Todo } from "../../shared/model/todo.ts"
 import { REPEAT_PERIODS } from "../../shared/model/todo.ts"
 import { Field } from "../../shared/ui/field.tsx"
@@ -17,10 +21,8 @@ import {
   SelectValue,
 } from "../../shared/ui/select.tsx"
 import { Textarea } from "../../shared/ui/textarea.tsx"
-import { ToggleGroup, ToggleGroupItem } from "../../shared/ui/toggle-group.tsx"
 import { Toggle } from "../../shared/ui/toggle.tsx"
-import { DatePickerField } from "@/shared/ui/DatePickerField.tsx"
-import { MultiSelect } from "@/shared/ui/MultiSelect.tsx"
+import { ToggleGroup, ToggleGroupItem } from "../../shared/ui/toggle-group.tsx"
 
 interface EditTodoProps {
   initialTodo: Todo
@@ -28,7 +30,7 @@ interface EditTodoProps {
 }
 
 export default function EditTodo({ initialTodo, todoOpen }: EditTodoProps) {
-  const { control, handleSubmit, reset } = useForm<Todo>({
+  const { control, handleSubmit, reset, setValue } = useForm<Todo>({
     defaultValues: initialTodo,
   })
 
@@ -94,9 +96,9 @@ export default function EditTodo({ initialTodo, todoOpen }: EditTodoProps) {
           name="projectId"
           control={control}
           render={({ field }) => (
-            <Field>
+            <Field orientation="horizontal" className="gap-2">
               <Select value={field.value} onValueChange={field.onChange}>
-                <SelectTrigger>
+                <SelectTrigger className="flex-1">
                   <SelectValue placeholder="Project" />
                 </SelectTrigger>
                 <SelectContent>
@@ -109,6 +111,19 @@ export default function EditTodo({ initialTodo, todoOpen }: EditTodoProps) {
                   </SelectGroup>
                 </SelectContent>
               </Select>
+              {field.value && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  title="Remove project"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setValue("projectId", "")
+                  }}
+                >
+                  Clear
+                </Button>
+              )}
             </Field>
           )}
         />
