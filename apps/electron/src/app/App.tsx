@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import { HashRouter, Route, Routes } from "react-router"
+import PageRepeats from "@/pages/PageRepeats.tsx"
 import TodoDrawer from "../entities/Todo/TodoDrawer.tsx"
 import PageHome from "../pages/PageHome.tsx"
 import PageInbox from "../pages/PageInbox.tsx"
@@ -39,6 +40,7 @@ function App() {
             <Routes>
               <Route path="/" element={<PageHome />} />
               <Route path="/inbox" element={<PageInbox />} />
+              <Route path="/repeats" element={<PageRepeats />} />
               <Route path="/project/:id" element={<PageProject />} />
             </Routes>
           </SidebarInset>

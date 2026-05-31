@@ -1,8 +1,8 @@
+import { isAfter, parse } from "date-fns"
+import { useMemo } from "react"
 import { DATE_FORMAT } from "@/app/config"
 import useGlobalKeybindings from "@/app/global-keybindings"
 import { useTodoSelectors } from "@/store/todosStore"
-import { isAfter, parse } from "date-fns"
-import { useMemo } from "react"
 import TodoList from "../entities/Todo/TodoList/TodoList"
 
 export default function PageHome() {

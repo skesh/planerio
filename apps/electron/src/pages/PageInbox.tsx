@@ -1,6 +1,6 @@
+import { useMemo } from "react"
 import useGlobalKeybindings from "@/app/global-keybindings"
 import { useTodoSelectors } from "@/store/todosStore"
-import { useMemo } from "react"
 import TodoList from "../entities/Todo/TodoList/TodoList"
 
 export default function PageInbox() {
