@@ -121,7 +121,7 @@ export default function EditTodo({ initialTodo, todoOpen }: EditTodoProps) {
                     setValue("projectId", "")
                   }}
                 >
-                  Clear
+                  <X />
                 </Button>
               )}
             </Field>
