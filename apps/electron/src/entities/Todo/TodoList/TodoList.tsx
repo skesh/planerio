@@ -1,8 +1,8 @@
+import { compareAsc, parse } from "date-fns"
+import { useEffect, useMemo, useRef } from "react"
 import { DATE_FORMAT } from "@/app/config"
 import type { Todo } from "@/shared/model/todo"
 import { useTodoSelectors } from "@/store/todosStore"
-import { compareAsc, parse } from "date-fns"
-import { useEffect, useMemo, useRef } from "react"
 import TodoCard from "../TodoCard"
 import { useTodoListKeybindings } from "./TodoList.keybind"
 
