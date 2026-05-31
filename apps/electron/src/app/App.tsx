@@ -6,21 +6,17 @@ import PageHome from "../pages/PageHome.tsx"
 import PageInbox from "../pages/PageInbox.tsx"
 import PageProject from "../pages/PageProject.tsx"
 import { SidebarInset, SidebarProvider } from "../shared/ui/sidebar.tsx"
-import { useProjectStore } from "../store/projectsStore.ts"
-import { useTodoStore } from "../store/todosStore.ts"
+import { initializeAuth } from "../features/auth/authService.ts"
 import { useUiSelectors } from "../store/uiStore.ts"
 import Footer from "../widgets/Footer.tsx"
 import { CommandMenu } from "../widgets/Menu.tsx"
 import { AppSidebar } from "../widgets/Sidebar/AppSidebar.tsx"
 
 function App() {
-  const initializeProjects = useProjectStore((s) => s.initialize)
-  const initializeTodos = useTodoStore((s) => s.initialize)
   const { sidebarOpen } = useUiSelectors()
 
   useEffect(() => {
-    initializeTodos()
-    initializeProjects()
+    initializeAuth()
   }, [])
 
   useEffect(() => {

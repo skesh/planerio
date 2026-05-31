@@ -14,6 +14,7 @@ import {
 } from "@/shared/ui/sidebar"
 import { useProjectActions, useProjectSelectors } from "@/store/projectsStore"
 import { useUiActions, useUiSelectors } from "@/store/uiStore.ts"
+import { AccountSwitcher } from "@/widgets/Sidebar/AccountSwitcher"
 import { useSidebarKeybindings } from "@/widgets/Sidebar/AppSidebar.keybinding"
 
 const STATIC_NAV = [
@@ -53,7 +54,7 @@ export function AppSidebar() {
 
   // Установка активного элемента при перезагрузке проекта
   useEffect(() => {
-    if (location.pathname.includes("/inbox")) setActiveIndex(1)
+    // if (location.pathname.includes("/inbox")) setActiveIndex(1)
     if (location.pathname.includes("/project")) {
       const projectId = location.pathname.slice(9)
       const index = projects.findIndex((p) => p.id === projectId)
@@ -78,6 +79,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
+      <AccountSwitcher />
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu className="gap-1">

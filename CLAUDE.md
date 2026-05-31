@@ -1,6 +1,9 @@
 # Planner
 
-Vim-like todo приложение. Единственный app — `apps/electron`.
+## Правила
+- **Не менять код без спроса.** Сначала спросить, что сделать и как, получить подтверждение — только потом делать.
+
+Vim-like todo приложение. В проекте есть `apps/api` (Fastify + Prisma + PostgreSQL) и `apps/electron`.
 
 ## Стек
 - Electron + Vite + React 19

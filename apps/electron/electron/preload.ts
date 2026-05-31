@@ -21,6 +21,11 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
   store: {
     get: (key: string) => ipcRenderer.invoke('store:get', key),
     set: (key: string, value: unknown) => ipcRenderer.invoke('store:set', key, value),
+    switch: (accountId: string) => ipcRenderer.invoke('store:switch', accountId),
+  },
+  auth: {
+    get: (key: string) => ipcRenderer.invoke('auth:get', key),
+    set: (key: string, value: unknown) => ipcRenderer.invoke('auth:set', key, value),
   },
   minimize: () => ipcRenderer.invoke('window:minimize'),
   // You can expose other APTs you need here.

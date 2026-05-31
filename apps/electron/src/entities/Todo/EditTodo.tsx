@@ -9,7 +9,7 @@ import { useProjectSelectors } from "@/store/projectsStore.ts"
 import { useTodoActions, useTodoSelectors } from "@/store/todosStore"
 import { type UIState, useUiActions } from "@/store/uiStore.ts"
 import type { Todo } from "../../shared/model/todo.ts"
-import { REPEAT_PERIODS } from "../../shared/model/todo.ts"
+import { RepeatPeriod } from "../../shared/model/todo.ts"
 import { Field } from "../../shared/ui/field.tsx"
 import { Input } from "../../shared/ui/input.tsx"
 import {
@@ -161,7 +161,7 @@ export default function EditTodo({ initialTodo, todoOpen }: EditTodoProps) {
               className="items-end gap-4"
               onValueChange={field.onChange}
             >
-              {REPEAT_PERIODS.map((option) => (
+              {Object.values(RepeatPeriod).map((option) => (
                 <ToggleGroupItem
                   key={option}
                   value={option}

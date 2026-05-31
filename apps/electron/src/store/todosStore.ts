@@ -1,22 +1,23 @@
-import { create } from "zustand";
-import { useShallow } from "zustand/shallow";
-import { Todo } from "../shared/model/todo";
+import { create } from "zustand"
+import { useShallow } from "zustand/shallow"
+import { Todo } from "../shared/model/todo"
 
 export interface TodoState {
-  items: Todo[];
-  activeId: string | null;
-  isFiltred: boolean;
-  initialized: boolean;
-  showDone: boolean;
-  initialize: () => Promise<void>;
-  setItems: (items: Todo[]) => void;
-  setActiveId: (index: string | null) => void;
-  addItem: (item: Todo) => void;
-  editItemById: (id: string, item: Todo) => void;
-  deleteActiveTodo: () => void;
-  toggleDone: (id: string) => void;
-  toggleFilter: () => void;
-  toggleShowDone: () => void;
+  items: Todo[]
+  activeId: string | null
+  isFiltred: boolean
+  initialized: boolean
+  showDone: boolean
+  initialize: () => Promise<void>
+  reset: () => void
+  setItems: (items: Todo[]) => void
+  setActiveId: (index: string | null) => void
+  addItem: (item: Todo) => void
+  editItemById: (id: string, item: Todo) => void
+  deleteActiveTodo: () => void
+  toggleDone: (id: string) => void
+  toggleFilter: () => void
+  toggleShowDone: () => void
 }
 
 export const useTodoStore = create<TodoState>((set, get) => ({
@@ -27,41 +28,45 @@ export const useTodoStore = create<TodoState>((set, get) => ({
   showDone: false,
 
   initialize: async () => {
-    if (get().initialized) return;
-    set({ initialized: true });
-    const items = (await window.ipcRenderer.store.get("items")) as Todo[];
-    set({ items: (items || []).map((i) => new Todo(i)) });
+    if (get().initialized) return
+    set({ initialized: true })
+    const items = (await window.ipcRenderer.store.get("items")) as Todo[]
+    set({ items: (items || []).map((i) => new Todo(i)) })
   },
 
+  reset: () => set({ initialized: false, items: [], activeId: null }),
+
   setItems: (items: Todo[]) => {
-    set({ items });
-    window.ipcRenderer.store.set("items", items);
+    set({ items })
+    window.ipcRenderer.store.set("items", items)
   },
 
   addItem: (item: Todo) => {
-    const { items, setItems } = get();
-    setItems([...items, new Todo(item)]);
+    const { items, setItems } = get()
+    setItems([...items, new Todo(item)])
   },
 
   editItemById: (id: string, item: Todo) => {
-    const { items, setItems } = get();
-    const newArr = [...items].map((i) => (i.id === id ? new Todo(item) : i));
-    setItems(newArr);
+    const { items, setItems } = get()
+    const newItem = new Todo(item)
+    newItem.updatedAt = new Date().toISOString()
+    const newArr = [...items].map((i) => (i.id === id ? newItem : i))
+    setItems(newArr)
   },
 
   setActiveId: (activeId: string | null) => set({ activeId }),
 
   deleteActiveTodo: () => {
-    const { activeId, items, setItems } = get();
-    setItems(items.filter((item) => item.id !== activeId));
+    const { activeId, items, setItems } = get()
+    setItems(items.filter((item) => item.id !== activeId))
   },
 
   toggleDone: (id: string) => {
-    const { editItemById, items, addItem } = get();
-    const todo = items.find((i) => i.id === id);
+    const { editItemById, items, addItem } = get()
+    const todo = items.find((i) => i.id === id)
     if (todo) {
       if (todo.repeat && !todo.done) {
-        addItem(todo.repeatNext());
+        addItem(todo.repeatNext())
       }
       editItemById(
         id,
@@ -70,13 +75,13 @@ export const useTodoStore = create<TodoState>((set, get) => ({
           done: !todo.done,
           doneDate: todo.done ? "" : new Date().toISOString(),
         }),
-      );
+      )
     }
   },
 
   toggleShowDone: () => set((state) => ({ showDone: !state.showDone })),
   toggleFilter: () => set((state) => ({ isFiltred: !state.isFiltred })),
-}));
+}))
 
 export const useTodoActions = () =>
   useTodoStore(
@@ -90,7 +95,7 @@ export const useTodoActions = () =>
       toggleDone: s.toggleDone,
       toggleShowDone: s.toggleShowDone,
     })),
-  );
+  )
 
 export const useTodoSelectors = () =>
   useTodoStore(
@@ -99,4 +104,4 @@ export const useTodoSelectors = () =>
       activeTodo: s.items.find((i) => i.id === s.activeId),
       showDone: s.showDone,
     })),
-  );
+  )

@@ -1,13 +1,14 @@
-import type { Project } from '@/shared/model/project'
-import { create } from 'zustand'
-import { useShallow } from 'zustand/shallow'
+import { create } from "zustand"
+import { useShallow } from "zustand/shallow"
+import type { Project } from "@/shared/model/project"
 
 interface ProjectsState {
   projects: Project[]
   activeId: string | null
 
   initialized: boolean
-  initialize: () => void
+  initialize: () => Promise<void>
+  reset: () => void
   saveProjects: (projects: Project[]) => void
   addProject: (project: Project) => void
   setId: (id: string) => void
@@ -23,13 +24,15 @@ export const useProjectStore = create<ProjectsState>((set, get) => ({
   initialize: async () => {
     if (get().initialized) return
     set({ initialized: true })
-    const projects = ((await window.ipcRenderer.store.get('projects')) as Project[]) || []
+    const projects = ((await window.ipcRenderer.store.get("projects")) as Project[]) || []
     set({ projects })
   },
 
+  reset: () => set({ initialized: false, projects: [], activeId: null }),
+
   saveProjects: (projects: Project[]) => {
     set({ projects })
-    window.ipcRenderer.store.set('projects', projects)
+    window.ipcRenderer.store.set("projects", projects)
   },
 
   addProject(project: Project) {

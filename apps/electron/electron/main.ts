@@ -8,13 +8,19 @@ import type { Todo } from '@/shared/model/todo'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-const store = new Store<{ items: Todo[]; projects: Project[] }>({
-  name: 'Todos',
-  defaults: {
-    items: [],
-    projects: [],
-  },
-})
+const authStore = new Store({ name: 'auth', defaults: { accounts: [], activeAccountId: null } })
+
+const dataStores = new Map<string, Store<{ items: Todo[]; projects: Project[] }>>()
+let activeStoreId = 'local'
+
+function getDataStore(id = activeStoreId) {
+  if (!dataStores.has(id)) {
+    dataStores.set(id, new Store<{ items: Todo[]; projects: Project[] }>({ name: `data-${id}`, defaults: { items: [], projects: [] } }))
+  }
+  return dataStores.get(id)!
+}
+
+getDataStore('local')
 
 process.env.APP_ROOT = path.join(__dirname, '..')
 
@@ -58,10 +64,8 @@ function createWindow() {
       filters: [{ name: 'JSON', extensions: ['json'] }],
     })
     if (filePath) {
-      const data = {
-        items: store.get('items'),
-        projects: store.get('projects'),
-      }
+      const store = getDataStore()
+      const data = { items: store.get('items'), projects: store.get('projects') }
       fs.writeFileSync(filePath, JSON.stringify(data, null, 2))
     }
   }
@@ -73,6 +77,7 @@ function createWindow() {
     })
     if (filePaths.length > 0) {
       const data = JSON.parse(fs.readFileSync(filePaths[0], 'utf-8'))
+      const store = getDataStore()
       if (data.items) store.set('items', data.items)
       if (data.projects) store.set('projects', data.projects)
     }
@@ -133,7 +138,13 @@ const INBOX: Project = {
   todoIds: [],
 }
 
+ipcMain.handle('store:switch', (_event, accountId: string) => {
+  activeStoreId = accountId
+  getDataStore(accountId)
+})
+
 ipcMain.handle('store:get', (_event, key: string) => {
+  const store = getDataStore()
   if (key === 'projects') {
     const projects = (store.get('projects') as Project[]) || []
     return projects.some((p) => p.id === 'inbox') ? projects : [INBOX, ...projects]
@@ -142,14 +153,16 @@ ipcMain.handle('store:get', (_event, key: string) => {
 })
 
 ipcMain.handle('store:set', (_event, key: string, value: unknown) => {
+  const store = getDataStore()
   if (key === 'projects') {
-    return store.set(
-      key,
-      (value as Project[]).filter((p) => p.id !== 'inbox'),
-    )
+    return store.set(key, (value as Project[]).filter((p) => p.id !== 'inbox'))
   }
   return store.set(key, value)
 })
+
+ipcMain.handle('auth:get', (_event, key: string) => authStore.get(key))
+
+ipcMain.handle('auth:set', (_event, key: string, value: unknown) => authStore.set(key, value))
 
 ipcMain.on('data:changed', () => {
   win?.webContents.reload()
