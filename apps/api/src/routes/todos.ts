@@ -1,11 +1,16 @@
-import type { Todo } from "@prisma/client"
 import type { FastifyInstance } from "fastify"
-
+import type { Todo } from "../generated/prisma/client"
 import { prisma } from "../lib/prisma.js"
 
 export async function todosRoutes(app: FastifyInstance) {
-  app.get("/", async () => {
-    return { message: "TODO" }
+  app.get("/", async (request, replay) => {
+    const { sub: userId } = await request.jwtVerify<{ sub: string }>()
+
+    const todos = await prisma.todo.findMany({
+      where: { userId },
+    })
+
+    return todos || []
   })
 
   app.post<{ Body: Todo[] }>("/sync", async (request, reply) => {

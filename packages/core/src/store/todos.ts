@@ -45,6 +45,7 @@ export function createTodosStore(storage: StorageAdapter) {
 
     addItem: (item: Todo) => {
       const { items, setItems } = get()
+      if (items.find((i) => i.id === item.id)) return
       setItems([...items, new Todo(item)])
     },
 

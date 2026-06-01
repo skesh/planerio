@@ -38,6 +38,7 @@ export function createProjectsStore(storage: StorageAdapter) {
 
     addProject: (project: Project) => {
       const { projects, saveProjects } = get()
+      if (projects.find((p) => p.id === project.id)) return
       saveProjects([...projects, new Project(project)])
     },
 

@@ -1,8 +1,18 @@
-import type { Project } from "@prisma/client"
 import type { FastifyInstance } from "fastify"
+import type { Project } from "../generated/prisma/client"
 import { prisma } from "../lib/prisma.js"
 
 export async function projectRoutes(app: FastifyInstance) {
+  app.get("/", async (request, replay) => {
+    const { sub: userId } = await request.jwtVerify<{ sub: string }>()
+
+    const projects = await prisma.project.findMany({
+      where: { userId },
+    })
+
+    return projects || []
+  })
+
   app.post<{ Body: Project[] }>("/sync", async (request, replay) => {
     const { sub: userId } = await request.jwtVerify<{ sub: string }>()
     const { body: projects } = request

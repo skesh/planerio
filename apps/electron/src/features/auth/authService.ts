@@ -3,7 +3,7 @@ import type { Account } from "@/store/authStore"
 import { useAuthStore } from "@/store/authStore"
 import { useProjectStore } from "@/store/projectsStore"
 import { useTodoStore } from "@/store/todosStore"
-import { getNewProjects, getNewTodos } from "../todo/todoService"
+import { getNewLocalProjects, getNewLocalTodos, loadProjects, loadTodos } from "../todo/todoService"
 
 const SYNC_INTERVAL = 10 * 60 * 1000
 
@@ -91,9 +91,11 @@ export async function switchAccount(accountId: string) {
 
 export async function sync() {
   const { accounts, activeAccountId } = useAuthStore.getState()
+  const { addProject } = useProjectStore.getState()
+  const { addItem } = useTodoStore.getState()
   const jwt = accounts.find((a) => a.id === activeAccountId)?.token
   // TODO: реализовать когда API готов
-  const projects = getNewProjects()
+  const projects = getNewLocalProjects()
   const projectsRes = await fetch(`${API_URL}/projects/sync`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${jwt}` },
@@ -101,12 +103,22 @@ export async function sync() {
   })
   if (!projectsRes.ok) throw new Error("Projects sync failed")
 
-  const todos = getNewTodos()
+  const todos = getNewLocalTodos()
   await fetch(`${API_URL}/todos/sync`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${jwt}` },
     body: JSON.stringify([...todos]),
   })
+
+  const serverProjects = await loadProjects()
+  for (const project of serverProjects) {
+    addProject(project)
+  }
+
+  const serverTodos = await loadTodos()
+  for (const todo of serverTodos) {
+    addItem(todo)
+  }
   // const newAccounts = useAuthStore
   //   .getState()
   //   .accounts.map((a) => (a.id === accountId ? { ...a, lastSync: Date.now() } : a))
