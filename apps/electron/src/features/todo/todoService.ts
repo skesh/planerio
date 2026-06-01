@@ -1,5 +1,5 @@
-import type { Project } from "@/shared/model/project"
-import type { Todo } from "@/shared/model/todo"
+import type { Project } from "@repo/core"
+import type { Todo } from "@repo/core"
 import { useAuthStore } from "@/store/authStore"
 import { useProjectStore } from "@/store/projectsStore"
 import { useTodoStore } from "@/store/todosStore"

@@ -1,5 +1,5 @@
 import useGlobalKeybindings from "@/app/global-keybindings"
-import type { Project } from "@/shared/model/project"
+import type { Project } from "@repo/core"
 import { Textarea } from "@/shared/ui/textarea"
 import { useProjectActions, useProjectSelectors } from "@/store/projectsStore"
 import { useTodoSelectors } from "@/store/todosStore"

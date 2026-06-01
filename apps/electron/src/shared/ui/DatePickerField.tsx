@@ -1,4 +1,4 @@
-import { DATE_FORMAT } from "@/app/config.ts"
+import { DATE_FORMAT } from "@repo/core"
 import { useUiActions } from "@/store/uiStore"
 import { format, isValid, parse } from "date-fns"
 import { CalendarIcon, XIcon } from "lucide-react"

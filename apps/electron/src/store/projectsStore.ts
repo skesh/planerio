@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { useShallow } from "zustand/shallow"
-import type { Project } from "@/shared/model/project"
+import type { Project } from "@repo/core"
 
 interface ProjectsState {
   projects: Project[]

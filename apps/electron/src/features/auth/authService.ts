@@ -1,4 +1,4 @@
-import { API_URL } from "@/app/config"
+import { API_URL } from "@repo/core"
 import type { Account } from "@/store/authStore"
 import { useAuthStore } from "@/store/authStore"
 import { useProjectStore } from "@/store/projectsStore"
@@ -54,7 +54,7 @@ export async function login(email: string, password: string) {
 
   await window.ipcRenderer.store.switch(user.id)
   await reloadData()
-  await sync(user.id)
+  await sync()
 }
 
 export async function logout(accountId?: string) {
@@ -85,11 +85,11 @@ export async function switchAccount(accountId: string) {
 
   const account = useAuthStore.getState().accounts.find((a) => a.id === accountId)
   if (account && Date.now() - account.lastSync > SYNC_INTERVAL) {
-    await sync(accountId)
+    await sync()
   }
 }
 
-export async function sync(accountId?: string) {
+export async function sync() {
   const { accounts, activeAccountId } = useAuthStore.getState()
   const jwt = accounts.find((a) => a.id === activeAccountId)?.token
   // TODO: реализовать когда API готов

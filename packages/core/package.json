@@ -1,0 +1,13 @@
+{
+  "name": "@repo/core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "date-fns": "^4.1.0",
+    "nanoid": "^5.1.7"
+  }
+}

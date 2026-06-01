@@ -3,7 +3,7 @@
 import { FolderIcon, HomeIcon, InboxIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router"
-import { Project } from "@/shared/model/project"
+import { Project } from "@repo/core"
 import {
   Command,
   CommandDialog,

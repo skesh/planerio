@@ -71,7 +71,7 @@ export function AppSidebar() {
 
   function submitProject() {
     if (name.trim()) {
-      addProject({ id: nanoid(), name, description: "", todoIds: [] })
+      addProject({ id: nanoid(), name, description: "" })
       setName("")
       setEditProject(false)
     }

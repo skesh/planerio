@@ -1,6 +1,6 @@
+import { Todo } from "@repo/core"
 import { create } from "zustand"
 import { useShallow } from "zustand/shallow"
-import { Todo } from "../shared/model/todo"
 
 export interface TodoState {
   items: Todo[]

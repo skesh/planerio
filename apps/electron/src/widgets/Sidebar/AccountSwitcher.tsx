@@ -54,7 +54,7 @@ export function AccountSwitcher() {
                 </DropdownMenuItem>
                 {activeAccount && (
                   <>
-                    <DropdownMenuItem onClick={() => sync() }>
+                    <DropdownMenuItem onClick={() => sync()}>
                       <RefreshCcw />
                       Sync
                     </DropdownMenuItem>

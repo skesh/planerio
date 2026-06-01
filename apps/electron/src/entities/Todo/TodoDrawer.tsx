@@ -1,4 +1,4 @@
-import { Todo } from '@/shared/model/todo.ts'
+import { Todo } from "@repo/core"
 import { useProjectSelectors } from '@/store/projectsStore'
 import { useTodoSelectors } from '@/store/todosStore'
 import { useUiSelectors } from '@/store/uiStore'

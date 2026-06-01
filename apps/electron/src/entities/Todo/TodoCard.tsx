@@ -1,7 +1,7 @@
 import { cn } from "@/shared/lib/utils"
 import { useProjectSelectors } from "@/store/projectsStore"
 import { CircleDotIcon, CircleIcon, FlameIcon, RepeatIcon } from "lucide-react"
-import type { Todo } from "../../shared/model/todo"
+import type { Todo } from "@repo/core"
 import { Item, ItemContent, ItemMedia, ItemTitle } from "../../shared/ui/item"
 import styles from "./todoCard.module.css"
 

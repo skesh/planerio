@@ -1,6 +1,6 @@
 import { addDays, addMonths, addWeeks, addYears, format, parse } from "date-fns"
 import { nanoid } from "nanoid"
-import { DATE_FORMAT } from "@/app/config"
+import { DATE_FORMAT } from "../constants"
 
 export enum RepeatPeriod {
   DAY = "day",
@@ -24,8 +24,8 @@ export class Todo {
   doneDate: string
   done: boolean = false
 
-  createdAt: string
-  updatedAt: string
+  createdAt?: string
+  updatedAt?: string
 
   constructor(todo?: Partial<Todo>) {
     this.id = todo?.id || nanoid()

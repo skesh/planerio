@@ -5,8 +5,8 @@ export class Project {
   name: string
   description: string
 
-  createdAt: string
-  updatedAt: string
+  createdAt?: string
+  updatedAt?: string
 
   constructor(project?: Partial<Project>) {
     this.id = project?.id || nanoid()

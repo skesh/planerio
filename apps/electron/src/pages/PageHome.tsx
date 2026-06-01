@@ -1,6 +1,6 @@
 import { isAfter, parse } from "date-fns"
 import { useMemo } from "react"
-import { DATE_FORMAT } from "@/app/config"
+import { DATE_FORMAT } from "@repo/core"
 import useGlobalKeybindings from "@/app/global-keybindings"
 import { useTodoSelectors } from "@/store/todosStore"
 import TodoList from "../entities/Todo/TodoList/TodoList"

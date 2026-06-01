@@ -1,6 +1,6 @@
 import { useRef } from "react"
 import { useHotkeys } from "@/shared/hooks/useHotkeys"
-import type { Todo } from "@/shared/model/todo"
+import type { Todo } from "@repo/core"
 import { useTodoActions, useTodoSelectors } from "@/store/todosStore"
 import { useUiActions, useUiSelectors } from "@/store/uiStore"
 
