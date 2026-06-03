@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "predev": "docker compose up -d",
+    "predev": "docker-compose up -d",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "biome format --write .",
