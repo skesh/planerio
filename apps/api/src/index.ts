@@ -1,34 +1,22 @@
-import cookie from "@fastify/cookie"
-import cors from "@fastify/cors"
-import jwt from "@fastify/jwt"
-import Fastify from "fastify"
+import cookieParser from "cookie-parser"
+import cors from "cors"
+import express from "express"
 
 import { authRoutes } from "./routes/auth.js"
 import { projectRoutes } from "./routes/projects.js"
 import { todosRoutes } from "./routes/todos.js"
 
-const app = Fastify({ logger: true })
+const app = express()
 
-await app.register(cors, {
-  origin: true,
-  credentials: true,
+app.use(cors({ origin: true, credentials: true }))
+app.use(cookieParser())
+app.use(express.json())
+
+app.get("/health", (_req, res) => res.json({ status: "ok" }))
+app.use("/auth", authRoutes)
+app.use("/todos", todosRoutes)
+app.use("/projects", projectRoutes)
+
+app.listen(3001, "0.0.0.0", () => {
+  console.log("Server running on http://0.0.0.0:3001")
 })
-
-await app.register(cookie)
-
-await app.register(jwt, {
-  secret: process.env.JWT_SECRET ?? "dev-secret-change-in-production",
-})
-
-await app.register(authRoutes, { prefix: "/auth" })
-await app.register(todosRoutes, { prefix: "/todos" })
-await app.register(projectRoutes, { prefix: "/projects" })
-
-app.get("/health", async () => ({ status: "ok" }))
-
-try {
-  await app.listen({ port: 3001, host: "0.0.0.0" })
-} catch (err) {
-  app.log.error(err)
-  process.exit(1)
-}

@@ -1,43 +1,41 @@
-import type { FastifyInstance } from "fastify"
+import { Router } from "express"
 import type { Todo } from "../generated/prisma/client"
+import { requireAuth } from "../middleware/auth.js"
 import { prisma } from "../lib/prisma.js"
 
-export async function todosRoutes(app: FastifyInstance) {
-  app.get("/", async (request, replay) => {
-    const { sub: userId } = await request.jwtVerify<{ sub: string }>()
+const router = Router()
 
-    const todos = await prisma.todo.findMany({
-      where: { userId },
+router.get("/", requireAuth, async (req, res) => {
+  const todos = await prisma.todo.findMany({ where: { userId: req.userId } })
+  res.json(todos || [])
+})
+
+router.post("/sync", requireAuth, async (req, res) => {
+  const todos: Todo[] = req.body
+
+  if (todos.length > 0) {
+    const existingIds = await prisma.todo.findMany({
+      where: { id: { in: todos.map((t) => t.id) } },
+      select: { id: true },
     })
+    const existingIdSet = new Set(existingIds.map((t) => t.id))
 
-    return todos || []
-  })
+    const existingProjectIds = new Set(
+      (await prisma.project.findMany({ select: { id: true } })).map((p) => p.id),
+    )
 
-  app.post<{ Body: Todo[] }>("/sync", async (request, reply) => {
-    const { sub: userId } = await request.jwtVerify<{ sub: string }>()
-    const { body: todos } = request
+    const newTodos = todos
+      .filter((t) => !existingIdSet.has(t.id))
+      .map((t) => ({
+        ...t,
+        userId: req.userId,
+        projectId: t.projectId && existingProjectIds.has(t.projectId) ? t.projectId : null,
+      }))
 
-    if (todos.length > 0) {
-      const existingIds = await prisma.todo.findMany({
-        where: { id: { in: todos.map((t) => t.id) } },
-        select: { id: true },
-      })
-      const existingIdSet = new Set(existingIds.map((t) => t.id))
+    await prisma.todo.createMany({ data: newTodos })
+  }
 
-      const existingProjectIds = new Set(
-        (await prisma.project.findMany({ select: { id: true } })).map((p) => p.id),
-      )
+  res.json({ message: "TODO" })
+})
 
-      const newTodos = todos
-        .filter((t) => !existingIdSet.has(t.id))
-        .map((t) => ({
-          ...t,
-          userId,
-          projectId: t.projectId && existingProjectIds.has(t.projectId) ? t.projectId : null,
-        }))
-
-      await prisma.todo.createMany({ data: newTodos })
-    }
-    return { message: "TODO" }
-  })
-}
+export { router as todosRoutes }
