@@ -2,6 +2,13 @@ packages:
   - "apps/*"
   - "packages/*"
 
+allowBuilds:
+  '@prisma/engines': true
+  esbuild: false
+  msgpackr-extract: false
+  msw: false
+  prisma: true
+
 overrides:
   typescript: "5.9.2"
   react: "19.2.6"
