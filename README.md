@@ -1,159 +1,84 @@
-# Turborepo starter
+# Planner
 
-This Turborepo starter is maintained by the Turborepo core team.
+Vim-like todo приложение. Монорепо на pnpm workspaces + Turborepo.
 
-## Using this example
+## Приложения
 
-Run the following command:
+| Приложение | Описание |
+|---|---|
+| `apps/electron` | Десктопное приложение (Electron + React 19) |
+| `apps/api` | REST API (Express + Prisma + PostgreSQL) |
+| `apps/mobile` | Мобильное приложение (в разработке) |
 
-```sh
-npx create-turbo@latest
-```
+## Стек
 
-## What's inside?
+**Electron**
+- Electron + Vite
+- React 19 + React Router 7
+- Zustand
+- shadcn/ui + Tailwind 4
+- TypeScript
 
-This Turborepo includes the following packages/apps:
+**API**
+- Express 5
+- Prisma + PostgreSQL
+- JWT
 
-### Apps and Packages
+**Общее**
+- pnpm workspaces + Turborepo
+- Biome (линтер + форматтер)
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+## Требования
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- Node.js >= 18
+- pnpm >= 11
+- Docker (для PostgreSQL)
 
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
+## Разработка
 
 ```sh
-cd my-turborepo
-turbo build
+pnpm install
+pnpm dev
 ```
 
-Without global `turbo`, use your package manager:
+`pnpm dev` поднимает Docker (PostgreSQL) и запускает все приложения параллельно через Turborepo.
+
+### Отдельные приложения
 
 ```sh
-cd my-turborepo
-npx turbo build
-pnpm dlx turbo build
-pnpm exec turbo build
+# только electron
+pnpm --filter electron dev
+
+# только api
+pnpm --filter api dev
 ```
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
+### База данных
 
 ```sh
-turbo build --filter=docs
+# применить миграции
+pnpm db:migrate
+
+# синхронизировать схему без миграций
+pnpm db:push
 ```
 
-Without global `turbo`:
+### Линтинг и форматирование
 
 ```sh
-npx turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+pnpm lint
+pnpm format
+pnpm check-types
 ```
 
-### Develop
+## Кейбиндинги
 
-To develop all apps and packages, run the following command:
+Навигация в стиле Vim:
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo dev
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo dev
-pnpm exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo dev --filter=web
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-pnpm exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-pnpm exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+| Клавиша | Действие |
+|---|---|
+| `j` / `k` | Движение вниз / вверх |
+| `Enter` | Открыть задачу |
+| `d` | Удалить задачу |
+| `g g` | Перейти в начало |
+| `G` | Перейти в конец |
