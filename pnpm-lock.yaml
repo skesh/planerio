@@ -85,6 +85,9 @@ importers:
       '@fontsource-variable/geist':
         specifier: ^5.2.8
         version: 5.2.9
+      '@repo/assets':
+        specifier: workspace:*
+        version: link:../../packages/assets
       '@repo/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -231,6 +234,8 @@ importers:
       typescript:
         specifier: 5.9.2
         version: 5.9.2
+
+  packages/assets: {}
 
   packages/core:
     dependencies:

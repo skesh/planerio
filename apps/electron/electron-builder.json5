@@ -3,13 +3,14 @@
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   "appId": "skesh",
   "asar": true,
-  "productName": "todo-app",
+  "productName": "Planero",
   "directories": {
-    "output": "release/${version}"
+    "output": "../../release/${version}"
   },
   "files": [
     "dist",
-    "dist-electron"
+    "dist-electron",
+    "node_modules/@repo/assets/icons/**/*"
   ],
   "mac": {
     "target": [
@@ -17,33 +18,33 @@
         "target": "dmg",
         "arch": [
           "arm64",
-          "x64"
         ]
       }
     ],
+    "icon": "node_modules/@repo/assets/icons/favicon.icns",
     "artifactName": "${productName}-Mac-${version}-${arch}-Installer.${ext}"
   },
-  "win": {
-    "target": [
-      {
-        "target": "nsis",
-        "arch": [
-          "x64"
-        ]
-      }
-    ],
-    "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
-  },
+  // "win": {
+  //   "target": [
+  //     {
+  //       "target": "nsis",
+  //       "arch": [
+  //         "x64"
+  //       ]
+  //     }
+  //   ],
+  //   "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
+  // },
   "nsis": {
     "oneClick": false,
     "perMachine": false,
     "allowToChangeInstallationDirectory": true,
     "deleteAppDataOnUninstall": false
   },
-  "linux": {
-    "target": [
-      "AppImage"
-    ],
-    "artifactName": "${productName}-Linux-${version}.${ext}"
-  }
+  // "linux": {
+  //   "target": [
+  //     "AppImage"
+  //   ],
+  //   "artifactName": "${productName}-Linux-${version}.${ext}"
+  // }
 }

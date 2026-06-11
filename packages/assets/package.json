@@ -1,0 +1,9 @@
+{
+  "name": "@repo/assets",
+  "files": [
+    "icons"
+  ],
+  "exports": {
+    "./icons/*": "./icons/*"
+  }
+}

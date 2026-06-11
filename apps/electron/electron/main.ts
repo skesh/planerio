@@ -1,4 +1,5 @@
 import fs from "node:fs"
+import { createRequire } from "node:module"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import type { Project, Todo } from "@repo/core"
@@ -41,11 +42,13 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
 let win: BrowserWindow | null
 
 function createWindow() {
+  const require = createRequire(import.meta.url)
+  const iconPath = require.resolve("@repo/assets/icons/favicon.icns")
   win = new BrowserWindow({
     titleBarStyle: "default",
     trafficLightPosition: { x: 15, y: 15 },
     frame: false,
-    icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+    icon: iconPath,
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs"),
     },
