@@ -1,18 +1,23 @@
-import { Text, View } from "react-native"
+import { FlatList, Text, View } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useTodoSelectors } from "../../src/store"
 
 export default function HomeScreen() {
+  const { top } = useSafeAreaInsets()
   const { todos } = useTodoSelectors()
 
   return (
-    <View className="flex-1 bg-white p-4">
-      <Text>{todos.length}</Text>
-      {todos?.map((todo) => (
-        <View key={todo.id} className="py-3 border-b border-gray-100">
-          <Text className="text-lg font-medium text-gray-900">{todo.title}</Text>
-          {todo.description && <Text className="text-sm text-gray-500">{todo.description}</Text>}
+    <FlatList
+      className="flex-1 bg-white"
+      contentContainerStyle={{ paddingTop: top + 16, paddingHorizontal: 16, paddingBottom: 16 }}
+      data={todos}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => (
+        <View className="py-3 border-b border-gray-100">
+          <Text className="text-lg font-medium text-gray-900">{item.title}</Text>
+          {item.description && <Text className="text-sm text-gray-500">{item.description}</Text>}
         </View>
-      ))}
-    </View>
+      )}
+    />
   )
 }
