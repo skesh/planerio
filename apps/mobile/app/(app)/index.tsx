@@ -1,16 +1,19 @@
+import { defaultSort, filterDone } from "@repo/core"
+import { useMemo } from "react"
 import { FlatList, Text, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useTodoSelectors } from "../../src/store"
 
 export default function HomeScreen() {
   const { top } = useSafeAreaInsets()
-  const { todos } = useTodoSelectors()
+  const { todos, showDone } = useTodoSelectors()
+  const sorted = useMemo(() => defaultSort(filterDone(todos, showDone)), [todos, showDone])
 
   return (
     <FlatList
       className="flex-1 bg-white"
       contentContainerStyle={{ paddingTop: top + 16, paddingHorizontal: 16, paddingBottom: 16 }}
-      data={todos}
+      data={sorted}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <View className="py-3 border-b border-gray-100">

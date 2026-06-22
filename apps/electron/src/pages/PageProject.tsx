@@ -1,10 +1,11 @@
-import useGlobalKeybindings from "@/app/global-keybindings"
 import type { Project } from "@repo/core"
+import { filterProject } from "@repo/core"
+import { useEffect, useMemo } from "react"
+import { useParams } from "react-router"
+import useGlobalKeybindings from "@/app/global-keybindings"
 import { Textarea } from "@/shared/ui/textarea"
 import { useProjectActions, useProjectSelectors } from "@/store/projectsStore"
 import { useTodoSelectors } from "@/store/todosStore"
-import { useEffect } from "react"
-import { useParams } from "react-router"
 import TodoDrawer from "../entities/Todo/TodoDrawer"
 import TodoList from "../entities/Todo/TodoList/TodoList"
 
@@ -18,7 +19,7 @@ export default function PageProject() {
   const { todos } = useTodoSelectors()
 
   const activeProject = projects.find((p) => p.id === id)
-  const projectTodos = todos.filter((t) => t.projectId === id)
+  const projectTodos = useMemo(() => filterProject(todos, id ?? ""), [todos, id])
 
   useGlobalKeybindings()
 

@@ -1,6 +1,5 @@
-import { isAfter, parse } from "date-fns"
+import { filterDependsOnReady, filterNotInbox, filterOverdueOrUndated } from "@repo/core"
 import { useMemo } from "react"
-import { DATE_FORMAT } from "@repo/core"
 import useGlobalKeybindings from "@/app/global-keybindings"
 import { useTodoSelectors } from "@/store/todosStore"
 import TodoList from "../entities/Todo/TodoList/TodoList"
@@ -8,11 +7,7 @@ import TodoList from "../entities/Todo/TodoList/TodoList"
 export default function PageHome() {
   const { todos } = useTodoSelectors()
   const homeTodos = useMemo(
-    () =>
-      todos
-        .filter((p) => p.projectId !== "inbox")
-        .filter((t) => (t.date ? isAfter(new Date(), parse(t.date, DATE_FORMAT, new Date())) : t))
-        .filter((t) => t.dependsOn.every((depId) => todos.find((t) => t.id === depId)?.done)),
+    () => filterDependsOnReady(filterOverdueOrUndated(filterNotInbox(todos)), todos),
     [todos],
   )
 

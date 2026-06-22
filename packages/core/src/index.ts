@@ -1,4 +1,5 @@
 export * from "./constants"
+export * from "./filters"
 export * from "./models/project"
 export * from "./models/todo"
 export * from "./storage"

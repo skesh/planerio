@@ -1,7 +1,6 @@
-import { compareAsc, parse } from "date-fns"
-import { useEffect, useMemo, useRef } from "react"
-import { DATE_FORMAT } from "@repo/core"
 import type { Todo } from "@repo/core"
+import { defaultSort, filterDone } from "@repo/core"
+import { useEffect, useMemo, useRef } from "react"
 import { useTodoSelectors } from "@/store/todosStore"
 import TodoCard from "../TodoCard"
 import { useTodoListKeybindings } from "./TodoList.keybind"
@@ -10,29 +9,12 @@ export default function TodoList({ items }: { items: Todo[] }) {
   const { activeTodo, showDone } = useTodoSelectors()
   const listRef = useRef<HTMLDivElement>(null)
 
-  const todos: Todo[] = useMemo(() => {
-    const inprocess: Todo[] = showDone ? items : items.filter((i) => !i.done)
-    return defaultSort(inprocess)
-  }, [items, showDone])
+  const todos: Todo[] = useMemo(() => defaultSort(filterDone(items, showDone)), [items, showDone])
 
   const activeIndex = useMemo(
     () => (activeTodo ? todos.findIndex((todo) => todo.id === activeTodo.id) : -1),
     [activeTodo, todos],
   )
-
-  function defaultSort(items: Todo[]) {
-    return items
-      .sort((a, b) => {
-        if (!a.date && !b.date) return 0
-        if (!a.date) return 1
-        if (!b.date) return -1
-        return compareAsc(
-          parse(a.date, DATE_FORMAT, new Date()),
-          parse(b.date, DATE_FORMAT, new Date()),
-        )
-      })
-      .sort((a, b) => Number(b.priority) - Number(a.priority))
-  }
 
   useEffect(() => {
     if (!activeTodo?.id) return

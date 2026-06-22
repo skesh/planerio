@@ -1,14 +1,13 @@
+import { filterAvailableForDependency, RepeatPeriod, type Todo } from "@repo/core"
 import { FlameIcon, X } from "lucide-react"
 import { useEffect, useRef } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { Button } from "@/shared/ui/button"
 import { DatePickerField } from "@/shared/ui/DatePickerField.tsx"
 import { MultiSelect } from "@/shared/ui/MultiSelect.tsx"
-
 import { useProjectSelectors } from "@/store/projectsStore.ts"
 import { useTodoActions, useTodoSelectors } from "@/store/todosStore"
 import { type UIState, useUiActions } from "@/store/uiStore.ts"
-import { type Todo, RepeatPeriod } from "@repo/core"
 import { Field } from "../../shared/ui/field.tsx"
 import { Input } from "../../shared/ui/input.tsx"
 import {
@@ -38,7 +37,7 @@ export default function EditTodo({ initialTodo, todoOpen }: EditTodoProps) {
   const { projects } = useProjectSelectors()
   const { setTodoOpen } = useUiActions()
 
-  const otherTodos = todos.filter((t) => t.id !== initialTodo.id && !t.done)
+  const otherTodos = filterAvailableForDependency(todos, initialTodo.id)
 
   const inputRef = useRef<HTMLInputElement>(null)
 
