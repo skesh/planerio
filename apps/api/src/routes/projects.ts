@@ -1,6 +1,6 @@
 import { Router } from "express"
-import { requireAuth } from "../middleware/auth.js"
 import { prisma } from "../lib/prisma.js"
+import { requireAuth } from "../middleware/auth.js"
 
 const router = Router()
 
@@ -13,21 +13,37 @@ router.post("/sync", requireAuth, async (req, res) => {
   const projects: Array<Record<string, unknown>> = req.body
 
   if (projects.length > 0) {
-    const existingIds = await prisma.project.findMany({
+    const existing = await prisma.project.findMany({
       where: { id: { in: projects.map((p) => p.id as string) } },
-      select: { id: true },
     })
+    const existingMap = new Map(existing.map((p) => [p.id, p]))
 
-    const existingIdSet = new Set(existingIds.map((p) => p.id))
-    const newProjects = projects
-      .filter((p) => !existingIdSet.has(p.id as string))
-      .map(({ todoIds, description, ...p }) => ({ ...p, userId: req.userId }))
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await prisma.project.createMany({ data: newProjects as any })
+    for (const project of projects) {
+      const { todoIds, description, ...data } = project
+      if (existingMap.has(project.id as string)) {
+        await prisma.project.update({
+          where: { id: project.id as string },
+          data: {
+            name: data.name as string,
+            updatedAt: data.updatedAt as string,
+          },
+        })
+      } else {
+        await prisma.project.create({
+          data: {
+            id: data.id as string,
+            name: data.name as string,
+            description: (description as string) ?? "",
+            userId: req.userId,
+            createdAt: data.createdAt as string,
+            updatedAt: data.updatedAt as string,
+          },
+        })
+      }
+    }
   }
 
-  res.json({ message: "TODO" })
+  res.json({ message: "Synced" })
 })
 
 export { router as projectRoutes }
