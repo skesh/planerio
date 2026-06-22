@@ -4,6 +4,27 @@ import { API_URL, useAuthStore } from "@repo/core"
 import { useProjectStore, useTodoStore } from "../store"
 
 async function reloadData() {
+  const { activeAccountId, accounts } = useAuthStore.getState()
+  const token = accounts.find((a) => a.id === activeAccountId)?.token
+
+  if (token) {
+    const headers = { Authorization: `Bearer ${token}` }
+
+    const [todosRes, projectsRes] = await Promise.all([
+      fetch(`${API_URL}/todos`, { headers }),
+      fetch(`${API_URL}/projects`, { headers }),
+    ])
+
+    if (todosRes.ok) {
+      const todos = await todosRes.json()
+      await AsyncStorage.setItem("items", JSON.stringify(todos))
+    }
+    if (projectsRes.ok) {
+      const projects = await projectsRes.json()
+      await AsyncStorage.setItem("projects", JSON.stringify(projects))
+    }
+  }
+
   useTodoStore.getState().reset()
   useProjectStore.getState().reset()
   await useTodoStore.getState().initialize()

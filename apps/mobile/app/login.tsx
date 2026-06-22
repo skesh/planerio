@@ -1,8 +1,10 @@
+import { useRouter } from "expo-router"
 import { useState } from "react"
 import { ActivityIndicator, Pressable, Text, TextInput, View } from "react-native"
 import { login } from "../src/services/authService"
 
 export default function LoginScreen() {
+  const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
@@ -14,6 +16,7 @@ export default function LoginScreen() {
     setLoading(true)
     try {
       await login(email, password)
+      router.replace("/")
     } catch (e) {
       setError(e instanceof Error ? e.message : "Ошибка входа")
     } finally {
