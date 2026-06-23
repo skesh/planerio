@@ -1,7 +1,8 @@
 import { defaultSort, type Todo } from "@repo/core"
-import { useMemo } from "react"
+import { useMemo, useRef, useState } from "react"
 import { FlatList, Pressable, Text, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useTodoActions } from "../../store"
 
 interface TodoListProps {
   items: Todo[]
@@ -10,7 +11,37 @@ interface TodoListProps {
 
 export function TodoList({ items, onPress }: TodoListProps) {
   const { top } = useSafeAreaInsets()
+  const { toggleDone } = useTodoActions()
   const sorted = useMemo(() => defaultSort(items), [items])
+  const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map())
+  const doneRef = useRef<Set<string>>(new Set())
+  const [tick, forceUpdate] = useState(0)
+
+  function ensureRender() {
+    forceUpdate((n) => n + 1)
+  }
+
+  function handleToggle(id: string) {
+    if (doneRef.current.has(id)) {
+      clearTimeout(timersRef.current.get(id))
+      timersRef.current.delete(id)
+      doneRef.current.delete(id)
+      ensureRender()
+      return
+    }
+
+    doneRef.current.add(id)
+    ensureRender()
+
+    const timer = setTimeout(() => {
+      timersRef.current.delete(id)
+      doneRef.current.delete(id)
+      toggleDone(id)
+      ensureRender()
+    }, 5000)
+
+    timersRef.current.set(id, timer)
+  }
 
   return (
     <FlatList
@@ -18,18 +49,37 @@ export function TodoList({ items, onPress }: TodoListProps) {
       contentContainerStyle={{ paddingTop: top + 16, paddingHorizontal: 16, paddingBottom: 16 }}
       data={sorted}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <Pressable
-          onPress={() => onPress?.(item)}
-          className="py-3 border-b border-gray-100 active:opacity-60"
-        >
-          <Text className="text-lg font-medium text-gray-900">
-            {item.title}
-            {item.priority && <Text className="text-red-500"> ★</Text>}
-          </Text>
-          {item.description && <Text className="text-sm text-gray-400" style={{ marginTop: 2 }}>{item.description}</Text>}
-        </Pressable>
-      )}
+      extraData={tick}
+      renderItem={({ item }) => {
+        const locallyDone = doneRef.current.has(item.id)
+        return (
+          <View style={{ flexDirection: "row", alignItems: "center", paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: "#f3f4f6" }}>
+            <Pressable
+              onPress={() => handleToggle(item.id)}
+              style={{
+                width: 20,
+                height: 20,
+                borderRadius: 10,
+                borderWidth: 2,
+                borderColor: locallyDone ? "#22c55e" : "#d1d5db",
+                backgroundColor: locallyDone ? "#22c55e" : "transparent",
+                alignItems: "center",
+                justifyContent: "center",
+                marginRight: 12,
+              }}
+            >
+              {locallyDone && <Text style={{ color: "white", fontSize: 11, fontWeight: "700" }}>✓</Text>}
+            </Pressable>
+            <Pressable onPress={() => onPress?.(item)} style={{ flex: 1 }}>
+              <Text style={{ fontSize: 18, fontWeight: "500", color: "#111827" }}>
+                {item.title}
+                {item.priority && <Text style={{ color: "#ef4444" }}> ★</Text>}
+              </Text>
+              {item.description && <Text style={{ color: "#9ca3af", fontSize: 14, marginTop: 2 }}>{item.description}</Text>}
+            </Pressable>
+          </View>
+        )
+      }}
     />
   )
 }
