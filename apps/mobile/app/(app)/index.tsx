@@ -1,4 +1,10 @@
-import { filterDone, filterDependsOnReady, filterNotInbox, filterOverdueOrUndated } from "@repo/core"
+import {
+  filterDependsOnReady,
+  filterDone,
+  filterNotInbox,
+  filterOverdueOrUndated,
+} from "@repo/core"
+import { router } from "expo-router"
 import { useMemo } from "react"
 import { TodoList } from "../../src/shared/ui/TodoList"
 import { useTodoSelectors } from "../../src/store"
@@ -10,5 +16,5 @@ export default function HomeScreen() {
     return filterDone(filtered, showDone)
   }, [todos, showDone])
 
-  return <TodoList items={sorted.filter((t) => !t.done)} />
+  return <TodoList items={sorted.filter((t) => !t.done)} onPress={(t) => router.push(`/todo/${t.id}`)} />
 }

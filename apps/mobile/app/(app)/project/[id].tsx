@@ -1,5 +1,5 @@
 import { filterProject } from "@repo/core"
-import { useLocalSearchParams } from "expo-router"
+import { router, useLocalSearchParams } from "expo-router"
 import { useMemo } from "react"
 import { Text, View } from "react-native"
 import { TodoList } from "../../../src/shared/ui/TodoList"
@@ -21,5 +21,5 @@ export default function ProjectScreen() {
     )
   }
 
-  return <TodoList items={items} />
+  return <TodoList items={items} onPress={(t) => router.push(`/todo/${t.id}`)} />
 }
