@@ -1,5 +1,18 @@
-import { Stack } from "expo-router"
+import { router } from "expo-router"
+import { Drawer } from "expo-router/drawer"
+import { Sidebar } from "../../src/widgets/Sidebar"
 
 export default function AppLayout() {
-  return <Stack screenOptions={{ headerShown: false }} />
+  return (
+    <Drawer
+      drawerContent={() => (
+        <Sidebar
+          onNavigate={(route) => {
+            router.navigate(route as never)
+          }}
+        />
+      )}
+      screenOptions={{ headerShown: false }}
+    />
+  )
 }

@@ -1,14 +1,14 @@
-import { filterDependsOnReady, filterNotInbox, filterOverdueOrUndated } from "@repo/core"
+import { filterDone, filterDependsOnReady, filterNotInbox, filterOverdueOrUndated } from "@repo/core"
 import { useMemo } from "react"
 import { TodoList } from "../../src/shared/ui/TodoList"
 import { useTodoSelectors } from "../../src/store"
 
 export default function HomeScreen() {
-  const { todos } = useTodoSelectors()
-  const sorted = useMemo(
-    () => filterDependsOnReady(filterOverdueOrUndated(filterNotInbox(todos)), todos),
-    [todos],
-  )
+  const { todos, showDone } = useTodoSelectors()
+  const sorted = useMemo(() => {
+    const filtered = filterDependsOnReady(filterOverdueOrUndated(filterNotInbox(todos)), todos)
+    return filterDone(filtered, showDone)
+  }, [todos, showDone])
 
-  return <TodoList items={sorted} />
+  return <TodoList items={sorted.filter((t) => !t.done)} />
 }
