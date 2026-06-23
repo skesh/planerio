@@ -1,6 +1,6 @@
 import { defaultSort, type Todo } from "@repo/core"
 import { useMemo } from "react"
-import { FlatList, Pressable, Text } from "react-native"
+import { FlatList, Pressable, Text, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 interface TodoListProps {
@@ -23,8 +23,11 @@ export function TodoList({ items, onPress }: TodoListProps) {
           onPress={() => onPress?.(item)}
           className="py-3 border-b border-gray-100 active:opacity-60"
         >
-          <Text className="text-lg font-medium text-gray-900">{item.title}</Text>
-          {item.description && <Text className="text-sm text-gray-500">{item.description}</Text>}
+          <Text className="text-lg font-medium text-gray-900">
+            {item.title}
+            {item.priority && <Text className="text-red-500"> ★</Text>}
+          </Text>
+          {item.description && <Text className="text-sm text-gray-400" style={{ marginTop: 2 }}>{item.description}</Text>}
         </Pressable>
       )}
     />
