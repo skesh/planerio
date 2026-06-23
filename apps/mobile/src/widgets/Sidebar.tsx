@@ -1,4 +1,4 @@
-import { useAuthStore } from "@repo/core"
+import { useAuthSelectors } from "@repo/core"
 import { nanoid } from "nanoid"
 import { useState } from "react"
 import { Pressable, ScrollView, Text, TextInput, View } from "react-native"
@@ -19,7 +19,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   const { top, bottom } = useSafeAreaInsets()
   const { projects } = useProjectSelectors()
   const { addProject } = useProjectActions()
-  const activeAccountId = useAuthStore((s) => s.activeAccountId)
+  const { activeAccount } = useAuthSelectors()
 
   const [name, setName] = useState("")
   const [adding, setAdding] = useState(false)
@@ -37,10 +37,13 @@ export function Sidebar({ onNavigate }: SidebarProps) {
       className="flex-1 bg-gray-900"
       style={{ paddingTop: top + 16, paddingBottom: bottom + 16 }}
     >
-      <View className="px-4 py-3 border-b border-gray-700">
-        <Text className="text-white font-semibold">
-          {activeAccountId ? "Planner" : "Гостевой режим"}
-        </Text>
+      <View className="px-4 py-3 border-b border-gray-700 gap-1">
+        <Text className="text-white font-semibold">Planner</Text>
+        {activeAccount ? (
+          <Text className="text-gray-400 text-sm">{activeAccount.email}</Text>
+        ) : (
+          <Text className="text-gray-500 text-sm">Гостевой режим</Text>
+        )}
       </View>
 
       <ScrollView className="flex-1 px-3 py-4">
