@@ -4,7 +4,10 @@
   "main": "expo-router/entry",
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.1.2",
+    "@react-native-community/datetimepicker": "^9.1.0",
+    "@react-native-picker/picker": "^2.11.4",
     "@repo/core": "workspace:*",
+    "date-fns": "^4.4.0",
     "expo": "~56.0.8",
     "expo-asset": "~56.0.17",
     "expo-constants": "~56.0.17",
