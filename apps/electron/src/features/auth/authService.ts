@@ -91,30 +91,44 @@ export async function switchAccount(accountId: string) {
 
 export async function sync() {
   const { accounts, activeAccountId } = useAuthStore.getState()
-  const { setItems } = useTodoStore.getState()
-  const { saveProjects } = useProjectStore.getState()
+  const { items, setItems } = useTodoStore.getState()
+  const { projects, saveProjects } = useProjectStore.getState()
   const jwt = accounts.find((a) => a.id === activeAccountId)?.token
   if (!jwt) return
-
-  const { items } = useTodoStore.getState()
-  const { projects } = useProjectStore.getState()
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${jwt}`,
   }
 
-  // Push local changes first
-  await Promise.all([
-    fetch(`${API_URL}/projects/sync`, { method: "POST", headers, body: JSON.stringify(projects) }),
-    fetch(`${API_URL}/todos/sync`, { method: "POST", headers, body: JSON.stringify(items) }),
-  ])
-
-  // Pull server data — replace local store
+  // Pull first — получить свежие данные с сервера
   const [serverProjects, serverTodos] = await Promise.all([
     loadProjects(),
     loadTodos(),
   ])
-  saveProjects(serverProjects)
-  setItems(serverTodos)
+
+  // Слить: серверные + локальные (локальные, которых нет на сервере)
+  const mergedTodos = serverTodos.map((st) => {
+    const local = items.find((i) => i.id === st.id)
+    return local && local.updatedAt && st.updatedAt
+      ? (new Date(local.updatedAt) > new Date(st.updatedAt) ? local : st)
+      : st
+  })
+  const localOnlyTodos = items.filter((i) => !serverTodos.find((st) => st.id === i.id))
+  setItems([...mergedTodos, ...localOnlyTodos])
+
+  const mergedProjects = serverProjects.map((sp) => {
+    const local = projects.find((p) => p.id === sp.id)
+    return local && local.updatedAt && sp.updatedAt
+      ? (new Date(local.updatedAt) > new Date(sp.updatedAt) ? local : sp)
+      : sp
+  })
+  const localOnlyProjects = projects.filter((p) => !serverProjects.find((sp) => sp.id === p.id))
+  saveProjects([...mergedProjects, ...localOnlyProjects])
+
+  // Push — отправить слитые данные на сервер
+  await Promise.all([
+    fetch(`${API_URL}/projects/sync`, { method: "POST", headers, body: JSON.stringify([...mergedProjects, ...localOnlyProjects]) }),
+    fetch(`${API_URL}/todos/sync`, { method: "POST", headers, body: JSON.stringify([...mergedTodos, ...localOnlyTodos]) }),
+  ])
 }

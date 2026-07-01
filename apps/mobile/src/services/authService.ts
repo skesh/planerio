@@ -29,22 +29,39 @@ export async function syncFromServer() {
   if (!token) return
 
   try {
-    await pushLocalChanges(token)
-
     const headers = { Authorization: `Bearer ${token}` }
     const [todosRes, projectsRes] = await Promise.all([
       fetch(`${API_URL}/todos`, { headers }),
       fetch(`${API_URL}/projects`, { headers }),
     ])
 
-    if (todosRes.ok) {
-      const todos = await todosRes.json()
-      await AsyncStorage.setItem("items", JSON.stringify(todos))
-    }
-    if (projectsRes.ok) {
-      const projects = await projectsRes.json()
-      await AsyncStorage.setItem("projects", JSON.stringify(projects))
-    }
+    // Pull → merge → push
+    const serverTodos: import("@repo/core").Todo[] = todosRes.ok ? await todosRes.json() : []
+    const serverProjects: import("@repo/core").Project[] = projectsRes.ok ? await projectsRes.json() : []
+
+    const { items } = useTodoStore.getState()
+    const { projects } = useProjectStore.getState()
+
+    const mergedTodos = serverTodos.map((st) => {
+      const local = items.find((i) => i.id === st.id)
+      return local && local.updatedAt && st.updatedAt
+        ? (new Date(local.updatedAt) > new Date(st.updatedAt) ? local : st)
+        : st
+    })
+    const localOnlyTodos = items.filter((i) => !serverTodos.find((st) => st.id === i.id))
+
+    const mergedProjects = serverProjects.map((sp) => {
+      const local = projects.find((p) => p.id === sp.id)
+      return local && local.updatedAt && sp.updatedAt
+        ? (new Date(local.updatedAt) > new Date(sp.updatedAt) ? local : sp)
+        : sp
+    })
+    const localOnlyProjects = projects.filter((p) => !serverProjects.find((sp) => sp.id === p.id))
+
+    await pushLocalChanges(token)
+
+    await AsyncStorage.setItem("items", JSON.stringify([...mergedTodos, ...localOnlyTodos]))
+    await AsyncStorage.setItem("projects", JSON.stringify([...mergedProjects, ...localOnlyProjects]))
 
     useTodoStore.getState().reset()
     useProjectStore.getState().reset()
