@@ -1,9 +1,11 @@
 import { useRouter } from "expo-router"
 import { useState } from "react"
 import { ActivityIndicator, Pressable, Text, TextInput, View } from "react-native"
+import { useTheme } from "../src/shared/lib/theme"
 import { login } from "../src/services/authService"
 
 export default function LoginScreen() {
+  const { colors } = useTheme()
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -25,12 +27,13 @@ export default function LoginScreen() {
   }
 
   return (
-    <View className="flex-1 justify-center px-6">
-      <Text className="text-2xl font-semibold text-gray-900 mb-8">Planner</Text>
+    <View className="flex-1 justify-center px-6" style={{ backgroundColor: colors.bg }}>
+      <Text className="text-2xl font-semibold mb-8" style={{ color: colors.text }}>Planner</Text>
 
       <View className="gap-3">
         <TextInput
-          className="border border-gray-200 rounded-lg px-4 py-3 text-base text-gray-900"
+          className="border rounded-lg px-4 py-3 text-base"
+          style={{ borderColor: colors.border, color: colors.text }}
           placeholder="Email"
           placeholderTextColor="#9ca3af"
           value={email}
@@ -40,7 +43,8 @@ export default function LoginScreen() {
           autoCorrect={false}
         />
         <TextInput
-          className="border border-gray-200 rounded-lg px-4 py-3 text-base text-gray-900"
+          className="border rounded-lg px-4 py-3 text-base"
+          style={{ borderColor: colors.border, color: colors.text }}
           placeholder="Пароль"
           placeholderTextColor="#9ca3af"
           value={password}

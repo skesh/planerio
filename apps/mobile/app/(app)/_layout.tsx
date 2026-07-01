@@ -1,6 +1,7 @@
 import { createContext, useContext, useRef, useState } from "react"
 import { Animated, Modal, Pressable, Text, TouchableWithoutFeedback, View } from "react-native"
 import { router, Stack } from "expo-router"
+import { useTheme } from "../../src/shared/lib/theme"
 import { Sidebar } from "../../src/widgets/Sidebar"
 
 const SIDEBAR_WIDTH = 280
@@ -13,6 +14,7 @@ const SidebarContext = createContext<SidebarContextType>({ open: () => {} })
 export const useSidebar = () => useContext(SidebarContext)
 
 export default function AppLayout() {
+  const { colors } = useTheme()
   const [sidebarVisible, setSidebarVisible] = useState(false)
   const slideAnim = useRef(new Animated.Value(-SIDEBAR_WIDTH)).current
   const fadeAnim = useRef(new Animated.Value(0)).current
@@ -42,14 +44,17 @@ export default function AppLayout() {
       <View style={{ flex: 1 }}>
         <Stack
           screenOptions={{
+            headerStyle: { backgroundColor: colors.bg },
+            headerTintColor: colors.text,
+            headerTitleStyle: { fontWeight: "600" as const, color: colors.text },
             headerLeft: () => (
               <Pressable onPress={openSidebar} hitSlop={8} style={{ padding: 4 }}>
-                <Text style={{ fontSize: 22, color: "#111827" }}>☰</Text>
+                <Text style={{ fontSize: 22, color: colors.text }}>☰</Text>
               </Pressable>
             ),
           }}
         >
-          <Stack.Screen name="index" options={{ title: "Home", headerTitleStyle: { fontWeight: "600" } }} />
+          <Stack.Screen name="index" options={{ title: "Home" }} />
           <Stack.Screen name="inbox" options={{ title: "Inbox" }} />
           <Stack.Screen name="repeats" options={{ title: "Repeats" }} />
           <Stack.Screen name="project/[id]" options={{ title: "Project" }} />

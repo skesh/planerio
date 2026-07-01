@@ -4,6 +4,7 @@ import { filterAvailableForDependency, RepeatPeriod, Todo, type Todo as TodoType
 import { format, isValid, parse } from "date-fns"
 import { forwardRef, useImperativeHandle, useState } from "react"
 import { Platform, Pressable, ScrollView, Switch, Text, TextInput, View } from "react-native"
+import { useTheme } from "../shared/lib/theme"
 import { useProjectSelectors, useTodoActions, useTodoSelectors } from "../store"
 
 const DATE_FORMAT = "dd.MM.yyyy"
@@ -40,6 +41,7 @@ function formatTime(date: Date | undefined): string {
 
 export const EditTodoForm = forwardRef<{ save: () => void }, EditTodoFormProps>(
   function EditTodoForm({ todo, onSave }, ref) {
+    const { colors } = useTheme()
     const { editItemById } = useTodoActions()
     const { projects } = useProjectSelectors()
     const { todos } = useTodoSelectors()
@@ -110,47 +112,58 @@ export const EditTodoForm = forwardRef<{ save: () => void }, EditTodoFormProps>(
       }
     }
 
+    const labelStyle = { color: colors.textMuted, fontSize: 12, textTransform: "uppercase" as const, fontWeight: "500" as const, marginBottom: 4 }
+    const inputStyle = { borderColor: colors.border, color: colors.text, fontSize: 16 }
+    const dateTextStyle = (hasValue: boolean) => ({ color: hasValue ? colors.text : colors.textMuted, fontSize: 16 })
+
     return (
       <ScrollView className="flex-1 px-4" keyboardShouldPersistTaps="handled">
-        <Text className="text-gray-500 text-xs uppercase font-medium mb-1 mt-4">Title</Text>
+        <Text style={[labelStyle, { marginTop: 16 }]}>Title</Text>
         <TextInput
-          className="border border-gray-300 rounded-lg px-3 py-2.5 text-base text-gray-900"
+          className="border rounded-lg px-3 py-2.5 text-base"
+          style={inputStyle}
           value={title}
           onChangeText={setTitle}
           placeholder="Title"
+          placeholderTextColor="#9ca3af"
         />
 
-        <Text className="text-gray-500 text-xs uppercase font-medium mb-1 mt-4">Description</Text>
+        <Text style={[labelStyle, { marginTop: 16 }]}>Description</Text>
         <TextInput
-          className="border border-gray-300 rounded-lg px-3 py-2.5 text-base text-gray-900"
+          className="border rounded-lg px-3 py-2.5 text-base"
+          style={inputStyle}
           value={description}
           onChangeText={setDescription}
           placeholder="Description"
+          placeholderTextColor="#9ca3af"
           multiline
           numberOfLines={3}
         />
 
-        <Text className="text-gray-500 text-xs uppercase font-medium mb-1 mt-4">Tags</Text>
+        <Text style={[labelStyle, { marginTop: 16 }]}>Tags</Text>
         <TextInput
-          className="border border-gray-300 rounded-lg px-3 py-2.5 text-base text-gray-900"
+          className="border rounded-lg px-3 py-2.5 text-base"
+          style={inputStyle}
           value={tags}
           onChangeText={setTags}
           placeholder="tag1, tag2, tag3"
+          placeholderTextColor="#9ca3af"
         />
 
         <View className="flex-row items-center justify-between mt-4">
-          <Text className="text-gray-500 text-xs uppercase font-medium flex-1">Priority</Text>
+          <Text style={[labelStyle, { flex: 1, marginBottom: 0 }]}>Priority</Text>
           <Switch value={priority} onValueChange={setPriority} />
         </View>
 
         <View className="flex-row gap-3 mt-4">
           <View className="flex-1">
-            <Text className="text-gray-500 text-xs uppercase font-medium mb-1">Date</Text>
+            <Text style={labelStyle}>Date</Text>
             <Pressable
               onPress={() => setShowDatePicker(true)}
-              className="border border-gray-300 rounded-lg px-3 py-2.5"
+              className="border rounded-lg px-3 py-2.5"
+              style={{ borderColor: colors.border }}
             >
-              <Text className={date ? "text-gray-900 text-base" : "text-gray-400 text-base"}>
+              <Text style={dateTextStyle(!!date)}>
                 {date || "Select date"}
               </Text>
             </Pressable>
@@ -164,12 +177,13 @@ export const EditTodoForm = forwardRef<{ save: () => void }, EditTodoFormProps>(
             )}
           </View>
           <View className="flex-1">
-            <Text className="text-gray-500 text-xs uppercase font-medium mb-1">Time</Text>
+            <Text style={labelStyle}>Time</Text>
             <Pressable
               onPress={() => setShowTimePicker(true)}
-              className="border border-gray-300 rounded-lg px-3 py-2.5"
+              className="border rounded-lg px-3 py-2.5"
+              style={{ borderColor: colors.border }}
             >
-              <Text className={time ? "text-gray-900 text-base" : "text-gray-400 text-base"}>
+              <Text style={dateTextStyle(!!time)}>
                 {time || "Select time"}
               </Text>
             </Pressable>
@@ -184,12 +198,13 @@ export const EditTodoForm = forwardRef<{ save: () => void }, EditTodoFormProps>(
           </View>
         </View>
 
-        <Text className="text-gray-500 text-xs uppercase font-medium mb-1 mt-4">End date</Text>
+        <Text style={[labelStyle, { marginTop: 16 }]}>End date</Text>
         <Pressable
           onPress={() => setShowEndDatePicker(true)}
-          className="border border-gray-300 rounded-lg px-3 py-2.5"
+          className="border rounded-lg px-3 py-2.5"
+          style={{ borderColor: colors.border }}
         >
-          <Text className={endDate ? "text-gray-900 text-base" : "text-gray-400 text-base"}>
+          <Text style={dateTextStyle(!!endDate)}>
             {endDate || "Select end date"}
           </Text>
         </Pressable>
@@ -202,8 +217,8 @@ export const EditTodoForm = forwardRef<{ save: () => void }, EditTodoFormProps>(
           />
         )}
 
-        <Text className="text-gray-500 text-xs uppercase font-medium mb-1 mt-4">Repeat</Text>
-        <View className="border border-gray-300 rounded-lg">
+        <Text style={[labelStyle, { marginTop: 16 }]}>Repeat</Text>
+        <View className="border rounded-lg" style={{ borderColor: colors.border }}>
           <Picker
             selectedValue={repeat ?? ""}
             onValueChange={(v) => setRepeat((v || undefined) as RepeatPeriod | undefined)}
@@ -215,8 +230,8 @@ export const EditTodoForm = forwardRef<{ save: () => void }, EditTodoFormProps>(
           </Picker>
         </View>
 
-        <Text className="text-gray-500 text-xs uppercase font-medium mb-1 mt-4">Project</Text>
-        <View className="border border-gray-300 rounded-lg">
+        <Text style={[labelStyle, { marginTop: 16 }]}>Project</Text>
+        <View className="border rounded-lg" style={{ borderColor: colors.border }}>
           <Picker selectedValue={projectId} onValueChange={setProjectId}>
             <Picker.Item label="No project" value="" />
             {projects.map((p) => (
@@ -227,9 +242,7 @@ export const EditTodoForm = forwardRef<{ save: () => void }, EditTodoFormProps>(
 
         {otherTodos.length > 0 && (
           <>
-            <Text className="text-gray-500 text-xs uppercase font-medium mb-1 mt-4">
-              Depends on
-            </Text>
+            <Text style={[labelStyle, { marginTop: 16 }]}>Depends on</Text>
             {otherTodos.map((t) => {
               const checked = dependsOn.includes(t.id)
               return (
@@ -255,7 +268,7 @@ export const EditTodoForm = forwardRef<{ save: () => void }, EditTodoFormProps>(
                       <Text style={{ color: "white", fontSize: 11, fontWeight: "700" }}>✓</Text>
                     )}
                   </View>
-                  <Text className="text-gray-900 text-sm flex-1">{t.title}</Text>
+                  <Text className="text-sm flex-1" style={{ color: colors.text }}>{t.title}</Text>
                 </Pressable>
               )
             })}

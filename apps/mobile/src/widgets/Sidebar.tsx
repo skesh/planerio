@@ -4,6 +4,7 @@ import { useState } from "react"
 import { ActivityIndicator, Alert, Pressable, ScrollView, Text, TextInput, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { logout, switchAccount, syncFromServer } from "../services/authService"
+import { useTheme } from "../shared/lib/theme"
 import { useProjectActions, useProjectSelectors } from "../store"
 
 const STATIC_NAV = [
@@ -18,6 +19,7 @@ interface SidebarProps {
 
 export function Sidebar({ onNavigate }: SidebarProps) {
   const { top, bottom } = useSafeAreaInsets()
+  const { theme, toggle } = useTheme()
   const { projects } = useProjectSelectors()
   const { addProject } = useProjectActions()
   const { activeAccount, accounts } = useAuthSelectors()
@@ -45,8 +47,11 @@ export function Sidebar({ onNavigate }: SidebarProps) {
       className="flex-1 bg-gray-900"
       style={{ paddingTop: top + 16, paddingBottom: bottom + 16 }}
     >
-      <View className="px-4 py-3 border-b border-gray-700">
+      <View className="flex-row items-center justify-between px-4 py-3 border-b border-gray-700">
         <Text className="text-white font-semibold">Planner</Text>
+        <Pressable onPress={toggle} hitSlop={8} className="p-1">
+          <Text className="text-gray-400 text-lg">{theme === "dark" ? "☀️" : "🌙"}</Text>
+        </Pressable>
       </View>
 
       <ScrollView className="flex-1 px-3 py-4">

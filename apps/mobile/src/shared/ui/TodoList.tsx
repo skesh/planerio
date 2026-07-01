@@ -1,6 +1,7 @@
 import { defaultSort, type Todo } from "@repo/core"
 import { useMemo, useRef, useState } from "react"
 import { FlatList, Pressable, RefreshControl, Text, View } from "react-native"
+import { useTheme } from "../lib/theme"
 import { useTodoActions } from "../../store"
 
 interface TodoListProps {
@@ -12,6 +13,7 @@ interface TodoListProps {
 
 export function TodoList({ items, onPress, refreshing, onRefresh }: TodoListProps) {
   const { toggleDone } = useTodoActions()
+  const { theme } = useTheme()
   const sorted = useMemo(() => defaultSort(items), [items])
   const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map())
   const doneRef = useRef<Set<string>>(new Set())
@@ -43,9 +45,12 @@ export function TodoList({ items, onPress, refreshing, onRefresh }: TodoListProp
     timersRef.current.set(id, timer)
   }
 
+  const { colors } = useTheme()
+
   return (
     <FlatList
-      className="flex-1 bg-white"
+      className="flex-1"
+      style={{ backgroundColor: colors.bg }}
       contentContainerStyle={{ paddingTop: 16, paddingHorizontal: 16, paddingBottom: 16 }}
       data={sorted}
       keyExtractor={(item) => item.id}
@@ -56,7 +61,7 @@ export function TodoList({ items, onPress, refreshing, onRefresh }: TodoListProp
       renderItem={({ item }) => {
         const locallyDone = doneRef.current.has(item.id)
         return (
-          <View style={{ flexDirection: "row", alignItems: "center", paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: "#f3f4f6" }}>
+          <View style={{ flexDirection: "row", alignItems: "center", paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.border }}>
             <Pressable
               onPress={() => handleToggle(item.id)}
               style={{
@@ -74,11 +79,11 @@ export function TodoList({ items, onPress, refreshing, onRefresh }: TodoListProp
               {locallyDone && <Text style={{ color: "white", fontSize: 11, fontWeight: "700" }}>✓</Text>}
             </Pressable>
             <Pressable onPress={() => onPress?.(item)} style={{ flex: 1 }}>
-              <Text style={{ fontSize: 18, fontWeight: "500", color: "#111827" }}>
+              <Text style={{ fontSize: 18, fontWeight: "500", color: colors.text }}>
                 {item.title}
                 {item.priority && <Text style={{ color: "#ef4444" }}> ★</Text>}
               </Text>
-              {item.description && <Text style={{ color: "#9ca3af", fontSize: 14, marginTop: 2 }}>{item.description}</Text>}
+              {item.description && <Text style={{ color: colors.textMuted, fontSize: 14, marginTop: 2 }}>{item.description}</Text>}
             </Pressable>
           </View>
         )
