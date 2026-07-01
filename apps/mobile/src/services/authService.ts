@@ -4,36 +4,42 @@ import { useAuthStore } from "@repo/core"
 import { API_URL } from "../config"
 import { useProjectStore, useTodoStore } from "../store"
 
-async function reloadData() {
-  const { activeAccountId, accounts } = useAuthStore.getState()
-  const token = accounts.find((a) => a.id === activeAccountId)?.token
-
-  if (token) {
-    const headers = { Authorization: `Bearer ${token}` }
-
-    try {
-      const [todosRes, projectsRes] = await Promise.all([
-        fetch(`${API_URL}/todos`, { headers }),
-        fetch(`${API_URL}/projects`, { headers }),
-      ])
-
-      if (todosRes.ok) {
-        const todos = await todosRes.json()
-        await AsyncStorage.setItem("items", JSON.stringify(todos))
-      }
-      if (projectsRes.ok) {
-        const projects = await projectsRes.json()
-        await AsyncStorage.setItem("projects", JSON.stringify(projects))
-      }
-    } catch (e) {
-      console.log("[DBG] reloadData fetch error", e)
-    }
-  }
-
+async function loadLocalData() {
   useTodoStore.getState().reset()
   useProjectStore.getState().reset()
   await useTodoStore.getState().initialize()
   await useProjectStore.getState().initialize()
+}
+
+async function syncFromServer() {
+  const { activeAccountId, accounts } = useAuthStore.getState()
+  const token = accounts.find((a) => a.id === activeAccountId)?.token
+  if (!token) return
+
+  const headers = { Authorization: `Bearer ${token}` }
+
+  try {
+    const [todosRes, projectsRes] = await Promise.all([
+      fetch(`${API_URL}/todos`, { headers }),
+      fetch(`${API_URL}/projects`, { headers }),
+    ])
+
+    if (todosRes.ok) {
+      const todos = await todosRes.json()
+      await AsyncStorage.setItem("items", JSON.stringify(todos))
+    }
+    if (projectsRes.ok) {
+      const projects = await projectsRes.json()
+      await AsyncStorage.setItem("projects", JSON.stringify(projects))
+    }
+
+    useTodoStore.getState().reset()
+    useProjectStore.getState().reset()
+    await useTodoStore.getState().initialize()
+    await useProjectStore.getState().initialize()
+  } catch (e) {
+    console.log("[DBG] syncFromServer error", e)
+  }
 }
 
 export async function initializeAuth() {
@@ -47,7 +53,8 @@ export async function initializeAuth() {
   const activeAccountId: string | null = activeAccountIdRaw ?? null
 
   useAuthStore.setState({ accounts, activeAccountId })
-  await reloadData()
+  await loadLocalData()
+  syncFromServer()
 }
 
 export async function login(email: string, password: string) {
@@ -75,7 +82,8 @@ export async function login(email: string, password: string) {
   await AsyncStorage.setItem("auth:activeAccountId", user.id)
   useAuthStore.setState({ accounts: newAccounts, activeAccountId: user.id })
 
-  await reloadData()
+  await loadLocalData()
+  syncFromServer()
 }
 
 export async function switchAccount(accountId: string) {
@@ -84,7 +92,8 @@ export async function switchAccount(accountId: string) {
 
   await AsyncStorage.setItem("auth:activeAccountId", accountId)
   useAuthStore.setState({ activeAccountId: accountId })
-  await reloadData()
+  await loadLocalData()
+  syncFromServer()
 }
 
 export async function logout() {
@@ -102,5 +111,6 @@ export async function logout() {
   }
 
   useAuthStore.setState({ accounts: newAccounts, activeAccountId: newActiveId })
-  await reloadData()
+  await loadLocalData()
+  syncFromServer()
 }
