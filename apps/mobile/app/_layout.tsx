@@ -30,12 +30,8 @@ class ErrorBoundary extends Component<{ children: React.ReactNode }, { error: Er
 }
 
 export default function RootLayout() {
-  console.log("[DBG] RootLayout render")
   useEffect(() => {
-    console.log("[DBG] initializeAuth start")
-    initializeAuth()
-      .then(() => console.log("[DBG] initializeAuth done"))
-      .catch((e) => console.log("[DBG] initializeAuth ERROR", e))
+    initializeAuth().catch((e) => console.log("[DBG] initializeAuth ERROR", e))
   }, [])
 
   return (
