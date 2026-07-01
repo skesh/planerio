@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid"
+import { nanoid } from "nanoid/non-secure"
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router"
 import { cn } from "@/shared/lib/utils"

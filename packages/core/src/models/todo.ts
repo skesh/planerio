@@ -1,5 +1,5 @@
 import { addDays, addMonths, addWeeks, addYears, format, parse } from "date-fns"
-import { nanoid } from "nanoid"
+import { nanoid } from "nanoid/non-secure"
 import { DATE_FORMAT } from "../constants"
 
 export enum RepeatPeriod {

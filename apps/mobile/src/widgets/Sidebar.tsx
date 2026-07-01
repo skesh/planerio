@@ -1,5 +1,5 @@
 import { useAuthSelectors } from "@repo/core"
-import { nanoid } from "nanoid"
+import { nanoid } from "nanoid/non-secure"
 import { useState } from "react"
 import { ActivityIndicator, Alert, Pressable, ScrollView, Text, TextInput, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
