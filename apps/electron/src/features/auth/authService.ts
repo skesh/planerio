@@ -3,7 +3,7 @@ import type { Account } from "@/store/authStore"
 import { useAuthStore } from "@/store/authStore"
 import { useProjectStore } from "@/store/projectsStore"
 import { useTodoStore } from "@/store/todosStore"
-import { getNewLocalProjects, getNewLocalTodos, loadProjects, loadTodos } from "../todo/todoService"
+import { loadProjects, loadTodos } from "../todo/todoService"
 
 const SYNC_INTERVAL = 10 * 60 * 1000
 
@@ -91,37 +91,30 @@ export async function switchAccount(accountId: string) {
 
 export async function sync() {
   const { accounts, activeAccountId } = useAuthStore.getState()
-  const { addProject } = useProjectStore.getState()
-  const { addItem } = useTodoStore.getState()
+  const { setItems } = useTodoStore.getState()
+  const { saveProjects } = useProjectStore.getState()
   const jwt = accounts.find((a) => a.id === activeAccountId)?.token
-  // TODO: реализовать когда API готов
-  const projects = getNewLocalProjects()
-  const projectsRes = await fetch(`${API_URL}/projects/sync`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${jwt}` },
-    body: JSON.stringify([...projects]),
-  })
-  if (!projectsRes.ok) throw new Error("Projects sync failed")
+  if (!jwt) return
 
-  const todos = getNewLocalTodos()
-  await fetch(`${API_URL}/todos/sync`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${jwt}` },
-    body: JSON.stringify([...todos]),
-  })
+  const { items } = useTodoStore.getState()
+  const { projects } = useProjectStore.getState()
 
-  const serverProjects = await loadProjects()
-  for (const project of serverProjects) {
-    addProject(project)
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${jwt}`,
   }
 
-  const serverTodos = await loadTodos()
-  for (const todo of serverTodos) {
-    addItem(todo)
-  }
-  // const newAccounts = useAuthStore
-  //   .getState()
-  //   .accounts.map((a) => (a.id === accountId ? { ...a, lastSync: Date.now() } : a))
-  // await window.ipcRenderer.auth.set("accounts", newAccounts)
-  // useAuthStore.setState({ accounts: newAccounts })
+  // Push local changes first
+  await Promise.all([
+    fetch(`${API_URL}/projects/sync`, { method: "POST", headers, body: JSON.stringify(projects) }),
+    fetch(`${API_URL}/todos/sync`, { method: "POST", headers, body: JSON.stringify(items) }),
+  ])
+
+  // Pull server data — replace local store
+  const [serverProjects, serverTodos] = await Promise.all([
+    loadProjects(),
+    loadTodos(),
+  ])
+  saveProjects(serverProjects)
+  setItems(serverTodos)
 }
