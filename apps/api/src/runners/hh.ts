@@ -48,12 +48,14 @@ export async function runHH(
   const area = String(config.area ?? "113")
   const perPage = Number(config.per_page ?? 20)
   const blacklist: string[] = (config.blacklist as string[]) ?? []
+  const accessToken = config.accessToken as string | undefined
 
   const url = `https://api.hh.ru/vacancies?text=${encodeURIComponent(query)}&area=${encodeURIComponent(area)}&per_page=${perPage}`
 
-  const res = await fetch(url, {
-    headers: { "User-Agent": "Planner/1.0" },
-  })
+  const headers: Record<string, string> = { "User-Agent": "Planner/1.0" }
+  if (accessToken) headers["Authorization"] = `Bearer ${accessToken}`
+
+  const res = await fetch(url, { headers })
 
   if (!res.ok) {
     throw new Error(`HH API error: ${res.status} ${await res.text()}`)
