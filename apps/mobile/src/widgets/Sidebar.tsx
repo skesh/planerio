@@ -1,9 +1,9 @@
 import { useAuthSelectors } from "@repo/core"
 import { nanoid } from "nanoid"
 import { useState } from "react"
-import { Alert, Pressable, ScrollView, Text, TextInput, View } from "react-native"
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, TextInput, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { logout, switchAccount } from "../services/authService"
+import { logout, switchAccount, syncFromServer } from "../services/authService"
 import { useProjectActions, useProjectSelectors } from "../store"
 
 const STATIC_NAV = [
@@ -24,6 +24,13 @@ export function Sidebar({ onNavigate }: SidebarProps) {
 
   const [name, setName] = useState("")
   const [adding, setAdding] = useState(false)
+  const [syncing, setSyncing] = useState(false)
+
+  async function handleSync() {
+    setSyncing(true)
+    await syncFromServer()
+    setSyncing(false)
+  }
 
   function submitProject() {
     if (name.trim()) {
@@ -111,6 +118,12 @@ export function Sidebar({ onNavigate }: SidebarProps) {
                 <Text className="text-gray-500 text-xs">Switch account</Text>
               </Pressable>
             )}
+            <Pressable onPress={handleSync} className="mt-1 flex-row items-center" disabled={syncing}>
+              {syncing ? (
+                <ActivityIndicator size={12} color="#6b7280" style={{ marginRight: 6 }} />
+              ) : null}
+              <Text className="text-gray-500 text-xs">{syncing ? "Syncing..." : "Sync"}</Text>
+            </Pressable>
             <Pressable onPress={logout} className="mt-1">
               <Text className="text-red-400 text-xs">Logout</Text>
             </Pressable>

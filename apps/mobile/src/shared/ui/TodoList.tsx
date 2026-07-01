@@ -1,16 +1,16 @@
 import { defaultSort, type Todo } from "@repo/core"
 import { useMemo, useRef, useState } from "react"
-import { FlatList, Pressable, Text, View } from "react-native"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { FlatList, Pressable, RefreshControl, Text, View } from "react-native"
 import { useTodoActions } from "../../store"
 
 interface TodoListProps {
   items: Todo[]
   onPress?: (todo: Todo) => void
+  refreshing?: boolean
+  onRefresh?: () => void
 }
 
-export function TodoList({ items, onPress }: TodoListProps) {
-  const { top } = useSafeAreaInsets()
+export function TodoList({ items, onPress, refreshing, onRefresh }: TodoListProps) {
   const { toggleDone } = useTodoActions()
   const sorted = useMemo(() => defaultSort(items), [items])
   const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map())
@@ -46,10 +46,13 @@ export function TodoList({ items, onPress }: TodoListProps) {
   return (
     <FlatList
       className="flex-1 bg-white"
-      contentContainerStyle={{ paddingTop: top + 16, paddingHorizontal: 16, paddingBottom: 16 }}
+      contentContainerStyle={{ paddingTop: 16, paddingHorizontal: 16, paddingBottom: 16 }}
       data={sorted}
       keyExtractor={(item) => item.id}
-      extraData={tick}
+      extraData={[tick, refreshing]}
+      refreshControl={
+        onRefresh ? <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} /> : undefined
+      }
       renderItem={({ item }) => {
         const locallyDone = doneRef.current.has(item.id)
         return (

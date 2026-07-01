@@ -11,7 +11,7 @@ async function loadLocalData() {
   await useProjectStore.getState().initialize()
 }
 
-async function syncFromServer() {
+export async function syncFromServer() {
   const { activeAccountId, accounts } = useAuthStore.getState()
   const token = accounts.find((a) => a.id === activeAccountId)?.token
   if (!token) return
