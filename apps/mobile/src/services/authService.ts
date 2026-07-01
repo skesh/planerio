@@ -73,6 +73,15 @@ export async function login(email: string, password: string) {
   await reloadData()
 }
 
+export async function switchAccount(accountId: string) {
+  const { accounts } = useAuthStore.getState()
+  if (!accounts.find((a) => a.id === accountId)) return
+
+  await AsyncStorage.setItem("auth:activeAccountId", accountId)
+  useAuthStore.setState({ activeAccountId: accountId })
+  await reloadData()
+}
+
 export async function logout() {
   const { accounts, activeAccountId } = useAuthStore.getState()
   if (!activeAccountId) return

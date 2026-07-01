@@ -1,8 +1,9 @@
 import { useAuthSelectors } from "@repo/core"
 import { nanoid } from "nanoid"
 import { useState } from "react"
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native"
+import { Alert, Pressable, ScrollView, Text, TextInput, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { logout, switchAccount } from "../services/authService"
 import { useProjectActions, useProjectSelectors } from "../store"
 
 const STATIC_NAV = [
@@ -19,7 +20,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   const { top, bottom } = useSafeAreaInsets()
   const { projects } = useProjectSelectors()
   const { addProject } = useProjectActions()
-  const { activeAccount } = useAuthSelectors()
+  const { activeAccount, accounts } = useAuthSelectors()
 
   const [name, setName] = useState("")
   const [adding, setAdding] = useState(false)
@@ -37,13 +38,8 @@ export function Sidebar({ onNavigate }: SidebarProps) {
       className="flex-1 bg-gray-900"
       style={{ paddingTop: top + 16, paddingBottom: bottom + 16 }}
     >
-      <View className="px-4 py-3 border-b border-gray-700 gap-1">
+      <View className="px-4 py-3 border-b border-gray-700">
         <Text className="text-white font-semibold">Planner</Text>
-        {activeAccount ? (
-          <Text className="text-gray-400 text-sm">{activeAccount.email}</Text>
-        ) : (
-          <Text className="text-gray-500 text-sm">Гостевой режим</Text>
-        )}
       </View>
 
       <ScrollView className="flex-1 px-3 py-4">
@@ -93,6 +89,41 @@ export function Sidebar({ onNavigate }: SidebarProps) {
           </Pressable>
         )}
       </ScrollView>
+
+      <View className="px-4 py-3 border-t border-gray-700">
+        {activeAccount ? (
+          <>
+            <Text className="text-gray-400 text-sm">{activeAccount.email}</Text>
+            {accounts.length > 1 && (
+              <Pressable
+                onPress={() => {
+                  const others = accounts.filter((a) => a.id !== activeAccount.id)
+                  Alert.alert("Switch account", undefined, [
+                    ...others.map((a) => ({
+                      text: a.email,
+                      onPress: () => switchAccount(a.id),
+                    })),
+                    { text: "Cancel", style: "cancel" },
+                  ])
+                }}
+                className="mt-1"
+              >
+                <Text className="text-gray-500 text-xs">Switch account</Text>
+              </Pressable>
+            )}
+            <Pressable onPress={logout} className="mt-1">
+              <Text className="text-red-400 text-xs">Logout</Text>
+            </Pressable>
+          </>
+        ) : (
+          <>
+            <Text className="text-gray-500 text-sm">Гостевой режим</Text>
+            <Pressable onPress={() => onNavigate("/login")} className="mt-1">
+              <Text className="text-blue-400 text-xs">Login</Text>
+            </Pressable>
+          </>
+        )}
+      </View>
     </View>
   )
 }
