@@ -44,7 +44,6 @@ async function syncFromServer() {
 
 export async function initializeAuth() {
   if (useAuthStore.getState().initialized) return
-  useAuthStore.setState({ initialized: true })
 
   const accountsRaw = await AsyncStorage.getItem("auth:accounts")
   const activeAccountIdRaw = await AsyncStorage.getItem("auth:activeAccountId")
@@ -52,7 +51,7 @@ export async function initializeAuth() {
   const accounts: Account[] = accountsRaw ? JSON.parse(accountsRaw) : []
   const activeAccountId: string | null = activeAccountIdRaw ?? null
 
-  useAuthStore.setState({ accounts, activeAccountId })
+  useAuthStore.setState({ accounts, activeAccountId, initialized: true })
   await loadLocalData()
   syncFromServer()
 }
