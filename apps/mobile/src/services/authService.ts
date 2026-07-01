@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import type { Account } from "@repo/core"
-import { API_URL, useAuthStore } from "@repo/core"
+import { useAuthStore } from "@repo/core"
+import { API_URL } from "../config"
 import { useProjectStore, useTodoStore } from "../store"
 
 async function reloadData() {
@@ -10,18 +11,22 @@ async function reloadData() {
   if (token) {
     const headers = { Authorization: `Bearer ${token}` }
 
-    const [todosRes, projectsRes] = await Promise.all([
-      fetch(`${API_URL}/todos`, { headers }),
-      fetch(`${API_URL}/projects`, { headers }),
-    ])
+    try {
+      const [todosRes, projectsRes] = await Promise.all([
+        fetch(`${API_URL}/todos`, { headers }),
+        fetch(`${API_URL}/projects`, { headers }),
+      ])
 
-    if (todosRes.ok) {
-      const todos = await todosRes.json()
-      await AsyncStorage.setItem("items", JSON.stringify(todos))
-    }
-    if (projectsRes.ok) {
-      const projects = await projectsRes.json()
-      await AsyncStorage.setItem("projects", JSON.stringify(projects))
+      if (todosRes.ok) {
+        const todos = await todosRes.json()
+        await AsyncStorage.setItem("items", JSON.stringify(todos))
+      }
+      if (projectsRes.ok) {
+        const projects = await projectsRes.json()
+        await AsyncStorage.setItem("projects", JSON.stringify(projects))
+      }
+    } catch (e) {
+      console.log("[DBG] reloadData fetch error", e)
     }
   }
 

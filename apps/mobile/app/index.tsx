@@ -5,8 +5,18 @@ export default function Index() {
   const initialized = useAuthStore((s) => s.initialized)
   const activeAccountId = useAuthStore((s) => s.activeAccountId)
 
-  if (!initialized) return null
+  console.log("[DBG] Index render", { initialized, activeAccountId })
 
-  if (!activeAccountId) return <Redirect href="/login" />
+  if (!initialized) {
+    console.log("[DBG] Index → null (not initialized)")
+    return null
+  }
+
+  if (!activeAccountId) {
+    console.log("[DBG] Index → redirect /login")
+    return <Redirect href="/login" />
+  }
+
+  console.log("[DBG] Index → redirect /(app)")
   return <Redirect href="/(app)" />
 }
