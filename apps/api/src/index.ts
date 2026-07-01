@@ -4,6 +4,7 @@ import express from "express"
 
 import { authRoutes } from "./routes/auth.js"
 import { projectRoutes } from "./routes/projects.js"
+import { runnersRoutes } from "./routes/runners.js"
 import { todosRoutes } from "./routes/todos.js"
 
 const app = express()
@@ -16,6 +17,7 @@ app.get("/health", (_req, res) => res.json({ status: "ok" }))
 app.use("/auth", authRoutes)
 app.use("/todos", todosRoutes)
 app.use("/projects", projectRoutes)
+app.use("/runners", runnersRoutes)
 
 app.listen(3001, "0.0.0.0", () => {
   console.log("Server running on http://0.0.0.0:3001")

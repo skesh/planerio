@@ -10,5 +10,6 @@
  */
 export type * from './models/User'
 export type * from './models/Project'
+export type * from './models/Runner'
 export type * from './models/Todo'
 export type * from './commonInputTypes'

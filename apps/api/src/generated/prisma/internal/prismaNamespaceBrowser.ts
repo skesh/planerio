@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Project: 'Project',
+  Runner: 'Runner',
   Todo: 'Todo'
 } as const
 
@@ -96,9 +97,29 @@ export const ProjectScalarFieldEnum = {
 export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
 
 
+export const RunnerScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  enabled: 'enabled',
+  schedule: 'schedule',
+  config: 'config',
+  lastRunAt: 'lastRunAt',
+  lastStatus: 'lastStatus',
+  errorMessage: 'errorMessage',
+  userId: 'userId',
+  projectId: 'projectId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RunnerScalarFieldEnum = (typeof RunnerScalarFieldEnum)[keyof typeof RunnerScalarFieldEnum]
+
+
 export const TodoScalarFieldEnum = {
   id: 'id',
   externalId: 'externalId',
+  externalSource: 'externalSource',
   title: 'title',
   description: 'description',
   tags: 'tags',
@@ -127,6 +148,13 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -141,4 +169,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

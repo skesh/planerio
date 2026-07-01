@@ -27,6 +27,7 @@ export type AggregateTodo = {
 export type TodoMinAggregateOutputType = {
   id: string | null
   externalId: string | null
+  externalSource: string | null
   title: string | null
   description: string | null
   priority: boolean | null
@@ -45,6 +46,7 @@ export type TodoMinAggregateOutputType = {
 export type TodoMaxAggregateOutputType = {
   id: string | null
   externalId: string | null
+  externalSource: string | null
   title: string | null
   description: string | null
   priority: boolean | null
@@ -63,6 +65,7 @@ export type TodoMaxAggregateOutputType = {
 export type TodoCountAggregateOutputType = {
   id: number
   externalId: number
+  externalSource: number
   title: number
   description: number
   tags: number
@@ -85,6 +88,7 @@ export type TodoCountAggregateOutputType = {
 export type TodoMinAggregateInputType = {
   id?: true
   externalId?: true
+  externalSource?: true
   title?: true
   description?: true
   priority?: true
@@ -103,6 +107,7 @@ export type TodoMinAggregateInputType = {
 export type TodoMaxAggregateInputType = {
   id?: true
   externalId?: true
+  externalSource?: true
   title?: true
   description?: true
   priority?: true
@@ -121,6 +126,7 @@ export type TodoMaxAggregateInputType = {
 export type TodoCountAggregateInputType = {
   id?: true
   externalId?: true
+  externalSource?: true
   title?: true
   description?: true
   tags?: true
@@ -214,6 +220,7 @@ export type TodoGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type TodoGroupByOutputType = {
   id: string
   externalId: string | null
+  externalSource: string | null
   title: string
   description: string
   tags: string[]
@@ -255,6 +262,7 @@ export type TodoWhereInput = {
   NOT?: Prisma.TodoWhereInput | Prisma.TodoWhereInput[]
   id?: Prisma.StringFilter<"Todo"> | string
   externalId?: Prisma.StringNullableFilter<"Todo"> | string | null
+  externalSource?: Prisma.StringNullableFilter<"Todo"> | string | null
   title?: Prisma.StringFilter<"Todo"> | string
   description?: Prisma.StringFilter<"Todo"> | string
   tags?: Prisma.StringNullableListFilter<"Todo">
@@ -277,6 +285,7 @@ export type TodoWhereInput = {
 export type TodoOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   externalId?: Prisma.SortOrderInput | Prisma.SortOrder
+  externalSource?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -302,6 +311,7 @@ export type TodoWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.TodoWhereInput[]
   NOT?: Prisma.TodoWhereInput | Prisma.TodoWhereInput[]
   externalId?: Prisma.StringNullableFilter<"Todo"> | string | null
+  externalSource?: Prisma.StringNullableFilter<"Todo"> | string | null
   title?: Prisma.StringFilter<"Todo"> | string
   description?: Prisma.StringFilter<"Todo"> | string
   tags?: Prisma.StringNullableListFilter<"Todo">
@@ -324,6 +334,7 @@ export type TodoWhereUniqueInput = Prisma.AtLeast<{
 export type TodoOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   externalId?: Prisma.SortOrderInput | Prisma.SortOrder
+  externalSource?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -350,6 +361,7 @@ export type TodoScalarWhereWithAggregatesInput = {
   NOT?: Prisma.TodoScalarWhereWithAggregatesInput | Prisma.TodoScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Todo"> | string
   externalId?: Prisma.StringNullableWithAggregatesFilter<"Todo"> | string | null
+  externalSource?: Prisma.StringNullableWithAggregatesFilter<"Todo"> | string | null
   title?: Prisma.StringWithAggregatesFilter<"Todo"> | string
   description?: Prisma.StringWithAggregatesFilter<"Todo"> | string
   tags?: Prisma.StringNullableListFilter<"Todo">
@@ -370,6 +382,7 @@ export type TodoScalarWhereWithAggregatesInput = {
 export type TodoCreateInput = {
   id?: string
   externalId?: string | null
+  externalSource?: string | null
   title: string
   description?: string
   tags?: Prisma.TodoCreatetagsInput | string[]
@@ -390,6 +403,7 @@ export type TodoCreateInput = {
 export type TodoUncheckedCreateInput = {
   id?: string
   externalId?: string | null
+  externalSource?: string | null
   title: string
   description?: string
   tags?: Prisma.TodoCreatetagsInput | string[]
@@ -410,6 +424,7 @@ export type TodoUncheckedCreateInput = {
 export type TodoUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   externalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TodoUpdatetagsInput | string[]
@@ -430,6 +445,7 @@ export type TodoUpdateInput = {
 export type TodoUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   externalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TodoUpdatetagsInput | string[]
@@ -450,6 +466,7 @@ export type TodoUncheckedUpdateInput = {
 export type TodoCreateManyInput = {
   id?: string
   externalId?: string | null
+  externalSource?: string | null
   title: string
   description?: string
   tags?: Prisma.TodoCreatetagsInput | string[]
@@ -470,6 +487,7 @@ export type TodoCreateManyInput = {
 export type TodoUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   externalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TodoUpdatetagsInput | string[]
@@ -488,6 +506,7 @@ export type TodoUpdateManyMutationInput = {
 export type TodoUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   externalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TodoUpdatetagsInput | string[]
@@ -526,6 +545,7 @@ export type StringNullableListFilter<$PrismaModel = never> = {
 export type TodoCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   externalId?: Prisma.SortOrder
+  externalSource?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -546,6 +566,7 @@ export type TodoCountOrderByAggregateInput = {
 export type TodoMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   externalId?: Prisma.SortOrder
+  externalSource?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   priority?: Prisma.SortOrder
@@ -564,6 +585,7 @@ export type TodoMaxOrderByAggregateInput = {
 export type TodoMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   externalId?: Prisma.SortOrder
+  externalSource?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   priority?: Prisma.SortOrder
@@ -676,10 +698,6 @@ export type TodoUpdatetagsInput = {
   push?: string | string[]
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type TodoUpdatedependsOnInput = {
   set?: string[]
   push?: string | string[]
@@ -688,6 +706,7 @@ export type TodoUpdatedependsOnInput = {
 export type TodoCreateWithoutUserInput = {
   id?: string
   externalId?: string | null
+  externalSource?: string | null
   title: string
   description?: string
   tags?: Prisma.TodoCreatetagsInput | string[]
@@ -707,6 +726,7 @@ export type TodoCreateWithoutUserInput = {
 export type TodoUncheckedCreateWithoutUserInput = {
   id?: string
   externalId?: string | null
+  externalSource?: string | null
   title: string
   description?: string
   tags?: Prisma.TodoCreatetagsInput | string[]
@@ -755,6 +775,7 @@ export type TodoScalarWhereInput = {
   NOT?: Prisma.TodoScalarWhereInput | Prisma.TodoScalarWhereInput[]
   id?: Prisma.StringFilter<"Todo"> | string
   externalId?: Prisma.StringNullableFilter<"Todo"> | string | null
+  externalSource?: Prisma.StringNullableFilter<"Todo"> | string | null
   title?: Prisma.StringFilter<"Todo"> | string
   description?: Prisma.StringFilter<"Todo"> | string
   tags?: Prisma.StringNullableListFilter<"Todo">
@@ -775,6 +796,7 @@ export type TodoScalarWhereInput = {
 export type TodoCreateWithoutProjectInput = {
   id?: string
   externalId?: string | null
+  externalSource?: string | null
   title: string
   description?: string
   tags?: Prisma.TodoCreatetagsInput | string[]
@@ -794,6 +816,7 @@ export type TodoCreateWithoutProjectInput = {
 export type TodoUncheckedCreateWithoutProjectInput = {
   id?: string
   externalId?: string | null
+  externalSource?: string | null
   title: string
   description?: string
   tags?: Prisma.TodoCreatetagsInput | string[]
@@ -839,6 +862,7 @@ export type TodoUpdateManyWithWhereWithoutProjectInput = {
 export type TodoCreateManyUserInput = {
   id?: string
   externalId?: string | null
+  externalSource?: string | null
   title: string
   description?: string
   tags?: Prisma.TodoCreatetagsInput | string[]
@@ -858,6 +882,7 @@ export type TodoCreateManyUserInput = {
 export type TodoUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   externalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TodoUpdatetagsInput | string[]
@@ -877,6 +902,7 @@ export type TodoUpdateWithoutUserInput = {
 export type TodoUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   externalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TodoUpdatetagsInput | string[]
@@ -896,6 +922,7 @@ export type TodoUncheckedUpdateWithoutUserInput = {
 export type TodoUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   externalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TodoUpdatetagsInput | string[]
@@ -915,6 +942,7 @@ export type TodoUncheckedUpdateManyWithoutUserInput = {
 export type TodoCreateManyProjectInput = {
   id?: string
   externalId?: string | null
+  externalSource?: string | null
   title: string
   description?: string
   tags?: Prisma.TodoCreatetagsInput | string[]
@@ -934,6 +962,7 @@ export type TodoCreateManyProjectInput = {
 export type TodoUpdateWithoutProjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   externalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TodoUpdatetagsInput | string[]
@@ -953,6 +982,7 @@ export type TodoUpdateWithoutProjectInput = {
 export type TodoUncheckedUpdateWithoutProjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   externalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TodoUpdatetagsInput | string[]
@@ -972,6 +1002,7 @@ export type TodoUncheckedUpdateWithoutProjectInput = {
 export type TodoUncheckedUpdateManyWithoutProjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   externalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TodoUpdatetagsInput | string[]
@@ -993,6 +1024,7 @@ export type TodoUncheckedUpdateManyWithoutProjectInput = {
 export type TodoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   externalId?: boolean
+  externalSource?: boolean
   title?: boolean
   description?: boolean
   tags?: boolean
@@ -1015,6 +1047,7 @@ export type TodoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type TodoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   externalId?: boolean
+  externalSource?: boolean
   title?: boolean
   description?: boolean
   tags?: boolean
@@ -1037,6 +1070,7 @@ export type TodoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type TodoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   externalId?: boolean
+  externalSource?: boolean
   title?: boolean
   description?: boolean
   tags?: boolean
@@ -1059,6 +1093,7 @@ export type TodoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type TodoSelectScalar = {
   id?: boolean
   externalId?: boolean
+  externalSource?: boolean
   title?: boolean
   description?: boolean
   tags?: boolean
@@ -1076,7 +1111,7 @@ export type TodoSelectScalar = {
   updatedAt?: boolean
 }
 
-export type TodoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "externalId" | "title" | "description" | "tags" | "priority" | "date" | "time" | "endDate" | "repeat" | "dependsOn" | "done" | "doneDate" | "userId" | "projectId" | "createdAt" | "updatedAt", ExtArgs["result"]["todo"]>
+export type TodoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "externalId" | "externalSource" | "title" | "description" | "tags" | "priority" | "date" | "time" | "endDate" | "repeat" | "dependsOn" | "done" | "doneDate" | "userId" | "projectId" | "createdAt" | "updatedAt", ExtArgs["result"]["todo"]>
 export type TodoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   project?: boolean | Prisma.Todo$projectArgs<ExtArgs>
@@ -1099,6 +1134,7 @@ export type $TodoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     externalId: string | null
+    externalSource: string | null
     title: string
     description: string
     tags: string[]
@@ -1541,6 +1577,7 @@ export interface Prisma__TodoClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface TodoFieldRefs {
   readonly id: Prisma.FieldRef<"Todo", 'String'>
   readonly externalId: Prisma.FieldRef<"Todo", 'String'>
+  readonly externalSource: Prisma.FieldRef<"Todo", 'String'>
   readonly title: Prisma.FieldRef<"Todo", 'String'>
   readonly description: Prisma.FieldRef<"Todo", 'String'>
   readonly tags: Prisma.FieldRef<"Todo", 'String[]'>

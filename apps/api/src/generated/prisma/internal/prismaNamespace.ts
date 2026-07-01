@@ -386,6 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   Project: 'Project',
+  Runner: 'Runner',
   Todo: 'Todo'
 } as const
 
@@ -402,7 +403,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "project" | "todo"
+    modelProps: "user" | "project" | "runner" | "todo"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -554,6 +555,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Runner: {
+      payload: Prisma.$RunnerPayload<ExtArgs>
+      fields: Prisma.RunnerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RunnerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RunnerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RunnerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RunnerPayload>
+        }
+        findFirst: {
+          args: Prisma.RunnerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RunnerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RunnerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RunnerPayload>
+        }
+        findMany: {
+          args: Prisma.RunnerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RunnerPayload>[]
+        }
+        create: {
+          args: Prisma.RunnerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RunnerPayload>
+        }
+        createMany: {
+          args: Prisma.RunnerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RunnerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RunnerPayload>[]
+        }
+        delete: {
+          args: Prisma.RunnerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RunnerPayload>
+        }
+        update: {
+          args: Prisma.RunnerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RunnerPayload>
+        }
+        deleteMany: {
+          args: Prisma.RunnerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RunnerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RunnerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RunnerPayload>[]
+        }
+        upsert: {
+          args: Prisma.RunnerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RunnerPayload>
+        }
+        aggregate: {
+          args: Prisma.RunnerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRunner>
+        }
+        groupBy: {
+          args: Prisma.RunnerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RunnerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RunnerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RunnerCountAggregateOutputType> | number
+        }
+      }
+    }
     Todo: {
       payload: Prisma.$TodoPayload<ExtArgs>
       fields: Prisma.TodoFieldRefs
@@ -691,9 +766,29 @@ export const ProjectScalarFieldEnum = {
 export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
 
 
+export const RunnerScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  enabled: 'enabled',
+  schedule: 'schedule',
+  config: 'config',
+  lastRunAt: 'lastRunAt',
+  lastStatus: 'lastStatus',
+  errorMessage: 'errorMessage',
+  userId: 'userId',
+  projectId: 'projectId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RunnerScalarFieldEnum = (typeof RunnerScalarFieldEnum)[keyof typeof RunnerScalarFieldEnum]
+
+
 export const TodoScalarFieldEnum = {
   id: 'id',
   externalId: 'externalId',
+  externalSource: 'externalSource',
   title: 'title',
   description: 'description',
   tags: 'tags',
@@ -722,6 +817,13 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -736,6 +838,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -776,6 +887,20 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -904,6 +1029,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   project?: Prisma.ProjectOmit
+  runner?: Prisma.RunnerOmit
   todo?: Prisma.TodoOmit
 }
 

@@ -52,6 +52,11 @@ export type User = Prisma.UserModel
  */
 export type Project = Prisma.ProjectModel
 /**
+ * Model Runner
+ * 
+ */
+export type Runner = Prisma.RunnerModel
+/**
  * Model Todo
  * 
  */
