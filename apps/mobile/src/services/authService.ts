@@ -11,14 +11,27 @@ async function loadLocalData() {
   await useProjectStore.getState().initialize()
 }
 
+async function pushLocalChanges(token: string) {
+  const { items } = useTodoStore.getState()
+  const { projects } = useProjectStore.getState()
+
+  const headers = { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
+
+  await Promise.all([
+    fetch(`${API_URL}/projects/sync`, { method: "POST", headers, body: JSON.stringify(projects) }),
+    fetch(`${API_URL}/todos/sync`, { method: "POST", headers, body: JSON.stringify(items) }),
+  ])
+}
+
 export async function syncFromServer() {
   const { activeAccountId, accounts } = useAuthStore.getState()
   const token = accounts.find((a) => a.id === activeAccountId)?.token
   if (!token) return
 
-  const headers = { Authorization: `Bearer ${token}` }
-
   try {
+    await pushLocalChanges(token)
+
+    const headers = { Authorization: `Bearer ${token}` }
     const [todosRes, projectsRes] = await Promise.all([
       fetch(`${API_URL}/todos`, { headers }),
       fetch(`${API_URL}/projects`, { headers }),
