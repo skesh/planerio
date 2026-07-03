@@ -55,4 +55,65 @@ router.post("/:id/run", requireAuth, async (req, res) => {
   }
 })
 
+router.post("/", requireAuth, async (req, res) => {
+  const { name, type, schedule, config, projectId } = req.body
+
+  if (!name || !type) {
+    res.status(400).json({ error: "name and type are required" })
+    return
+  }
+
+  const runner = await prisma.runner.create({
+    data: {
+      name,
+      type,
+      schedule: schedule ?? null,
+      config: config ?? {},
+      projectId: projectId ?? null,
+      userId: req.userId,
+    },
+  })
+
+  console.log(`[runners] created: ${runner.name} (${runner.id}) type=${runner.type} schedule=${runner.schedule}`)
+  res.status(201).json(runner)
+})
+
+router.patch("/:id", requireAuth, async (req, res) => {
+  const id = req.params.id as string
+  const existing = await prisma.runner.findFirst({
+    where: { id, userId: req.userId },
+  })
+  if (!existing) {
+    res.status(404).json({ error: "Runner not found" })
+    return
+  }
+
+  const { name, schedule, config, enabled } = req.body
+  const data: Record<string, unknown> = {}
+  if (name !== undefined) data.name = name
+  if (schedule !== undefined) data.schedule = schedule
+  if (config !== undefined) data.config = config
+  if (enabled !== undefined) data.enabled = enabled
+
+  const updated = await prisma.runner.update({ where: { id }, data })
+
+  console.log(`[runners] updated: ${updated.name} (${updated.id})`)
+  res.json(updated)
+})
+
+router.delete("/:id", requireAuth, async (req, res) => {
+  const id = req.params.id as string
+  const existing = await prisma.runner.findFirst({
+    where: { id, userId: req.userId },
+  })
+  if (!existing) {
+    res.status(404).json({ error: "Runner not found" })
+    return
+  }
+
+  await prisma.runner.delete({ where: { id } })
+  console.log(`[runners] deleted: ${existing.name} (${existing.id})`)
+  res.status(204).end()
+})
+
 export { router as runnersRoutes }

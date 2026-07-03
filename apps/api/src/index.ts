@@ -7,6 +7,7 @@ import { authRoutes } from "./routes/auth"
 import { projectRoutes } from "./routes/projects"
 import { runnersRoutes } from "./routes/runners"
 import { todosRoutes } from "./routes/todos"
+import { startScheduler } from "./scheduler"
 
 const app = express()
 
@@ -23,4 +24,5 @@ app.use("/vacancies", vacanciesRoutes)
 
 app.listen(3001, "0.0.0.0", () => {
   console.log("Server running on http://0.0.0.0:3001")
+  startScheduler()
 })
