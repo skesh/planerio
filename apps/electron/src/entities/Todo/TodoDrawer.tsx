@@ -1,6 +1,5 @@
-import { Todo } from "@repo/core"
+import { Todo, type FeedItem } from "@repo/core"
 import { useProjectSelectors } from '@/store/projectsStore'
-import { useTodoSelectors } from '@/store/todosStore'
 import { useMemo } from 'react'
 import {
     Drawer,
@@ -14,15 +13,15 @@ import EditTodo from './EditTodo.tsx'
 interface TodoDrawerProps {
   open: "edit" | "add" | false
   onClose: () => void
+  activeTodo?: FeedItem
 }
 
-export default function TodoDrawer({ open, onClose }: TodoDrawerProps) {
-  const { activeTodo } = useTodoSelectors()
+export default function TodoDrawer({ open, onClose, activeTodo }: TodoDrawerProps) {
   const { activeProjectId } = useProjectSelectors()
 
   const initialTodo = useMemo(() => {
     if (open === "edit") {
-      return activeTodo ?? new Todo()
+      return activeTodo && "projectId" in activeTodo ? new Todo(activeTodo) : new Todo()
     }
     return new Todo({ projectId: activeProjectId ?? "" })
   }, [open, activeTodo, activeProjectId])

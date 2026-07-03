@@ -2,7 +2,7 @@ import type { FeedItem } from "@repo/core"
 import { useEffect, useRef, useState } from "react"
 import TodoCard from "@/entities/Todo/TodoCard"
 import TodoDrawer from "@/entities/Todo/TodoDrawer"
-import { useTodoActions, useTodoSelectors } from "@/store/todosStore"
+import { useTodoActions, useTodoStore } from "@/store/todosStore"
 import { useHotkeys } from "../hooks/useHotkeys"
 import { VacancyCard } from "./VacancyCard"
 
@@ -16,13 +16,14 @@ export default function FeedList({ items }: FeedListProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [drawerMode, setDrawerMode] = useState<DrawerMode>(false)
   const listRef = useRef<HTMLDivElement>(null)
-  const { setActiveId, deleteActiveTodo, toggleDone, toggleShowDone } = useTodoActions()
-  const { activeTodo } = useTodoSelectors()
+  const { toggleDone, toggleShowDone } = useTodoActions()
 
   const clamp = (i: number) => {
     if (items.length === 0) return 0
     return Math.min(Math.max(i, 0), items.length - 1)
   }
+
+  const activeItem = items[activeIndex]
 
   const handleOpen = (item: FeedItem) => {
     if (item.kind === "todo") {
@@ -39,16 +40,14 @@ export default function FeedList({ items }: FeedListProps) {
     const item = items[next]
     if (!item) return
     setActiveIndex(next)
-    if (item.kind === "todo") setActiveId(item.id)
-  }, [activeIndex, items, setActiveId], { enabled: !drawerBlock })
+  }, [activeIndex, items], { enabled: !drawerBlock })
 
   useHotkeys("KeyK", () => {
     const next = activeIndex > 0 ? activeIndex - 1 : items.length - 1
     const item = items[next]
     if (!item) return
     setActiveIndex(next)
-    if (item.kind === "todo") setActiveId(item.id)
-  }, [activeIndex, items, setActiveId], { enabled: !drawerBlock })
+  }, [activeIndex, items], { enabled: !drawerBlock })
 
   useHotkeys("Enter", () => {
     const item = items[activeIndex]
@@ -58,8 +57,16 @@ export default function FeedList({ items }: FeedListProps) {
   useHotkeys("KeyI", () => setDrawerMode("edit"), [drawerBlock], { enabled: !drawerBlock })
   useHotkeys("KeyO", () => setDrawerMode("add"), [drawerBlock], { enabled: !drawerBlock })
   useHotkeys("KeyS", () => toggleShowDone(), [drawerBlock], { enabled: !drawerBlock })
-  useHotkeys("D", () => deleteActiveTodo(), [drawerBlock], { enabled: !drawerBlock })
-  useHotkeys("d", () => { if (activeTodo) toggleDone(activeTodo.id) }, [activeTodo, drawerBlock], { enabled: !drawerBlock })
+  useHotkeys("D", () => {
+    const activeItem = items[activeIndex]
+    if (activeItem?.kind !== "todo") return
+    const { items: storeItems, setItems } = useTodoStore.getState()
+    setItems(storeItems.filter((i) => i.id !== activeItem.id))
+  }, [activeIndex, items], { enabled: !drawerBlock })
+  useHotkeys("d", () => {
+    const activeItem = items[activeIndex]
+    if (activeItem?.kind === "todo") toggleDone(activeItem.id)
+  }, [activeIndex, items], { enabled: !drawerBlock })
 
   useHotkeys("Escape", () => setDrawerMode(false), [drawerMode], { enabled: drawerBlock })
 
@@ -95,7 +102,7 @@ export default function FeedList({ items }: FeedListProps) {
           )
         })}
       </div>
-      {drawerMode && <TodoDrawer open={drawerMode} onClose={() => setDrawerMode(false)} />}
+      {drawerMode && <TodoDrawer open={drawerMode} onClose={() => setDrawerMode(false)} activeTodo={activeItem?.kind === "todo" ? activeItem : undefined} />}
     </>
   )
 }
