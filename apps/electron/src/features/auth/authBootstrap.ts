@@ -36,7 +36,7 @@ export async function login(email: string, password: string) {
 }
 
 export async function logout(accountId?: string) {
-  const { accounts, activeAccountId } = useAuthStore.getState()
+  const { activeAccountId } = useAuthStore.getState()
   const targetId = accountId ?? activeAccountId
   if (!targetId) return
 

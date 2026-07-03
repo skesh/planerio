@@ -1,6 +1,6 @@
 import { apiFetch } from "../utils/apiFetch"
 import { getActiveJwt } from "../store/auth"
-import type { Project } from "../types/types"
+import type { Project } from "../models/project"
 
 export async function loadProjects() {
   const jwt = getActiveJwt()
