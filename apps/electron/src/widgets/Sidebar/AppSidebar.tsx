@@ -21,6 +21,7 @@ const STATIC_NAV = [
   { id: "home", name: "Home", route: "/" },
   { id: "inbox", name: "Inbox", route: "/inbox" },
   { id: "repeats", name: "Repeats", route: "/repeats" },
+  { id: "vacancy", name: "Vacancy", route: "/vacancy" },
 ]
 
 export function AppSidebar() {
