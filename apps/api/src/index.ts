@@ -2,10 +2,11 @@ import cookieParser from "cookie-parser"
 import cors from "cors"
 import express from "express"
 
-import { authRoutes } from "./routes/auth.js"
-import { projectRoutes } from "./routes/projects.js"
-import { runnersRoutes } from "./routes/runners.js"
-import { todosRoutes } from "./routes/todos.js"
+import vacanciesRoutes from "./modules/vacancies"
+import { authRoutes } from "./routes/auth"
+import { projectRoutes } from "./routes/projects"
+import { runnersRoutes } from "./routes/runners"
+import { todosRoutes } from "./routes/todos"
 
 const app = express()
 
@@ -18,6 +19,7 @@ app.use("/auth", authRoutes)
 app.use("/todos", todosRoutes)
 app.use("/projects", projectRoutes)
 app.use("/runners", runnersRoutes)
+app.use("/vacancies", vacanciesRoutes)
 
 app.listen(3001, "0.0.0.0", () => {
   console.log("Server running on http://0.0.0.0:3001")

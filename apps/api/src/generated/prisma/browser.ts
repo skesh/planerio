@@ -37,3 +37,8 @@ export type Runner = Prisma.RunnerModel
  * 
  */
 export type Todo = Prisma.TodoModel
+/**
+ * Model Vacancy
+ * 
+ */
+export type Vacancy = Prisma.VacancyModel

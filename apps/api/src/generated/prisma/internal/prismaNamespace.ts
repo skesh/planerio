@@ -387,7 +387,8 @@ export const ModelName = {
   User: 'User',
   Project: 'Project',
   Runner: 'Runner',
-  Todo: 'Todo'
+  Todo: 'Todo',
+  Vacancy: 'Vacancy'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -403,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "project" | "runner" | "todo"
+    modelProps: "user" | "project" | "runner" | "todo" | "vacancy"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -703,6 +704,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Vacancy: {
+      payload: Prisma.$VacancyPayload<ExtArgs>
+      fields: Prisma.VacancyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VacancyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VacancyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>
+        }
+        findFirst: {
+          args: Prisma.VacancyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VacancyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>
+        }
+        findMany: {
+          args: Prisma.VacancyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>[]
+        }
+        create: {
+          args: Prisma.VacancyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>
+        }
+        createMany: {
+          args: Prisma.VacancyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VacancyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>[]
+        }
+        delete: {
+          args: Prisma.VacancyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>
+        }
+        update: {
+          args: Prisma.VacancyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>
+        }
+        deleteMany: {
+          args: Prisma.VacancyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VacancyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VacancyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>[]
+        }
+        upsert: {
+          args: Prisma.VacancyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VacancyPayload>
+        }
+        aggregate: {
+          args: Prisma.VacancyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVacancy>
+        }
+        groupBy: {
+          args: Prisma.VacancyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VacancyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VacancyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VacancyCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -807,6 +882,25 @@ export const TodoScalarFieldEnum = {
 } as const
 
 export type TodoScalarFieldEnum = (typeof TodoScalarFieldEnum)[keyof typeof TodoScalarFieldEnum]
+
+
+export const VacancyScalarFieldEnum = {
+  id: 'id',
+  company: 'company',
+  title: 'title',
+  publishedAt: 'publishedAt',
+  externalId: 'externalId',
+  externalSource: 'externalSource',
+  description: 'description',
+  area: 'area',
+  url: 'url',
+  salary: 'salary',
+  keywords: 'keywords',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VacancyScalarFieldEnum = (typeof VacancyScalarFieldEnum)[keyof typeof VacancyScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1031,6 +1125,7 @@ export type GlobalOmitConfig = {
   project?: Prisma.ProjectOmit
   runner?: Prisma.RunnerOmit
   todo?: Prisma.TodoOmit
+  vacancy?: Prisma.VacancyOmit
 }
 
 /* Types for Logging */

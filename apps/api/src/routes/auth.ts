@@ -1,8 +1,8 @@
 import { randomBytes, scryptSync, timingSafeEqual } from "node:crypto"
 import { Router } from "express"
 import jwt from "jsonwebtoken"
-import { prisma } from "../lib/prisma.js"
-import { JWT_SECRET } from "../middleware/auth.js"
+import { prisma } from "../lib/prisma"
+import { JWT_SECRET } from "../middleware/auth"
 
 const router = Router()
 

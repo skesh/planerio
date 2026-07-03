@@ -1,7 +1,7 @@
 import { Router } from "express"
 import type { Todo } from "../generated/prisma/client"
-import { prisma } from "../lib/prisma.js"
-import { requireAuth } from "../middleware/auth.js"
+import { prisma } from "../lib/prisma"
+import { requireAuth } from "../middleware/auth"
 
 const router = Router()
 
