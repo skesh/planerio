@@ -16,12 +16,10 @@ async function reloadData() {
 
 export async function initializeAuth() {
   if (useAuthStore.getState().initialized) return
-  useAuthStore.setState({ initialized: true })
 
   const accounts = ((await window.ipcRenderer.auth.get("accounts")) as Account[]) ?? []
   const activeAccountId = ((await window.ipcRenderer.auth.get("activeAccountId")) as string) ?? null
-
-  useAuthStore.setState({ accounts, activeAccountId })
+  useAuthStore.setState({ accounts, activeAccountId, initialized: true })
 
   if (activeAccountId) {
     await window.ipcRenderer.store.switch(activeAccountId)
