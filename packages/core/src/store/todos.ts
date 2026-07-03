@@ -8,7 +8,6 @@ export interface TodoState {
   activeId: string | null
   isFiltred: boolean
   initialized: boolean
-  showDone: boolean
   initialize: () => Promise<void>
   reset: () => void
   setItems: (items: Todo[]) => void
@@ -18,7 +17,6 @@ export interface TodoState {
   deleteActiveTodo: () => void
   toggleDone: (id: string) => void
   toggleFilter: () => void
-  toggleShowDone: () => void
 }
 
 export function createTodosStore(storage: StorageAdapter) {
@@ -27,7 +25,6 @@ export function createTodosStore(storage: StorageAdapter) {
     activeId: null,
     initialized: false,
     isFiltred: true,
-    showDone: false,
 
     initialize: async () => {
       if (get().initialized) return
@@ -81,7 +78,6 @@ export function createTodosStore(storage: StorageAdapter) {
       }
     },
 
-    toggleShowDone: () => set((state) => ({ showDone: !state.showDone })),
     toggleFilter: () => set((state) => ({ isFiltred: !state.isFiltred })),
   }))
 
@@ -95,7 +91,6 @@ export function createTodosStore(storage: StorageAdapter) {
         deleteActiveTodo: s.deleteActiveTodo,
         toggleFilter: s.toggleFilter,
         toggleDone: s.toggleDone,
-        toggleShowDone: s.toggleShowDone,
       })),
     )
 
@@ -104,7 +99,6 @@ export function createTodosStore(storage: StorageAdapter) {
       useShallow((s) => ({
         todos: s.items,
         activeTodo: s.items.find((i) => i.id === s.activeId),
-        showDone: s.showDone,
       })),
     )
 

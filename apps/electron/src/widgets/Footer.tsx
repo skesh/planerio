@@ -4,8 +4,8 @@ import { useTodoSelectors } from "@/store/todosStore";
 import { useUiSelectors } from "@/store/uiStore";
 
 export default function Footer() {
-  const { todos, activeTodo, showDone } = useTodoSelectors();
-  const { editMode } = useUiSelectors();
+  const { todos, activeTodo } = useTodoSelectors();
+  const { editMode, showDone } = useUiSelectors();
 
   return (
     <div className="sticky bottom-0 flex w-full shrink-0 gap-2 bg-background items-center">

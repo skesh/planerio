@@ -3,6 +3,7 @@ import {
   filterDone,
   filterNotInbox,
   filterOverdueOrUndated,
+  useUiSelectors,
 } from "@repo/core"
 import { router } from "expo-router"
 import { useMemo, useState } from "react"
@@ -11,7 +12,8 @@ import { syncFromServer } from "../../src/services/authService"
 import { useTodoSelectors } from "../../src/store"
 
 export default function HomeScreen() {
-  const { todos, showDone } = useTodoSelectors()
+  const { todos } = useTodoSelectors()
+  const { showDone } = useUiSelectors()
   const [refreshing, setRefreshing] = useState(false)
   const sorted = useMemo(() => {
     const filtered = filterDependsOnReady(filterOverdueOrUndated(filterNotInbox(todos)), todos)

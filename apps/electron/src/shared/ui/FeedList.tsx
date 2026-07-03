@@ -16,10 +16,10 @@ interface FeedListProps {
 export default function FeedList({ items }: FeedListProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [drawerMode, setDrawerMode] = useState<DrawerMode>(false)
-  const { toggleSidebar, setDrawerOpen } = useUiActions()
+  const { toggleSidebar, setDrawerOpen, toggleShowDone } = useUiActions()
   const { editMode, sidebarOpen } = useUiSelectors()
   const listRef = useRef<HTMLDivElement>(null)
-  const { toggleDone, toggleShowDone } = useTodoActions()
+  const { toggleDone } = useTodoActions()
 
   const clamp = (i: number) => {
     if (items.length === 0) return 0

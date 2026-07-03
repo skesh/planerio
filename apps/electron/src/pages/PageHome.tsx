@@ -1,12 +1,19 @@
 import type { FeedItem } from "@repo/core"
-import { defaultSort, filterDependsOnReady, filterDone, filterNotInbox, filterOverdueOrUndated } from "@repo/core"
+import {
+  defaultSort,
+  filterDependsOnReady,
+  filterDone,
+  filterNotInbox,
+  filterOverdueOrUndated,
+} from "@repo/core"
 import { useMemo } from "react"
-import { useTodoFeedItems, useTodoSelectors } from "@/store/todosStore"
 import FeedList from "@/shared/ui/FeedList"
+import { useTodoFeedItems } from "@/store/todosStore"
+import { useUiSelectors } from "@/store/uiStore"
 
 export default function PageHome() {
   const items = useTodoFeedItems()
-  const { showDone } = useTodoSelectors()
+  const { showDone } = useUiSelectors()
 
   const sorted = useMemo(() => {
     const filtered = filterDependsOnReady(
