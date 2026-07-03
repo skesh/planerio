@@ -1,14 +1,14 @@
-import { Todo, type FeedItem } from "@repo/core"
-import { useProjectSelectors } from '@/store/projectsStore'
-import { useMemo } from 'react'
+import { type FeedItem, Todo } from "@repo/core"
+import { useMemo } from "react"
 import {
-    Drawer,
-    DrawerContent,
-    DrawerDescription,
-    DrawerHeader,
-    DrawerTitle,
-} from '@/shared/ui/drawer'
-import EditTodo from './EditTodo.tsx'
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/shared/ui/drawer"
+import { useProjectSelectors } from "@/store/projectsStore"
+import EditTodo from "./EditTodo.tsx"
 
 interface TodoDrawerProps {
   open: "edit" | "add" | false
@@ -27,14 +27,14 @@ export default function TodoDrawer({ open, onClose, activeTodo }: TodoDrawerProp
   }, [open, activeTodo, activeProjectId])
 
   return (
-    <Drawer open={!!open} onClose={onClose}>
+    <Drawer open={!!open}>
       <DrawerContent className="px-4 py-4">
         <DrawerHeader hidden={true}>
           <DrawerTitle>Title</DrawerTitle>
           <DrawerDescription>Description</DrawerDescription>
         </DrawerHeader>
 
-        <EditTodo todoOpen={open} initialTodo={initialTodo} onClose={onClose} />
+        <EditTodo editMode={open} initialTodo={initialTodo} onClose={onClose} />
       </DrawerContent>
     </Drawer>
   )

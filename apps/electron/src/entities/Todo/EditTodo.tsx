@@ -1,4 +1,4 @@
-import { filterAvailableForDependency, RepeatPeriod, type Todo } from "@repo/core"
+import { type DrawerMode, filterAvailableForDependency, RepeatPeriod, type Todo } from "@repo/core"
 import { FlameIcon, X } from "lucide-react"
 import { useEffect, useRef } from "react"
 import { Controller, useForm } from "react-hook-form"
@@ -24,16 +24,16 @@ import { ToggleGroup, ToggleGroupItem } from "../../shared/ui/toggle-group.tsx"
 
 interface EditTodoProps {
   initialTodo: Todo
-  todoOpen: "edit" | "add" | false
+  editMode: DrawerMode
   onClose: () => void
 }
 
-export default function EditTodo({ initialTodo, todoOpen, onClose }: EditTodoProps) {
+export default function EditTodo({ initialTodo, editMode, onClose }: EditTodoProps) {
   const { control, handleSubmit, reset, setValue } = useForm<Todo>({
     defaultValues: initialTodo,
   })
 
-  const { activeTodo, todos } = useTodoSelectors()
+  const { todos } = useTodoSelectors()
   const { addItem, editItemById } = useTodoActions()
   const { projects } = useProjectSelectors()
   const otherTodos = filterAvailableForDependency(todos, initialTodo.id)
@@ -46,15 +46,15 @@ export default function EditTodo({ initialTodo, todoOpen, onClose }: EditTodoPro
 
   useEffect(() => {
     inputRef.current?.focus()
-  }, [todoOpen])
+  }, [editMode])
 
   function onSubmit(data: Todo) {
-    switch (todoOpen) {
+    switch (editMode) {
       case "add":
         addItem(data)
         break
       case "edit":
-        if (activeTodo) editItemById(activeTodo.id, data)
+        if (initialTodo) editItemById(initialTodo.id, data)
         break
     }
     onClose()
