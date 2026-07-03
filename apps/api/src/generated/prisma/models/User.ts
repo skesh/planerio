@@ -185,6 +185,7 @@ export type UserWhereInput = {
   todos?: Prisma.TodoListRelationFilter
   projects?: Prisma.ProjectListRelationFilter
   runners?: Prisma.RunnerListRelationFilter
+  vacancies?: Prisma.UserVacancyListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -196,6 +197,7 @@ export type UserOrderByWithRelationInput = {
   todos?: Prisma.TodoOrderByRelationAggregateInput
   projects?: Prisma.ProjectOrderByRelationAggregateInput
   runners?: Prisma.RunnerOrderByRelationAggregateInput
+  vacancies?: Prisma.UserVacancyOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -210,6 +212,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   todos?: Prisma.TodoListRelationFilter
   projects?: Prisma.ProjectListRelationFilter
   runners?: Prisma.RunnerListRelationFilter
+  vacancies?: Prisma.UserVacancyListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -243,6 +246,7 @@ export type UserCreateInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
   runners?: Prisma.RunnerCreateNestedManyWithoutUserInput
+  vacancies?: Prisma.UserVacancyCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -254,6 +258,7 @@ export type UserUncheckedCreateInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
   runners?: Prisma.RunnerUncheckedCreateNestedManyWithoutUserInput
+  vacancies?: Prisma.UserVacancyUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -265,6 +270,7 @@ export type UserUpdateInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
   runners?: Prisma.RunnerUpdateManyWithoutUserNestedInput
+  vacancies?: Prisma.UserVacancyUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -276,6 +282,7 @@ export type UserUncheckedUpdateInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
   runners?: Prisma.RunnerUncheckedUpdateManyWithoutUserNestedInput
+  vacancies?: Prisma.UserVacancyUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -381,6 +388,20 @@ export type UserUpdateOneRequiredWithoutTodosNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTodosInput, Prisma.UserUpdateWithoutTodosInput>, Prisma.UserUncheckedUpdateWithoutTodosInput>
 }
 
+export type UserCreateNestedOneWithoutVacanciesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVacanciesInput, Prisma.UserUncheckedCreateWithoutVacanciesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVacanciesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutVacanciesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVacanciesInput, Prisma.UserUncheckedCreateWithoutVacanciesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVacanciesInput
+  upsert?: Prisma.UserUpsertWithoutVacanciesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVacanciesInput, Prisma.UserUpdateWithoutVacanciesInput>, Prisma.UserUncheckedUpdateWithoutVacanciesInput>
+}
+
 export type UserCreateWithoutProjectsInput = {
   id?: string
   email: string
@@ -389,6 +410,7 @@ export type UserCreateWithoutProjectsInput = {
   updatedAt?: Date | string
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   runners?: Prisma.RunnerCreateNestedManyWithoutUserInput
+  vacancies?: Prisma.UserVacancyCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProjectsInput = {
@@ -399,6 +421,7 @@ export type UserUncheckedCreateWithoutProjectsInput = {
   updatedAt?: Date | string
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   runners?: Prisma.RunnerUncheckedCreateNestedManyWithoutUserInput
+  vacancies?: Prisma.UserVacancyUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProjectsInput = {
@@ -425,6 +448,7 @@ export type UserUpdateWithoutProjectsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   runners?: Prisma.RunnerUpdateManyWithoutUserNestedInput
+  vacancies?: Prisma.UserVacancyUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProjectsInput = {
@@ -435,6 +459,7 @@ export type UserUncheckedUpdateWithoutProjectsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   runners?: Prisma.RunnerUncheckedUpdateManyWithoutUserNestedInput
+  vacancies?: Prisma.UserVacancyUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRunnersInput = {
@@ -445,6 +470,7 @@ export type UserCreateWithoutRunnersInput = {
   updatedAt?: Date | string
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  vacancies?: Prisma.UserVacancyCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRunnersInput = {
@@ -455,6 +481,7 @@ export type UserUncheckedCreateWithoutRunnersInput = {
   updatedAt?: Date | string
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  vacancies?: Prisma.UserVacancyUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRunnersInput = {
@@ -481,6 +508,7 @@ export type UserUpdateWithoutRunnersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  vacancies?: Prisma.UserVacancyUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRunnersInput = {
@@ -491,6 +519,7 @@ export type UserUncheckedUpdateWithoutRunnersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  vacancies?: Prisma.UserVacancyUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTodosInput = {
@@ -501,6 +530,7 @@ export type UserCreateWithoutTodosInput = {
   updatedAt?: Date | string
   projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
   runners?: Prisma.RunnerCreateNestedManyWithoutUserInput
+  vacancies?: Prisma.UserVacancyCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTodosInput = {
@@ -511,6 +541,7 @@ export type UserUncheckedCreateWithoutTodosInput = {
   updatedAt?: Date | string
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
   runners?: Prisma.RunnerUncheckedCreateNestedManyWithoutUserInput
+  vacancies?: Prisma.UserVacancyUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTodosInput = {
@@ -537,6 +568,7 @@ export type UserUpdateWithoutTodosInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
   runners?: Prisma.RunnerUpdateManyWithoutUserNestedInput
+  vacancies?: Prisma.UserVacancyUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTodosInput = {
@@ -545,6 +577,67 @@ export type UserUncheckedUpdateWithoutTodosInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  runners?: Prisma.RunnerUncheckedUpdateManyWithoutUserNestedInput
+  vacancies?: Prisma.UserVacancyUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutVacanciesInput = {
+  id?: string
+  email: string
+  password: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  runners?: Prisma.RunnerCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutVacanciesInput = {
+  id?: string
+  email: string
+  password: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  runners?: Prisma.RunnerUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutVacanciesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutVacanciesInput, Prisma.UserUncheckedCreateWithoutVacanciesInput>
+}
+
+export type UserUpsertWithoutVacanciesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutVacanciesInput, Prisma.UserUncheckedUpdateWithoutVacanciesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutVacanciesInput, Prisma.UserUncheckedCreateWithoutVacanciesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutVacanciesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutVacanciesInput, Prisma.UserUncheckedUpdateWithoutVacanciesInput>
+}
+
+export type UserUpdateWithoutVacanciesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  runners?: Prisma.RunnerUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutVacanciesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
   runners?: Prisma.RunnerUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -558,12 +651,14 @@ export type UserCountOutputType = {
   todos: number
   projects: number
   runners: number
+  vacancies: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   todos?: boolean | UserCountOutputTypeCountTodosArgs
   projects?: boolean | UserCountOutputTypeCountProjectsArgs
   runners?: boolean | UserCountOutputTypeCountRunnersArgs
+  vacancies?: boolean | UserCountOutputTypeCountVacanciesArgs
 }
 
 /**
@@ -597,6 +692,13 @@ export type UserCountOutputTypeCountRunnersArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.RunnerWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountVacanciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserVacancyWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -607,6 +709,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   todos?: boolean | Prisma.User$todosArgs<ExtArgs>
   projects?: boolean | Prisma.User$projectsArgs<ExtArgs>
   runners?: boolean | Prisma.User$runnersArgs<ExtArgs>
+  vacancies?: boolean | Prisma.User$vacanciesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -639,6 +742,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   todos?: boolean | Prisma.User$todosArgs<ExtArgs>
   projects?: boolean | Prisma.User$projectsArgs<ExtArgs>
   runners?: boolean | Prisma.User$runnersArgs<ExtArgs>
+  vacancies?: boolean | Prisma.User$vacanciesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -650,6 +754,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     todos: Prisma.$TodoPayload<ExtArgs>[]
     projects: Prisma.$ProjectPayload<ExtArgs>[]
     runners: Prisma.$RunnerPayload<ExtArgs>[]
+    vacancies: Prisma.$UserVacancyPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1054,6 +1159,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   todos<T extends Prisma.User$todosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$todosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TodoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   projects<T extends Prisma.User$projectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   runners<T extends Prisma.User$runnersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$runnersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RunnerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vacancies<T extends Prisma.User$vacanciesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vacanciesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserVacancyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1550,6 +1656,30 @@ export type User$runnersArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.RunnerScalarFieldEnum | Prisma.RunnerScalarFieldEnum[]
+}
+
+/**
+ * User.vacancies
+ */
+export type User$vacanciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserVacancy
+   */
+  select?: Prisma.UserVacancySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserVacancy
+   */
+  omit?: Prisma.UserVacancyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserVacancyInclude<ExtArgs> | null
+  where?: Prisma.UserVacancyWhereInput
+  orderBy?: Prisma.UserVacancyOrderByWithRelationInput | Prisma.UserVacancyOrderByWithRelationInput[]
+  cursor?: Prisma.UserVacancyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserVacancyScalarFieldEnum | Prisma.UserVacancyScalarFieldEnum[]
 }
 
 /**

@@ -66,3 +66,8 @@ export type Todo = Prisma.TodoModel
  * 
  */
 export type Vacancy = Prisma.VacancyModel
+/**
+ * Model UserVacancy
+ * 
+ */
+export type UserVacancy = Prisma.UserVacancyModel

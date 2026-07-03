@@ -55,7 +55,8 @@ export const ModelName = {
   Project: 'Project',
   Runner: 'Runner',
   Todo: 'Todo',
-  Vacancy: 'Vacancy'
+  Vacancy: 'Vacancy',
+  UserVacancy: 'UserVacancy'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -158,6 +159,17 @@ export const VacancyScalarFieldEnum = {
 } as const
 
 export type VacancyScalarFieldEnum = (typeof VacancyScalarFieldEnum)[keyof typeof VacancyScalarFieldEnum]
+
+
+export const UserVacancyScalarFieldEnum = {
+  userId: 'userId',
+  vacancyId: 'vacancyId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserVacancyScalarFieldEnum = (typeof UserVacancyScalarFieldEnum)[keyof typeof UserVacancyScalarFieldEnum]
 
 
 export const SortOrder = {

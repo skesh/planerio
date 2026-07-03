@@ -19,9 +19,10 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  todos    Todo[]
-  projects Project[]
-  runners  Runner[]
+  todos      Todo[]
+  projects   Project[]
+  runners    Runner[]
+  vacancies  UserVacancy[]
 }
 
 model Project {
@@ -97,5 +98,20 @@ model Vacancy {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  users    UserVacancy[]
+
   @@unique([externalSource, externalId])
+}
+
+model UserVacancy {
+  userId    String
+  vacancyId String
+  status    String   @default("new")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vacancy Vacancy @relation(fields: [vacancyId], references: [id], onDelete: Cascade)
+
+  @@id([userId, vacancyId])
 }

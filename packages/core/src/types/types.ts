@@ -9,6 +9,7 @@ export interface User {
   todos?: Todo[];
   projects?: Project[];
   runners?: Runner[];
+  vacancies?: UserVacancy[];
 }
 
 export interface Project {
@@ -79,6 +80,17 @@ export interface Vacancy {
   keywords: string[];
   createdAt: Date;
   updatedAt: Date;
+  users?: UserVacancy[];
+}
+
+export interface UserVacancy {
+  userId: string;
+  vacancyId: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+  user?: User;
+  vacancy?: Vacancy;
 }
 
 type JsonValue = string | number | boolean | { [key in string]?: JsonValue } | Array<JsonValue> | null;
