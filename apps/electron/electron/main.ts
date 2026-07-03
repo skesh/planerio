@@ -3,7 +3,7 @@ import { createRequire } from "node:module"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import type { Project, Todo } from "@repo/core"
-import { app, BrowserWindow, dialog, ipcMain, Menu } from "electron"
+import { app, BrowserWindow, dialog, ipcMain, Menu, shell } from "electron"
 import Store from "electron-store"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -133,6 +133,10 @@ app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow()
   }
+})
+
+ipcMain.handle("shell:open-url", (_event, url: string) => {
+  if (url.startsWith("http")) shell.openExternal(url)
 })
 
 ipcMain.handle("window:minimize", (event) => {

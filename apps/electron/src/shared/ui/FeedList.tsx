@@ -4,6 +4,7 @@ import TodoCard from "@/entities/Todo/TodoCard"
 import TodoDrawer from "@/entities/Todo/TodoDrawer"
 import { useTodoActions, useTodoStore } from "@/store/todosStore"
 import { useUiActions, useUiSelectors } from "@/store/uiStore"
+import { useVacancyStore } from "@/features/vacancies/vacancyStore"
 import { useHotkeys } from "../hooks/useHotkeys"
 import { VacancyCard } from "./VacancyCard"
 
@@ -19,10 +20,19 @@ export default function FeedList({ items }: FeedListProps) {
   const listRef = useRef<HTMLDivElement>(null)
   const { toggleDone } = useTodoActions()
 
+  const vacancyStoreItems = useVacancyStore((s) => s.items)
+
   const visibleItems = useMemo(
-    () => items.filter((i) => i.kind !== "todo" || !i.done || showDone),
-    [items, showDone],
+    () => items.filter((i) => {
+      if (i.kind === "todo") return !i.done || showDone
+
+      const status = vacancyStoreItems.find((v) => v.id === i.id)?.status ?? "new"
+      return showDone || status === "new"
+    }),
+    [items, showDone, vacancyStoreItems],
   )
+
+  const prevIdsRef = useRef("")
 
   const clamp = (i: number) => {
     if (visibleItems.length === 0) return 0
@@ -55,7 +65,14 @@ export default function FeedList({ items }: FeedListProps) {
     { enabled: !drawerOpen },
   )
 
-  useHotkeys("KeyI", () => setDrawerOpen("edit"), [drawerOpen], { enabled: !drawerOpen })
+  useHotkeys("KeyI", () => {
+    const item = visibleItems[activeIndex]
+    if (item?.kind === "vacancy") {
+      window.ipcRenderer.invoke("shell:open-url", (item as any).url)
+      return
+    }
+    setDrawerOpen("edit")
+  }, [activeIndex, visibleItems], { enabled: !drawerOpen })
   useHotkeys("KeyO", () => setDrawerOpen("add"), [drawerOpen], { enabled: !drawerOpen })
   useHotkeys("KeyS", () => setShowDone((s) => !s), [drawerOpen], { enabled: !drawerOpen })
   useHotkeys(
@@ -85,6 +102,26 @@ export default function FeedList({ items }: FeedListProps) {
     enabled: editMode === "normal" && !sidebarOpen && !drawerOpen,
   })
 
+  useHotkeys(
+    "KeyM",
+    () => {
+      const item = visibleItems[activeIndex]
+      if (item?.kind !== "vacancy") return
+
+      const cycle: Record<string, string> = {
+        new: "applied",
+        applied: "skipped",
+        skipped: "blocked",
+        blocked: "new",
+      }
+      const store = useVacancyStore.getState()
+      const current = store.items.find((i) => i.id === item.id)?.status ?? "new"
+      store.setStatus(item.id, cycle[current] ?? "applied")
+    },
+    [activeIndex, visibleItems],
+    { enabled: !drawerOpen },
+  )
+
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.code === "KeyH") {
@@ -97,7 +134,11 @@ export default function FeedList({ items }: FeedListProps) {
   }, [])
 
   useEffect(() => {
-    setActiveIndex(0)
+    const ids = visibleItems.map((i) => i.id).join(",")
+    if (prevIdsRef.current !== ids) {
+      prevIdsRef.current = ids
+      setActiveIndex(0)
+    }
   }, [visibleItems])
 
   useEffect(() => {
