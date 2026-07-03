@@ -1,4 +1,4 @@
-import type { Project } from "@repo/core"
+import type { FeedItem } from "@repo/core"
 import { filterProject } from "@repo/core"
 import { useEffect, useMemo } from "react"
 import { useParams } from "react-router"
@@ -6,8 +6,8 @@ import useGlobalKeybindings from "@/app/global-keybindings"
 import { Textarea } from "@/shared/ui/textarea"
 import { useProjectActions, useProjectSelectors } from "@/store/projectsStore"
 import { useTodoSelectors } from "@/store/todosStore"
-import TodoDrawer from "../entities/Todo/TodoDrawer"
-import TodoList from "../entities/Todo/TodoList/TodoList"
+import FeedList from "@/shared/ui/FeedList"
+import type { Project } from "@repo/core"
 
 export default function PageProject() {
   const { id } = useParams<{ id: string }>()
@@ -19,7 +19,10 @@ export default function PageProject() {
   const { todos } = useTodoSelectors()
 
   const activeProject = projects.find((p) => p.id === id)
-  const projectTodos = useMemo(() => filterProject(todos, id ?? ""), [todos, id])
+  const projectTodos: FeedItem[] = useMemo(
+    () => filterProject(todos, id ?? "").map((t) => Object.assign(Object.create(t), { kind: "todo" as const })),
+    [todos, id],
+  )
 
   useGlobalKeybindings()
 
@@ -46,9 +49,7 @@ export default function PageProject() {
             onChange={(e) => updateProjectField("description", e.target.value)}
           />
 
-          <TodoList items={projectTodos} />
-
-          <TodoDrawer />
+          <FeedList items={projectTodos} />
         </div>
       ) : (
         <div>Project not found</div>

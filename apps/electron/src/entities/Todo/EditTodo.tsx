@@ -7,7 +7,7 @@ import { DatePickerField } from "@/shared/ui/DatePickerField.tsx"
 import { MultiSelect } from "@/shared/ui/MultiSelect.tsx"
 import { useProjectSelectors } from "@/store/projectsStore.ts"
 import { useTodoActions, useTodoSelectors } from "@/store/todosStore"
-import { type UIState, useUiActions } from "@/store/uiStore.ts"
+
 import { Field } from "../../shared/ui/field.tsx"
 import { Input } from "../../shared/ui/input.tsx"
 import {
@@ -24,10 +24,11 @@ import { ToggleGroup, ToggleGroupItem } from "../../shared/ui/toggle-group.tsx"
 
 interface EditTodoProps {
   initialTodo: Todo
-  todoOpen: UIState["todoOpen"]
+  todoOpen: "edit" | "add" | false
+  onClose: () => void
 }
 
-export default function EditTodo({ initialTodo, todoOpen }: EditTodoProps) {
+export default function EditTodo({ initialTodo, todoOpen, onClose }: EditTodoProps) {
   const { control, handleSubmit, reset, setValue } = useForm<Todo>({
     defaultValues: initialTodo,
   })
@@ -35,8 +36,6 @@ export default function EditTodo({ initialTodo, todoOpen }: EditTodoProps) {
   const { activeTodo, todos } = useTodoSelectors()
   const { addItem, editItemById } = useTodoActions()
   const { projects } = useProjectSelectors()
-  const { setTodoOpen } = useUiActions()
-
   const otherTodos = filterAvailableForDependency(todos, initialTodo.id)
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -58,7 +57,7 @@ export default function EditTodo({ initialTodo, todoOpen }: EditTodoProps) {
         if (activeTodo) editItemById(activeTodo.id, data)
         break
     }
-    setTodoOpen(false)
+    onClose()
   }
 
   return (

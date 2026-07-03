@@ -1,15 +1,19 @@
+import type { FeedItem } from "@repo/core"
 import { filterRepeats } from "@repo/core"
 import { useMemo } from "react"
 import useGlobalKeybindings from "@/app/global-keybindings"
 import { useTodoSelectors } from "@/store/todosStore"
-import TodoList from "../entities/Todo/TodoList/TodoList"
+import FeedList from "@/shared/ui/FeedList"
 
 export default function PageRepeats() {
   const { todos } = useTodoSelectors()
 
-  const repeatsTodos = useMemo(() => filterRepeats(todos), [todos])
+  const items: FeedItem[] = useMemo(
+    () => filterRepeats(todos).map((t) => Object.assign(Object.create(t), { kind: "todo" as const })),
+    [todos],
+  )
 
   useGlobalKeybindings()
 
-  return <TodoList items={repeatsTodos} />
+  return <FeedList items={items} />
 }

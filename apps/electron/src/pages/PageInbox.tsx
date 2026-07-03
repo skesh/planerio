@@ -1,15 +1,19 @@
+import type { FeedItem } from "@repo/core"
 import { filterInbox } from "@repo/core"
 import { useMemo } from "react"
 import useGlobalKeybindings from "@/app/global-keybindings"
 import { useTodoSelectors } from "@/store/todosStore"
-import TodoList from "../entities/Todo/TodoList/TodoList"
+import FeedList from "@/shared/ui/FeedList"
 
 export default function PageInbox() {
   const { todos } = useTodoSelectors()
 
-  const inboxTodos = useMemo(() => filterInbox(todos), [todos])
+  const items: FeedItem[] = useMemo(
+    () => filterInbox(todos).map((t) => Object.assign(Object.create(t), { kind: "todo" as const })),
+    [todos],
+  )
 
   useGlobalKeybindings()
 
-  return <TodoList items={inboxTodos} />
+  return <FeedList items={items} />
 }
