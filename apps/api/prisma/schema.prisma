@@ -28,8 +28,8 @@ model Project {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  todos  Todo[]
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  todos   Todo[]
   runners Runner[]
 }
 
@@ -56,22 +56,41 @@ model Todo {
   id             String   @id @default(cuid())
   externalId     String?
   externalSource String?
-  title       String
-  description String   @default("")
-  tags        String[]
-  priority    Boolean  @default(false)
-  date        String   @default("")
-  time        String   @default("")
-  endDate     String   @default("")
-  repeat      String?
-  dependsOn   String[]
-  done        Boolean  @default(false)
-  doneDate    String   @default("")
-  userId      String
-  projectId   String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  title          String
+  description    String   @default("")
+  tags           String[]
+  priority       Boolean  @default(false)
+  date           String   @default("")
+  time           String   @default("")
+  endDate        String   @default("")
+  repeat         String?
+  dependsOn      String[]
+  done           Boolean  @default(false)
+  doneDate       String   @default("")
+  userId         String
+  projectId      String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   project Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+}
+
+model Vacancy {
+  id             String   @id @default(cuid())
+  company        String
+  title          String
+  publishedAt    String
+  externalId     String
+  externalSource String
+  description    String   @default("")
+  area           String?
+  url            String
+  salary         String?
+  keywords       String[] @default([])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([externalSource, externalId])
 }
