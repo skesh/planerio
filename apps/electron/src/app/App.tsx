@@ -2,7 +2,6 @@ import { useEffect } from "react"
 import { HashRouter, Route, Routes } from "react-router"
 import PageVacancies from "@/features/vacancies/PageVacancy.tsx"
 import PageRepeats from "@/pages/PageRepeats.tsx"
-import TodoDrawer from "../entities/Todo/TodoDrawer.tsx"
 import { initializeAuth } from "../features/auth/authBootstrap.ts"
 import PageHome from "../pages/PageHome.tsx"
 import PageInbox from "../pages/PageInbox.tsx"
@@ -33,7 +32,6 @@ function App() {
           <AppSidebar />
           <SidebarInset>
             <CommandMenu />
-            {/* <Toolbar /> */}
             <Routes>
               <Route path="/" element={<PageHome />} />
               <Route path="/inbox" element={<PageInbox />} />
@@ -44,7 +42,6 @@ function App() {
           </SidebarInset>
         </SidebarProvider>
 
-        <TodoDrawer />
         <Footer />
       </div>
     </HashRouter>
