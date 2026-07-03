@@ -5,7 +5,7 @@ import { useUiSelectors } from "@/store/uiStore";
 
 export default function Footer() {
   const { todos, activeTodo } = useTodoSelectors();
-  const { editMode, showDone } = useUiSelectors();
+  const { editMode } = useUiSelectors();
 
   return (
     <div className="sticky bottom-0 flex w-full shrink-0 gap-2 bg-background items-center">
@@ -17,7 +17,6 @@ export default function Footer() {
       >
         {editMode.toUpperCase()}
       </div>
-      <span>Hidden: {showDone ? "false" : "true"}</span>
       <div className="flex ml-auto gap-4">
         {activeTodo && <span>Active ID: {activeTodo?.id}</span>}
         <span>Total: {todos.length}</span>
