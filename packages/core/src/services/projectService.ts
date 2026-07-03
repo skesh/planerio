@@ -1,9 +1,9 @@
 import { apiFetch } from "../utils/apiFetch"
 import { getActiveJwt } from "../store/auth"
-import type { Vacancy } from "../types/types"
+import type { Project } from "../types/types"
 
-export async function loadVacancies() {
+export async function loadProjects() {
   const jwt = getActiveJwt()
   if (!jwt) return []
-  return apiFetch<Vacancy[]>("/vacancies", jwt)
+  return apiFetch<Project[]>("/projects", jwt)
 }

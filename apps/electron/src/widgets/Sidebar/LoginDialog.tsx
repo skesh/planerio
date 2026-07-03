@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { login } from "@/features/auth/authService"
+import { login } from "@/features/auth/authBootstrap"
 import { Button } from "@/shared/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/dialog"
 import { Input } from "@/shared/ui/input"

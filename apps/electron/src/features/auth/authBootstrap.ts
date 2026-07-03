@@ -1,9 +1,6 @@
-import { API_URL } from "@repo/core"
-import type { Account } from "@/store/authStore"
-import { useAuthStore } from "@/store/authStore"
+import { API_URL, type Account, useAuthStore, getActiveJwt, loadTodos, loadProjects } from "@repo/core"
 import { useProjectStore } from "@/store/projectsStore"
 import { useTodoStore } from "@/store/todosStore"
-import { loadProjects, loadTodos } from "../todo/todoService"
 
 const SYNC_INTERVAL = 10 * 60 * 1000
 
@@ -19,7 +16,7 @@ export async function initializeAuth() {
 
   const accounts = ((await window.ipcRenderer.auth.get("accounts")) as Account[]) ?? []
   const activeAccountId = ((await window.ipcRenderer.auth.get("activeAccountId")) as string) ?? null
-  useAuthStore.setState({ accounts, activeAccountId, initialized: true })
+  useAuthStore.getState().initialize(accounts, activeAccountId)
 
   if (activeAccountId) {
     await window.ipcRenderer.store.switch(activeAccountId)
@@ -28,29 +25,12 @@ export async function initializeAuth() {
 }
 
 export async function login(email: string, password: string) {
-  const { accounts } = useAuthStore.getState()
+  const account = await useAuthStore.getState().login(email, password)
 
-  const res = await fetch(`${API_URL}/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  })
-  if (!res.ok) {
-    const err = await res.json()
-    throw new Error(err.error ?? "Login failed")
-  }
-  const { token, user } = await res.json()
+  await window.ipcRenderer.auth.set("accounts", useAuthStore.getState().accounts)
+  await window.ipcRenderer.auth.set("activeAccountId", account.id)
+  await window.ipcRenderer.store.switch(account.id)
 
-  const account: Account = { id: user.id, email: user.email, token, lastSync: 0 }
-  const newAccounts = accounts.some((a) => a.id === user.id)
-    ? accounts.map((a) => (a.id === user.id ? account : a))
-    : [...accounts, account]
-
-  await window.ipcRenderer.auth.set("accounts", newAccounts)
-  await window.ipcRenderer.auth.set("activeAccountId", user.id)
-  useAuthStore.setState({ accounts: newAccounts, activeAccountId: user.id })
-
-  await window.ipcRenderer.store.switch(user.id)
   await reloadData()
   await sync()
 }
@@ -60,12 +40,10 @@ export async function logout(accountId?: string) {
   const targetId = accountId ?? activeAccountId
   if (!targetId) return
 
-  const newAccounts = accounts.filter((a) => a.id !== targetId)
-  const newActiveId = targetId === activeAccountId ? (newAccounts[0]?.id ?? null) : activeAccountId
+  const newActiveId = useAuthStore.getState().removeAccount(targetId)
 
-  await window.ipcRenderer.auth.set("accounts", newAccounts)
+  await window.ipcRenderer.auth.set("accounts", useAuthStore.getState().accounts)
   await window.ipcRenderer.auth.set("activeAccountId", newActiveId)
-  useAuthStore.setState({ accounts: newAccounts, activeAccountId: newActiveId })
 
   if (targetId === activeAccountId) {
     await window.ipcRenderer.store.switch(newActiveId ?? "local")
@@ -78,7 +56,7 @@ export async function switchAccount(accountId: string) {
 
   await window.ipcRenderer.store.switch(accountId)
   await window.ipcRenderer.auth.set("activeAccountId", accountId)
-  useAuthStore.setState({ activeAccountId: accountId })
+  useAuthStore.getState().setActiveAccountId(accountId)
   await reloadData()
 
   const account = useAuthStore.getState().accounts.find((a) => a.id === accountId)
@@ -88,24 +66,16 @@ export async function switchAccount(accountId: string) {
 }
 
 export async function sync() {
-  const { accounts, activeAccountId } = useAuthStore.getState()
   const { items, setItems } = useTodoStore.getState()
   const { projects, saveProjects } = useProjectStore.getState()
-  const jwt = accounts.find((a) => a.id === activeAccountId)?.token
+  const jwt = getActiveJwt()
   if (!jwt) return
 
-  const headers: HeadersInit = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${jwt}`,
-  }
-
-  // Pull first — получить свежие данные с сервера
   const [serverProjects, serverTodos] = await Promise.all([
     loadProjects(),
     loadTodos(),
   ])
 
-  // Слить: серверные + локальные (локальные, которых нет на сервере)
   const mergedTodos = serverTodos.map((st) => {
     const local = items.find((i) => i.id === st.id)
     return local && local.updatedAt && st.updatedAt
@@ -124,9 +94,16 @@ export async function sync() {
   const localOnlyProjects = projects.filter((p) => !serverProjects.find((sp) => sp.id === p.id))
   saveProjects([...mergedProjects, ...localOnlyProjects])
 
-  // Push — отправить слитые данные на сервер
   await Promise.all([
-    fetch(`${API_URL}/projects/sync`, { method: "POST", headers, body: JSON.stringify([...mergedProjects, ...localOnlyProjects]) }),
-    fetch(`${API_URL}/todos/sync`, { method: "POST", headers, body: JSON.stringify([...mergedTodos, ...localOnlyTodos]) }),
+    fetch(`${API_URL}/projects/sync`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${jwt}` },
+      body: JSON.stringify([...mergedProjects, ...localOnlyProjects]),
+    }),
+    fetch(`${API_URL}/todos/sync`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${jwt}` },
+      body: JSON.stringify([...mergedTodos, ...localOnlyTodos]),
+    }),
   ])
 }

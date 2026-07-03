@@ -1,6 +1,6 @@
-import useGlobalKeybindings from "@/app/global-keybindings"
 import { useAuthSelectors, useVacancySelectors } from "@repo/core"
 import { useEffect } from "react"
+import useGlobalKeybindings from "@/app/global-keybindings"
 import { reloadData } from "./vacancyService"
 
 export default function PageVacancies() {

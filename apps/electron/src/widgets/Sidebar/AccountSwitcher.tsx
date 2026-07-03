@@ -1,6 +1,6 @@
 import { ChevronsUpDown, LogOut, Plus, RefreshCcw, UserRound } from "lucide-react"
 import { useState } from "react"
-import { logout, switchAccount, sync } from "@/features/auth/authService"
+import { logout, switchAccount, sync } from "@/features/auth/authBootstrap"
 import {
   DropdownMenu,
   DropdownMenuContent,

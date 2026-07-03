@@ -17,10 +17,9 @@ export const useVacancyStore = create<VacancyState>((set, get) => ({
   isLoading: false,
 
   initialize: async () => {
-    if (get().initialized) return // защита от повторного вызова
+    if (get().initialized) return
     set({ isLoading: true })
     const items = await loadVacancies()
-    console.log(items)
     set({ items, isLoading: false, initialized: true })
   },
 
