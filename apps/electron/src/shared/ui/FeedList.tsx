@@ -44,38 +44,63 @@ export default function FeedList({ items }: FeedListProps) {
 
   const drawerBlock = !!drawerMode
 
-  useHotkeys("KeyJ", () => {
-    const next = activeIndex < visibleItems.length - 1 ? activeIndex + 1 : 0
-    const item = visibleItems[next]
-    if (!item) return
-    setActiveIndex(next)
-  }, [activeIndex, visibleItems], { enabled: !drawerBlock })
+  useHotkeys(
+    "KeyJ",
+    () => {
+      const next = activeIndex < visibleItems.length - 1 ? activeIndex + 1 : 0
+      const item = visibleItems[next]
+      if (!item) return
+      setActiveIndex(next)
+    },
+    [activeIndex, visibleItems],
+    { enabled: !drawerBlock },
+  )
 
-  useHotkeys("KeyK", () => {
-    const next = activeIndex > 0 ? activeIndex - 1 : visibleItems.length - 1
-    const item = visibleItems[next]
-    if (!item) return
-    setActiveIndex(next)
-  }, [activeIndex, visibleItems], { enabled: !drawerBlock })
+  useHotkeys(
+    "KeyK",
+    () => {
+      const next = activeIndex > 0 ? activeIndex - 1 : visibleItems.length - 1
+      const item = visibleItems[next]
+      if (!item) return
+      setActiveIndex(next)
+    },
+    [activeIndex, visibleItems],
+    { enabled: !drawerBlock },
+  )
 
-  useHotkeys("Enter", () => {
-    const item = visibleItems[activeIndex]
-    if (item) handleOpen(item)
-  }, [activeIndex, visibleItems], { enabled: !drawerBlock })
+  useHotkeys(
+    "Enter",
+    () => {
+      const item = visibleItems[activeIndex]
+      if (item) handleOpen(item)
+    },
+    [activeIndex, visibleItems],
+    { enabled: !drawerBlock },
+  )
 
   useHotkeys("KeyI", () => setDrawerMode("edit"), [drawerBlock], { enabled: !drawerBlock })
   useHotkeys("KeyO", () => setDrawerMode("add"), [drawerBlock], { enabled: !drawerBlock })
   useHotkeys("KeyS", () => setShowDone((s) => !s), [drawerBlock], { enabled: !drawerBlock })
-  useHotkeys("D", () => {
-    const activeItem = visibleItems[activeIndex]
-    if (activeItem?.kind !== "todo") return
-    const { items: storeItems, setItems } = useTodoStore.getState()
-    setItems(storeItems.filter((i) => i.id !== activeItem.id))
-  }, [activeIndex, visibleItems], { enabled: !drawerBlock })
-  useHotkeys("d", () => {
-    const activeItem = visibleItems[activeIndex]
-    if (activeItem?.kind === "todo") toggleDone(activeItem.id)
-  }, [activeIndex, visibleItems], { enabled: !drawerBlock })
+  useHotkeys(
+    "D",
+    () => {
+      const activeItem = visibleItems[activeIndex]
+      if (activeItem?.kind !== "todo") return
+      const { items: storeItems, setItems } = useTodoStore.getState()
+      setItems(storeItems.filter((i) => i.id !== activeItem.id))
+    },
+    [activeIndex, visibleItems],
+    { enabled: !drawerBlock },
+  )
+  useHotkeys(
+    "d",
+    () => {
+      const activeItem = visibleItems[activeIndex]
+      if (activeItem?.kind === "todo") toggleDone(activeItem.id)
+    },
+    [activeIndex, visibleItems],
+    { enabled: !drawerBlock },
+  )
 
   useHotkeys("Escape", () => setDrawerMode(false), [drawerMode], { enabled: drawerBlock })
 
@@ -118,7 +143,10 @@ export default function FeedList({ items }: FeedListProps) {
             <div
               key={item.id}
               data-id={item.id}
-              onClick={() => { setActiveIndex(i); handleOpen(item) }}
+              onClick={() => {
+                setActiveIndex(i)
+                handleOpen(item)
+              }}
               className="cursor-pointer"
             >
               {item.kind === "todo" ? (
@@ -130,7 +158,13 @@ export default function FeedList({ items }: FeedListProps) {
           )
         })}
       </div>
-      {drawerMode && <TodoDrawer open={drawerMode} onClose={() => setDrawerMode(false)} activeTodo={activeItem?.kind === "todo" ? activeItem : undefined} />}
+      {drawerMode && (
+        <TodoDrawer
+          open={drawerMode}
+          onClose={() => setDrawerMode(false)}
+          activeTodo={activeItem?.kind === "todo" ? activeItem : undefined}
+        />
+      )}
     </>
   )
 }
