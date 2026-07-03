@@ -5,12 +5,12 @@ import { useNavigate } from "react-router";
 
 export default function useGlobalKeybindings() {
   const { toggleSidebar } = useUiActions();
-  const { editMode, sidebarOpen } = useUiSelectors();
+  const { editMode, sidebarOpen, drawerOpen } = useUiSelectors();
 
   const navigate = useNavigate();
 
-  useHotkeys("KeyH", () => toggleSidebar(), [editMode], {
-    enabled: editMode === "normal" && !sidebarOpen,
+  useHotkeys("KeyH", () => toggleSidebar(), [editMode, drawerOpen], {
+    enabled: editMode === "normal" && !sidebarOpen && !drawerOpen,
   });
 
   useEffect(() => {

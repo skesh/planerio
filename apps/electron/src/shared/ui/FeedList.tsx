@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react"
 import TodoCard from "@/entities/Todo/TodoCard"
 import TodoDrawer from "@/entities/Todo/TodoDrawer"
 import { useTodoActions, useTodoStore } from "@/store/todosStore"
+import { useUiActions } from "@/store/uiStore"
 import { useHotkeys } from "../hooks/useHotkeys"
 import { VacancyCard } from "./VacancyCard"
 
@@ -15,6 +16,7 @@ interface FeedListProps {
 export default function FeedList({ items }: FeedListProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [drawerMode, setDrawerMode] = useState<DrawerMode>(false)
+  const { setDrawerOpen } = useUiActions()
   const listRef = useRef<HTMLDivElement>(null)
   const { toggleDone, toggleShowDone } = useTodoActions()
 
@@ -73,6 +75,10 @@ export default function FeedList({ items }: FeedListProps) {
   useEffect(() => {
     setActiveIndex(0)
   }, [items])
+
+  useEffect(() => {
+    setDrawerOpen(!!drawerMode)
+  }, [drawerMode, setDrawerOpen])
 
   useEffect(() => {
     const el = listRef.current?.querySelector(`[data-id="${items[activeIndex]?.id}"]`)

@@ -6,11 +6,13 @@ export interface UIState {
   editProjectOpen: boolean
   activeIndex: number
   menuOpen: boolean
+  drawerOpen: boolean
   editMode: "normal" | "edit"
   toggleSidebar: () => void
   setEditProject: (state: boolean) => void
   setActiveIndex: (index: number) => void
   toggleMenu: () => void
+  setDrawerOpen: (open: boolean) => void
   setMode: (mode: UIState["editMode"]) => void
 }
 
@@ -19,11 +21,13 @@ export const useUIStore = create<UIState>((set, get) => ({
   editProjectOpen: false,
   activeIndex: -1,
   menuOpen: false,
+  drawerOpen: false,
   editMode: "normal",
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
   toggleMenu: () => set((state) => ({ menuOpen: !state.menuOpen })),
   setEditProject: (editProjectOpen: boolean) => set({ editProjectOpen }),
   setActiveIndex: (index: number) => set({ activeIndex: index }),
+  setDrawerOpen: (drawerOpen: boolean) => set({ drawerOpen }),
   setMode: (editMode: UIState["editMode"]) => get().editMode !== editMode && set({ editMode }),
 }))
 
@@ -33,6 +37,7 @@ export const useUiSelectors = () =>
       sidebarOpen: s.sidebarOpen,
       activeIndex: s.activeIndex,
       menuOpen: s.menuOpen,
+      drawerOpen: s.drawerOpen,
       editMode: s.editMode,
       editProjectOpen: s.editProjectOpen,
     })),
@@ -45,6 +50,7 @@ export const useUiActions = () =>
       setEditProject: s.setEditProject,
       setActiveIndex: s.setActiveIndex,
       toggleMenu: s.toggleMenu,
+      setDrawerOpen: s.setDrawerOpen,
       setMode: s.setMode,
     })),
   )
