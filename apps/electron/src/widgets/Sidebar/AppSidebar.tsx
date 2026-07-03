@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid/non-secure"
 import { useEffect, useState } from "react"
-import { useLocation, useNavigate } from "react-router"
+import { useNavigate } from "react-router"
 import { cn } from "@/shared/lib/utils"
 import { Input } from "@/shared/ui/input"
 import {
@@ -25,12 +25,11 @@ const STATIC_NAV = [
 ]
 
 export function AppSidebar() {
-  const { projects } = useProjectSelectors()
-  const { addProject, setId } = useProjectActions()
-  const { editProjectOpen } = useUiSelectors()
+  const { projects, activeProjectId } = useProjectSelectors()
+  const { addProject } = useProjectActions()
+  const { editProjectOpen, sidebarOpen } = useUiSelectors()
   const { setEditProject, toggleSidebar } = useUiActions()
   const navigate = useNavigate()
-  const location = useLocation()
 
   const [name, setName] = useState("")
   const [activeIndex, setActiveIndex] = useState(0)
@@ -51,22 +50,32 @@ export function AppSidebar() {
     toggleSidebar()
   }
 
-  useSidebarKeybindings(activeIndex, setActiveIndex, navItems.length, onEnter)
+  useSidebarKeybindings(onEnter)
 
-  // Установка активного элемента при перезагрузке проекта
   useEffect(() => {
-    // if (location.pathname.includes("/inbox")) setActiveIndex(1)
-    if (location.pathname.includes("/project")) {
-      const projectId = location.pathname.slice(9)
-      const index = projects.findIndex((p) => p.id === projectId)
-      if (index) setActiveIndex(index + STATIC_NAV.length)
+    if (!sidebarOpen) return
+    const index = navItems.findIndex((p) => p.id === activeProjectId)
+    if (index >= 0) setActiveIndex(index)
+  }, [sidebarOpen, activeProjectId, projects])
+
+
+  useEffect(() => {
+    if (!sidebarOpen || editProjectOpen) return
+
+    function handler(e: KeyboardEvent) {
+      if (e.code === "KeyJ") {
+        setActiveIndex((prev) => (prev < navItems.length - 1 ? prev + 1 : 0))
+        e.preventDefault()
+      }
+      if (e.code === "KeyK") {
+        setActiveIndex((prev) => (prev > 0 ? prev - 1 : navItems.length - 1))
+        e.preventDefault()
+      }
     }
-  }, [projects])
 
-  useEffect(() => {
-    const projectIndex = navItems[activeIndex]?.id
-    setId(projectIndex)
-  }, [activeIndex, projects])
+    window.addEventListener("keydown", handler)
+    return () => window.removeEventListener("keydown", handler)
+  }, [sidebarOpen, editProjectOpen, navItems.length])
 
   function submitProject() {
     if (name.trim()) {

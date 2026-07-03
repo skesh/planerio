@@ -2,12 +2,7 @@ import { useHotkeys } from "@/shared/hooks/useHotkeys";
 import { useProjectActions, useProjectSelectors } from "@/store/projectsStore";
 import { useUiActions, useUiSelectors } from "@/store/uiStore";
 
-export function useSidebarKeybindings(
-  index: number,
-  setIndex: (result: number) => void,
-  totalLength: number,
-  onEnter: () => void,
-) {
+export function useSidebarKeybindings(onEnter: () => void) {
   const { sidebarOpen, editProjectOpen, editMode } = useUiSelectors();
   const { setEditProject } = useUiActions();
   const { activeProjectId } = useProjectSelectors();
@@ -15,20 +10,6 @@ export function useSidebarKeybindings(
 
   const hotkeysEnable =
     sidebarOpen && !editProjectOpen && editMode === "normal";
-
-  useHotkeys(
-    "j",
-    () => setIndex(index < totalLength - 1 ? index + 1 : 0),
-    [sidebarOpen, editMode, editProjectOpen, index, totalLength],
-    { enabled: hotkeysEnable },
-  );
-
-  useHotkeys(
-    "k",
-    () => setIndex(index > 0 ? index - 1 : totalLength - 1),
-    [sidebarOpen, editMode, editProjectOpen, index, totalLength],
-    { enabled: hotkeysEnable },
-  );
 
   useHotkeys(
     "o",
