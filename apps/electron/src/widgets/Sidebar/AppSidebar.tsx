@@ -64,10 +64,8 @@ export function AppSidebar() {
   }, [projects])
 
   useEffect(() => {
-    const projectIndex = activeIndex - STATIC_NAV.length
-    if (projectIndex >= 0 && projects[projectIndex]) {
-      setId(projects[projectIndex].id)
-    }
+    const projectIndex = navItems[activeIndex]?.id
+    setId(projectIndex)
   }, [activeIndex, projects])
 
   function submitProject() {
