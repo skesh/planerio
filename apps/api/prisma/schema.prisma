@@ -3,6 +3,11 @@ generator client {
   output   = "../src/generated/prisma"
 }
 
+generator typescriptInterfaces {
+  provider = "prisma-generator-typescript-interfaces"
+  output   = "../../../packages/core/src/types/types.ts"
+}
+
 datasource db {
   provider = "postgresql"
 }
