@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react"
 import TodoCard from "@/entities/Todo/TodoCard"
 import TodoDrawer from "@/entities/Todo/TodoDrawer"
 import { useTodoActions, useTodoStore } from "@/store/todosStore"
-import { useUiActions } from "@/store/uiStore"
+import { useUiActions, useUiSelectors } from "@/store/uiStore"
 import { useHotkeys } from "../hooks/useHotkeys"
 import { VacancyCard } from "./VacancyCard"
 
@@ -16,7 +16,8 @@ interface FeedListProps {
 export default function FeedList({ items }: FeedListProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [drawerMode, setDrawerMode] = useState<DrawerMode>(false)
-  const { setDrawerOpen } = useUiActions()
+  const { toggleSidebar, setDrawerOpen } = useUiActions()
+  const { editMode, sidebarOpen } = useUiSelectors()
   const listRef = useRef<HTMLDivElement>(null)
   const { toggleDone, toggleShowDone } = useTodoActions()
 
@@ -71,6 +72,21 @@ export default function FeedList({ items }: FeedListProps) {
   }, [activeIndex, items], { enabled: !drawerBlock })
 
   useHotkeys("Escape", () => setDrawerMode(false), [drawerMode], { enabled: drawerBlock })
+
+  useHotkeys("KeyH", () => toggleSidebar(), [editMode, drawerBlock], {
+    enabled: editMode === "normal" && !sidebarOpen && !drawerBlock,
+  })
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.code === "KeyH") {
+        e.preventDefault()
+        window.ipcRenderer.invoke("window:minimize")
+      }
+    }
+    document.addEventListener("keydown", down)
+    return () => document.removeEventListener("keydown", down)
+  }, [])
 
   useEffect(() => {
     setActiveIndex(0)

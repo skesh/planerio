@@ -2,7 +2,6 @@ import type { FeedItem } from "@repo/core"
 import { filterProject } from "@repo/core"
 import { useEffect, useMemo } from "react"
 import { useParams } from "react-router"
-import useGlobalKeybindings from "@/app/global-keybindings"
 import { Textarea } from "@/shared/ui/textarea"
 import { useProjectActions, useProjectSelectors } from "@/store/projectsStore"
 import { useTodoSelectors } from "@/store/todosStore"
@@ -23,8 +22,6 @@ export default function PageProject() {
     () => filterProject(todos, id ?? "").map((t) => Object.assign(Object.create(t), { kind: "todo" as const })),
     [todos, id],
   )
-
-  useGlobalKeybindings()
 
   useEffect(() => {
     if (activeProjectId !== id && id) {

@@ -1,7 +1,6 @@
 import type { FeedItem } from "@repo/core"
 import { defaultSort, filterDependsOnReady, filterDone, filterNotInbox, filterOverdueOrUndated } from "@repo/core"
 import { useMemo } from "react"
-import useGlobalKeybindings from "@/app/global-keybindings"
 import { useTodoFeedItems, useTodoSelectors } from "@/store/todosStore"
 import FeedList from "@/shared/ui/FeedList"
 
@@ -16,8 +15,6 @@ export default function PageHome() {
     )
     return defaultSort(filtered) as FeedItem[]
   }, [items, showDone])
-
-  useGlobalKeybindings()
 
   return (
     <div className="flex flex-col flex-1">

@@ -1,6 +1,5 @@
 import { useAuthSelectors } from "@repo/core"
 import { useEffect } from "react"
-import useGlobalKeybindings from "@/app/global-keybindings"
 import { useVacancyFeedItems } from "./vacancyStore"
 import { reloadData } from "./vacancyService"
 import FeedList from "@/shared/ui/FeedList"
@@ -12,8 +11,6 @@ export default function PageVacancies() {
   useEffect(() => {
     reloadData()
   }, [activeAccountId])
-
-  useGlobalKeybindings()
 
   return (
     <div className="flex flex-col flex-1">
