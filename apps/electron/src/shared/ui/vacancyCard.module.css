@@ -4,3 +4,7 @@
   background-color: deeppink;
   color: black;
 }
+
+.active :global(.text-muted-foreground) {
+  color: oklch(0.3 0 0);
+}

@@ -100,6 +100,12 @@ export default function FeedList({ items }: FeedListProps) {
     setActiveIndex(0)
   }, [visibleItems])
 
+  useEffect(() => {
+    if (!activeItem) return
+    const el = listRef.current?.querySelector(`[data-id="${activeItem.id}"]`)
+    el?.scrollIntoView({ block: "nearest" })
+  }, [activeIndex])
+
   const onClose = () => {
     setDrawerOpen(false)
   }
