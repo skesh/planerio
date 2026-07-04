@@ -1,7 +1,7 @@
 import { useAuthSelectors } from "@repo/core"
 import { useEffect } from "react"
 import { useVacancyFeedItems } from "./vacancyStore"
-import { reloadData } from "./vacancyService"
+import { loadData } from "./vacancyService"
 import FeedList from "@/shared/ui/FeedList"
 
 export default function PageVacancies() {
@@ -9,7 +9,7 @@ export default function PageVacancies() {
   const { activeAccountId } = useAuthSelectors()
 
   useEffect(() => {
-    reloadData()
+    loadData()
   }, [activeAccountId])
 
   return (
