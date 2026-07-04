@@ -6,14 +6,14 @@ import { runners } from "../runners/index"
 const router = Router()
 
 router.get("/", requireAuth, async (req, res) => {
-  const list = await prisma.runner.findMany({ where: { userId: req.userId } })
+  const list = await prisma.runner.findMany()
   res.json(list)
 })
 
 router.get("/:id", requireAuth, async (req, res) => {
   const id = req.params.id as string
   const runner = await prisma.runner.findFirst({
-    where: { id, userId: req.userId },
+    where: { id },
   })
   if (!runner) {
     res.status(404).json({ error: "Runner not found" })
@@ -83,7 +83,9 @@ router.post("/", requireAuth, async (req, res) => {
     },
   })
 
-  console.log(`[runners] created: ${runner.name} (${runner.id}) type=${runner.type} schedule=${runner.schedule}`)
+  console.log(
+    `[runners] created: ${runner.name} (${runner.id}) type=${runner.type} schedule=${runner.schedule}`,
+  )
   res.status(201).json(runner)
 })
 

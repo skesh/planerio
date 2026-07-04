@@ -21,8 +21,12 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
   isUpdating: false,
 
   loadRunners: async () => {
-    const runners = await fetchRunners()
-    set({ runners })
+    try {
+      const runners = await fetchRunners()
+      set({ runners })
+    } catch (e) {
+      console.error("[runnerStore] loadRunners error:", e)
+    }
   },
 
   triggerAndWait: async (id, lastRunAt, schedule) => {
