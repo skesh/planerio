@@ -22,7 +22,6 @@ export interface Project {
   updatedAt: Date;
   user?: User;
   todos?: Todo[];
-  runners?: Runner[];
 }
 
 export interface Runner {
@@ -33,14 +32,11 @@ export interface Runner {
   schedule: string | null;
   config: JsonValue;
   lastRunAt: Date | null;
-  lastStatus: string | null;
-  errorMessage: string | null;
+  status: string;
   userId: string;
-  projectId: string | null;
   createdAt: Date;
   updatedAt: Date;
   user?: User;
-  project?: Project | null;
 }
 
 export interface Todo {

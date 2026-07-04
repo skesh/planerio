@@ -107,10 +107,8 @@ export const RunnerScalarFieldEnum = {
   schedule: 'schedule',
   config: 'config',
   lastRunAt: 'lastRunAt',
-  lastStatus: 'lastStatus',
-  errorMessage: 'errorMessage',
+  status: 'status',
   userId: 'userId',
-  projectId: 'projectId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

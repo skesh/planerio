@@ -28,6 +28,8 @@ async function tick() {
   for (const runner of dueRunners) {
     if (!runner.schedule) continue
 
+    if (runner.status === "running") continue
+
     const intervalMinutes = parseSchedule(runner.schedule)
     if (!intervalMinutes) continue
 
@@ -39,6 +41,11 @@ async function tick() {
     const handler = runners[runner.type]
     if (!handler) continue
 
+    await prisma.runner.update({
+      where: { id: runner.id },
+      data: { status: "running" },
+    })
+
     try {
       const count = await handler.run(
         runner.userId,
@@ -47,14 +54,14 @@ async function tick() {
       )
       await prisma.runner.update({
         where: { id: runner.id },
-        data: { lastRunAt: new Date(), lastStatus: "ok", errorMessage: null },
+        data: { lastRunAt: new Date(), status: "idle" },
       })
       console.log(`[scheduler] runner ${runner.name} (${runner.id}): done, created ${count}`)
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error"
       await prisma.runner.update({
         where: { id: runner.id },
-        data: { lastStatus: "error", errorMessage: message },
+        data: { status: "error" },
       })
       console.error(`[scheduler] runner ${runner.name} (${runner.id}): error - ${message}`)
     }

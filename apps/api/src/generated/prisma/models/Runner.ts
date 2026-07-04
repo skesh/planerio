@@ -31,10 +31,8 @@ export type RunnerMinAggregateOutputType = {
   enabled: boolean | null
   schedule: string | null
   lastRunAt: Date | null
-  lastStatus: string | null
-  errorMessage: string | null
+  status: string | null
   userId: string | null
-  projectId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -46,10 +44,8 @@ export type RunnerMaxAggregateOutputType = {
   enabled: boolean | null
   schedule: string | null
   lastRunAt: Date | null
-  lastStatus: string | null
-  errorMessage: string | null
+  status: string | null
   userId: string | null
-  projectId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,10 +58,8 @@ export type RunnerCountAggregateOutputType = {
   schedule: number
   config: number
   lastRunAt: number
-  lastStatus: number
-  errorMessage: number
+  status: number
   userId: number
-  projectId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -79,10 +73,8 @@ export type RunnerMinAggregateInputType = {
   enabled?: true
   schedule?: true
   lastRunAt?: true
-  lastStatus?: true
-  errorMessage?: true
+  status?: true
   userId?: true
-  projectId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -94,10 +86,8 @@ export type RunnerMaxAggregateInputType = {
   enabled?: true
   schedule?: true
   lastRunAt?: true
-  lastStatus?: true
-  errorMessage?: true
+  status?: true
   userId?: true
-  projectId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -110,10 +100,8 @@ export type RunnerCountAggregateInputType = {
   schedule?: true
   config?: true
   lastRunAt?: true
-  lastStatus?: true
-  errorMessage?: true
+  status?: true
   userId?: true
-  projectId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -199,10 +187,8 @@ export type RunnerGroupByOutputType = {
   schedule: string | null
   config: runtime.JsonValue
   lastRunAt: Date | null
-  lastStatus: string | null
-  errorMessage: string | null
+  status: string
   userId: string
-  projectId: string | null
   createdAt: Date
   updatedAt: Date
   _count: RunnerCountAggregateOutputType | null
@@ -236,14 +222,11 @@ export type RunnerWhereInput = {
   schedule?: Prisma.StringNullableFilter<"Runner"> | string | null
   config?: Prisma.JsonFilter<"Runner">
   lastRunAt?: Prisma.DateTimeNullableFilter<"Runner"> | Date | string | null
-  lastStatus?: Prisma.StringNullableFilter<"Runner"> | string | null
-  errorMessage?: Prisma.StringNullableFilter<"Runner"> | string | null
+  status?: Prisma.StringFilter<"Runner"> | string
   userId?: Prisma.StringFilter<"Runner"> | string
-  projectId?: Prisma.StringNullableFilter<"Runner"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Runner"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Runner"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  project?: Prisma.XOR<Prisma.ProjectNullableScalarRelationFilter, Prisma.ProjectWhereInput> | null
 }
 
 export type RunnerOrderByWithRelationInput = {
@@ -254,14 +237,11 @@ export type RunnerOrderByWithRelationInput = {
   schedule?: Prisma.SortOrderInput | Prisma.SortOrder
   config?: Prisma.SortOrder
   lastRunAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  lastStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
-  project?: Prisma.ProjectOrderByWithRelationInput
 }
 
 export type RunnerWhereUniqueInput = Prisma.AtLeast<{
@@ -275,14 +255,11 @@ export type RunnerWhereUniqueInput = Prisma.AtLeast<{
   schedule?: Prisma.StringNullableFilter<"Runner"> | string | null
   config?: Prisma.JsonFilter<"Runner">
   lastRunAt?: Prisma.DateTimeNullableFilter<"Runner"> | Date | string | null
-  lastStatus?: Prisma.StringNullableFilter<"Runner"> | string | null
-  errorMessage?: Prisma.StringNullableFilter<"Runner"> | string | null
+  status?: Prisma.StringFilter<"Runner"> | string
   userId?: Prisma.StringFilter<"Runner"> | string
-  projectId?: Prisma.StringNullableFilter<"Runner"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Runner"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Runner"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  project?: Prisma.XOR<Prisma.ProjectNullableScalarRelationFilter, Prisma.ProjectWhereInput> | null
 }, "id">
 
 export type RunnerOrderByWithAggregationInput = {
@@ -293,10 +270,8 @@ export type RunnerOrderByWithAggregationInput = {
   schedule?: Prisma.SortOrderInput | Prisma.SortOrder
   config?: Prisma.SortOrder
   lastRunAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  lastStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.RunnerCountOrderByAggregateInput
@@ -315,10 +290,8 @@ export type RunnerScalarWhereWithAggregatesInput = {
   schedule?: Prisma.StringNullableWithAggregatesFilter<"Runner"> | string | null
   config?: Prisma.JsonWithAggregatesFilter<"Runner">
   lastRunAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Runner"> | Date | string | null
-  lastStatus?: Prisma.StringNullableWithAggregatesFilter<"Runner"> | string | null
-  errorMessage?: Prisma.StringNullableWithAggregatesFilter<"Runner"> | string | null
+  status?: Prisma.StringWithAggregatesFilter<"Runner"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Runner"> | string
-  projectId?: Prisma.StringNullableWithAggregatesFilter<"Runner"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Runner"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Runner"> | Date | string
 }
@@ -331,12 +304,10 @@ export type RunnerCreateInput = {
   schedule?: string | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastRunAt?: Date | string | null
-  lastStatus?: string | null
-  errorMessage?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutRunnersInput
-  project?: Prisma.ProjectCreateNestedOneWithoutRunnersInput
 }
 
 export type RunnerUncheckedCreateInput = {
@@ -347,10 +318,8 @@ export type RunnerUncheckedCreateInput = {
   schedule?: string | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastRunAt?: Date | string | null
-  lastStatus?: string | null
-  errorMessage?: string | null
+  status?: string
   userId: string
-  projectId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -363,12 +332,10 @@ export type RunnerUpdateInput = {
   schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastRunAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutRunnersNestedInput
-  project?: Prisma.ProjectUpdateOneWithoutRunnersNestedInput
 }
 
 export type RunnerUncheckedUpdateInput = {
@@ -379,10 +346,8 @@ export type RunnerUncheckedUpdateInput = {
   schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastRunAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -395,10 +360,8 @@ export type RunnerCreateManyInput = {
   schedule?: string | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastRunAt?: Date | string | null
-  lastStatus?: string | null
-  errorMessage?: string | null
+  status?: string
   userId: string
-  projectId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -411,8 +374,7 @@ export type RunnerUpdateManyMutationInput = {
   schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastRunAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -425,10 +387,8 @@ export type RunnerUncheckedUpdateManyInput = {
   schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastRunAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -451,10 +411,8 @@ export type RunnerCountOrderByAggregateInput = {
   schedule?: Prisma.SortOrder
   config?: Prisma.SortOrder
   lastRunAt?: Prisma.SortOrder
-  lastStatus?: Prisma.SortOrder
-  errorMessage?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  projectId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -466,10 +424,8 @@ export type RunnerMaxOrderByAggregateInput = {
   enabled?: Prisma.SortOrder
   schedule?: Prisma.SortOrder
   lastRunAt?: Prisma.SortOrder
-  lastStatus?: Prisma.SortOrder
-  errorMessage?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  projectId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -481,10 +437,8 @@ export type RunnerMinOrderByAggregateInput = {
   enabled?: Prisma.SortOrder
   schedule?: Prisma.SortOrder
   lastRunAt?: Prisma.SortOrder
-  lastStatus?: Prisma.SortOrder
-  errorMessage?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  projectId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -531,48 +485,6 @@ export type RunnerUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.RunnerScalarWhereInput | Prisma.RunnerScalarWhereInput[]
 }
 
-export type RunnerCreateNestedManyWithoutProjectInput = {
-  create?: Prisma.XOR<Prisma.RunnerCreateWithoutProjectInput, Prisma.RunnerUncheckedCreateWithoutProjectInput> | Prisma.RunnerCreateWithoutProjectInput[] | Prisma.RunnerUncheckedCreateWithoutProjectInput[]
-  connectOrCreate?: Prisma.RunnerCreateOrConnectWithoutProjectInput | Prisma.RunnerCreateOrConnectWithoutProjectInput[]
-  createMany?: Prisma.RunnerCreateManyProjectInputEnvelope
-  connect?: Prisma.RunnerWhereUniqueInput | Prisma.RunnerWhereUniqueInput[]
-}
-
-export type RunnerUncheckedCreateNestedManyWithoutProjectInput = {
-  create?: Prisma.XOR<Prisma.RunnerCreateWithoutProjectInput, Prisma.RunnerUncheckedCreateWithoutProjectInput> | Prisma.RunnerCreateWithoutProjectInput[] | Prisma.RunnerUncheckedCreateWithoutProjectInput[]
-  connectOrCreate?: Prisma.RunnerCreateOrConnectWithoutProjectInput | Prisma.RunnerCreateOrConnectWithoutProjectInput[]
-  createMany?: Prisma.RunnerCreateManyProjectInputEnvelope
-  connect?: Prisma.RunnerWhereUniqueInput | Prisma.RunnerWhereUniqueInput[]
-}
-
-export type RunnerUpdateManyWithoutProjectNestedInput = {
-  create?: Prisma.XOR<Prisma.RunnerCreateWithoutProjectInput, Prisma.RunnerUncheckedCreateWithoutProjectInput> | Prisma.RunnerCreateWithoutProjectInput[] | Prisma.RunnerUncheckedCreateWithoutProjectInput[]
-  connectOrCreate?: Prisma.RunnerCreateOrConnectWithoutProjectInput | Prisma.RunnerCreateOrConnectWithoutProjectInput[]
-  upsert?: Prisma.RunnerUpsertWithWhereUniqueWithoutProjectInput | Prisma.RunnerUpsertWithWhereUniqueWithoutProjectInput[]
-  createMany?: Prisma.RunnerCreateManyProjectInputEnvelope
-  set?: Prisma.RunnerWhereUniqueInput | Prisma.RunnerWhereUniqueInput[]
-  disconnect?: Prisma.RunnerWhereUniqueInput | Prisma.RunnerWhereUniqueInput[]
-  delete?: Prisma.RunnerWhereUniqueInput | Prisma.RunnerWhereUniqueInput[]
-  connect?: Prisma.RunnerWhereUniqueInput | Prisma.RunnerWhereUniqueInput[]
-  update?: Prisma.RunnerUpdateWithWhereUniqueWithoutProjectInput | Prisma.RunnerUpdateWithWhereUniqueWithoutProjectInput[]
-  updateMany?: Prisma.RunnerUpdateManyWithWhereWithoutProjectInput | Prisma.RunnerUpdateManyWithWhereWithoutProjectInput[]
-  deleteMany?: Prisma.RunnerScalarWhereInput | Prisma.RunnerScalarWhereInput[]
-}
-
-export type RunnerUncheckedUpdateManyWithoutProjectNestedInput = {
-  create?: Prisma.XOR<Prisma.RunnerCreateWithoutProjectInput, Prisma.RunnerUncheckedCreateWithoutProjectInput> | Prisma.RunnerCreateWithoutProjectInput[] | Prisma.RunnerUncheckedCreateWithoutProjectInput[]
-  connectOrCreate?: Prisma.RunnerCreateOrConnectWithoutProjectInput | Prisma.RunnerCreateOrConnectWithoutProjectInput[]
-  upsert?: Prisma.RunnerUpsertWithWhereUniqueWithoutProjectInput | Prisma.RunnerUpsertWithWhereUniqueWithoutProjectInput[]
-  createMany?: Prisma.RunnerCreateManyProjectInputEnvelope
-  set?: Prisma.RunnerWhereUniqueInput | Prisma.RunnerWhereUniqueInput[]
-  disconnect?: Prisma.RunnerWhereUniqueInput | Prisma.RunnerWhereUniqueInput[]
-  delete?: Prisma.RunnerWhereUniqueInput | Prisma.RunnerWhereUniqueInput[]
-  connect?: Prisma.RunnerWhereUniqueInput | Prisma.RunnerWhereUniqueInput[]
-  update?: Prisma.RunnerUpdateWithWhereUniqueWithoutProjectInput | Prisma.RunnerUpdateWithWhereUniqueWithoutProjectInput[]
-  updateMany?: Prisma.RunnerUpdateManyWithWhereWithoutProjectInput | Prisma.RunnerUpdateManyWithWhereWithoutProjectInput[]
-  deleteMany?: Prisma.RunnerScalarWhereInput | Prisma.RunnerScalarWhereInput[]
-}
-
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
@@ -589,11 +501,9 @@ export type RunnerCreateWithoutUserInput = {
   schedule?: string | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastRunAt?: Date | string | null
-  lastStatus?: string | null
-  errorMessage?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  project?: Prisma.ProjectCreateNestedOneWithoutRunnersInput
 }
 
 export type RunnerUncheckedCreateWithoutUserInput = {
@@ -604,9 +514,7 @@ export type RunnerUncheckedCreateWithoutUserInput = {
   schedule?: string | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastRunAt?: Date | string | null
-  lastStatus?: string | null
-  errorMessage?: string | null
-  projectId?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -648,68 +556,10 @@ export type RunnerScalarWhereInput = {
   schedule?: Prisma.StringNullableFilter<"Runner"> | string | null
   config?: Prisma.JsonFilter<"Runner">
   lastRunAt?: Prisma.DateTimeNullableFilter<"Runner"> | Date | string | null
-  lastStatus?: Prisma.StringNullableFilter<"Runner"> | string | null
-  errorMessage?: Prisma.StringNullableFilter<"Runner"> | string | null
+  status?: Prisma.StringFilter<"Runner"> | string
   userId?: Prisma.StringFilter<"Runner"> | string
-  projectId?: Prisma.StringNullableFilter<"Runner"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Runner"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Runner"> | Date | string
-}
-
-export type RunnerCreateWithoutProjectInput = {
-  id?: string
-  name: string
-  type: string
-  enabled?: boolean
-  schedule?: string | null
-  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastRunAt?: Date | string | null
-  lastStatus?: string | null
-  errorMessage?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutRunnersInput
-}
-
-export type RunnerUncheckedCreateWithoutProjectInput = {
-  id?: string
-  name: string
-  type: string
-  enabled?: boolean
-  schedule?: string | null
-  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastRunAt?: Date | string | null
-  lastStatus?: string | null
-  errorMessage?: string | null
-  userId: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type RunnerCreateOrConnectWithoutProjectInput = {
-  where: Prisma.RunnerWhereUniqueInput
-  create: Prisma.XOR<Prisma.RunnerCreateWithoutProjectInput, Prisma.RunnerUncheckedCreateWithoutProjectInput>
-}
-
-export type RunnerCreateManyProjectInputEnvelope = {
-  data: Prisma.RunnerCreateManyProjectInput | Prisma.RunnerCreateManyProjectInput[]
-  skipDuplicates?: boolean
-}
-
-export type RunnerUpsertWithWhereUniqueWithoutProjectInput = {
-  where: Prisma.RunnerWhereUniqueInput
-  update: Prisma.XOR<Prisma.RunnerUpdateWithoutProjectInput, Prisma.RunnerUncheckedUpdateWithoutProjectInput>
-  create: Prisma.XOR<Prisma.RunnerCreateWithoutProjectInput, Prisma.RunnerUncheckedCreateWithoutProjectInput>
-}
-
-export type RunnerUpdateWithWhereUniqueWithoutProjectInput = {
-  where: Prisma.RunnerWhereUniqueInput
-  data: Prisma.XOR<Prisma.RunnerUpdateWithoutProjectInput, Prisma.RunnerUncheckedUpdateWithoutProjectInput>
-}
-
-export type RunnerUpdateManyWithWhereWithoutProjectInput = {
-  where: Prisma.RunnerScalarWhereInput
-  data: Prisma.XOR<Prisma.RunnerUpdateManyMutationInput, Prisma.RunnerUncheckedUpdateManyWithoutProjectInput>
 }
 
 export type RunnerCreateManyUserInput = {
@@ -720,9 +570,7 @@ export type RunnerCreateManyUserInput = {
   schedule?: string | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastRunAt?: Date | string | null
-  lastStatus?: string | null
-  errorMessage?: string | null
-  projectId?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -735,11 +583,9 @@ export type RunnerUpdateWithoutUserInput = {
   schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastRunAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  project?: Prisma.ProjectUpdateOneWithoutRunnersNestedInput
 }
 
 export type RunnerUncheckedUpdateWithoutUserInput = {
@@ -750,9 +596,7 @@ export type RunnerUncheckedUpdateWithoutUserInput = {
   schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastRunAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -765,69 +609,7 @@ export type RunnerUncheckedUpdateManyWithoutUserInput = {
   schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastRunAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type RunnerCreateManyProjectInput = {
-  id?: string
-  name: string
-  type: string
-  enabled?: boolean
-  schedule?: string | null
-  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastRunAt?: Date | string | null
-  lastStatus?: string | null
-  errorMessage?: string | null
-  userId: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type RunnerUpdateWithoutProjectInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastRunAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutRunnersNestedInput
-}
-
-export type RunnerUncheckedUpdateWithoutProjectInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastRunAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type RunnerUncheckedUpdateManyWithoutProjectInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  schedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastRunAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -842,14 +624,11 @@ export type RunnerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   schedule?: boolean
   config?: boolean
   lastRunAt?: boolean
-  lastStatus?: boolean
-  errorMessage?: boolean
+  status?: boolean
   userId?: boolean
-  projectId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  project?: boolean | Prisma.Runner$projectArgs<ExtArgs>
 }, ExtArgs["result"]["runner"]>
 
 export type RunnerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -860,14 +639,11 @@ export type RunnerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   schedule?: boolean
   config?: boolean
   lastRunAt?: boolean
-  lastStatus?: boolean
-  errorMessage?: boolean
+  status?: boolean
   userId?: boolean
-  projectId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  project?: boolean | Prisma.Runner$projectArgs<ExtArgs>
 }, ExtArgs["result"]["runner"]>
 
 export type RunnerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -878,14 +654,11 @@ export type RunnerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   schedule?: boolean
   config?: boolean
   lastRunAt?: boolean
-  lastStatus?: boolean
-  errorMessage?: boolean
+  status?: boolean
   userId?: boolean
-  projectId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  project?: boolean | Prisma.Runner$projectArgs<ExtArgs>
 }, ExtArgs["result"]["runner"]>
 
 export type RunnerSelectScalar = {
@@ -896,33 +669,27 @@ export type RunnerSelectScalar = {
   schedule?: boolean
   config?: boolean
   lastRunAt?: boolean
-  lastStatus?: boolean
-  errorMessage?: boolean
+  status?: boolean
   userId?: boolean
-  projectId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type RunnerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "type" | "enabled" | "schedule" | "config" | "lastRunAt" | "lastStatus" | "errorMessage" | "userId" | "projectId" | "createdAt" | "updatedAt", ExtArgs["result"]["runner"]>
+export type RunnerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "type" | "enabled" | "schedule" | "config" | "lastRunAt" | "status" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["runner"]>
 export type RunnerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  project?: boolean | Prisma.Runner$projectArgs<ExtArgs>
 }
 export type RunnerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  project?: boolean | Prisma.Runner$projectArgs<ExtArgs>
 }
 export type RunnerIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  project?: boolean | Prisma.Runner$projectArgs<ExtArgs>
 }
 
 export type $RunnerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Runner"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
-    project: Prisma.$ProjectPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -932,10 +699,8 @@ export type $RunnerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     schedule: string | null
     config: runtime.JsonValue
     lastRunAt: Date | null
-    lastStatus: string | null
-    errorMessage: string | null
+    status: string
     userId: string
-    projectId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["runner"]>
@@ -1333,7 +1098,6 @@ readonly fields: RunnerFieldRefs;
 export interface Prisma__RunnerClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  project<T extends Prisma.Runner$projectArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Runner$projectArgs<ExtArgs>>): Prisma.Prisma__ProjectClient<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1370,10 +1134,8 @@ export interface RunnerFieldRefs {
   readonly schedule: Prisma.FieldRef<"Runner", 'String'>
   readonly config: Prisma.FieldRef<"Runner", 'Json'>
   readonly lastRunAt: Prisma.FieldRef<"Runner", 'DateTime'>
-  readonly lastStatus: Prisma.FieldRef<"Runner", 'String'>
-  readonly errorMessage: Prisma.FieldRef<"Runner", 'String'>
+  readonly status: Prisma.FieldRef<"Runner", 'String'>
   readonly userId: Prisma.FieldRef<"Runner", 'String'>
-  readonly projectId: Prisma.FieldRef<"Runner", 'String'>
   readonly createdAt: Prisma.FieldRef<"Runner", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Runner", 'DateTime'>
 }
@@ -1774,25 +1536,6 @@ export type RunnerDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Limit how many Runners to delete.
    */
   limit?: number
-}
-
-/**
- * Runner.project
- */
-export type Runner$projectArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Project
-   */
-  select?: Prisma.ProjectSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Project
-   */
-  omit?: Prisma.ProjectOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProjectInclude<ExtArgs> | null
-  where?: Prisma.ProjectWhereInput
 }
 
 /**

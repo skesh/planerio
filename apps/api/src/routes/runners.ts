@@ -32,31 +32,41 @@ router.post("/:id/run", requireAuth, async (req, res) => {
     return
   }
 
+  if (runner.status === "running") {
+    res.status(409).json({ error: "Runner is already running" })
+    return
+  }
+
   const handler = runners[runner.type]
   if (!handler) {
     res.status(400).json({ error: `No handler for runner type: ${runner.type}` })
     return
   }
 
+  await prisma.runner.update({
+    where: { id: runner.id },
+    data: { status: "running" },
+  })
+
   try {
     const count = await handler.run(runner.userId, runner.config as Record<string, unknown>, prisma)
     await prisma.runner.update({
       where: { id: runner.id },
-      data: { lastRunAt: new Date(), lastStatus: "ok", errorMessage: null },
+      data: { lastRunAt: new Date(), status: "idle" },
     })
     res.json({ created: count })
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error"
     await prisma.runner.update({
       where: { id: runner.id },
-      data: { lastStatus: "error", errorMessage: message },
+      data: { status: "error" },
     })
     res.status(500).json({ error: message })
   }
 })
 
 router.post("/", requireAuth, async (req, res) => {
-  const { name, type, schedule, config, projectId } = req.body
+  const { name, type, schedule, config } = req.body
 
   if (!name || !type) {
     res.status(400).json({ error: "name and type are required" })
@@ -69,7 +79,6 @@ router.post("/", requireAuth, async (req, res) => {
       type,
       schedule: schedule ?? null,
       config: config ?? {},
-      projectId: projectId ?? null,
       userId: req.userId,
     },
   })
