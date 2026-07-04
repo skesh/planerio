@@ -21,17 +21,15 @@ export default function FeedList({ items }: FeedListProps) {
   const { toggleDone } = useTodoActions()
 
   const vacancyStoreItems = useVacancyStore((s) => s.items)
-  const [pendingIds, setPendingIds] = useState<string[]>([])
-  const pendingRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map())
 
   const visibleItems = useMemo(
     () => items.filter((i) => {
       if (i.kind === "todo") return !i.done || showDone
 
       const status = vacancyStoreItems.find((v) => v.id === i.id)?.status ?? "new"
-      return showDone || status === "new" || pendingIds.includes(i.id)
+      return showDone || status === "new"
     }),
-    [items, showDone, vacancyStoreItems, pendingIds],
+    [items, showDone, vacancyStoreItems],
   )
 
   const prevIdsRef = useRef("")
@@ -104,34 +102,7 @@ export default function FeedList({ items }: FeedListProps) {
     enabled: editMode === "normal" && !sidebarOpen && !drawerOpen,
   })
 
-  useHotkeys(
-    "KeyM",
-    () => {
-      const item = visibleItems[activeIndex]
-      if (item?.kind !== "vacancy") return
 
-      const cycle: Record<string, string> = {
-        new: "applied",
-        applied: "skipped",
-        skipped: "blocked",
-        blocked: "new",
-      }
-      const store = useVacancyStore.getState()
-      const current = store.items.find((i) => i.id === item.id)?.status ?? "new"
-      store.setStatus(item.id, cycle[current] ?? "applied")
-
-      const oldTimer = pendingRef.current.get(item.id)
-      if (oldTimer) clearTimeout(oldTimer)
-      const timer = setTimeout(() => {
-        pendingRef.current.delete(item.id)
-        setPendingIds((prev) => prev.filter((id) => id !== item!.id))
-      }, 10_000)
-      pendingRef.current.set(item.id, timer)
-      setPendingIds((prev) => (prev.includes(item.id) ? prev : [...prev, item.id]))
-    },
-    [activeIndex, visibleItems],
-    { enabled: !drawerOpen },
-  )
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {

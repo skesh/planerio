@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from "react"
+import type { FeedItem } from "@repo/core"
+import { ExternalLinkIcon } from "lucide-react"
+import { useRef, useState } from "react"
+import { useVacancyStore } from "@/features/vacancies/vacancyStore"
 import { cn } from "@/shared/lib/utils"
 import { Item, ItemContent, ItemMedia, ItemTitle } from "@/shared/ui/item"
-import { ExternalLinkIcon } from "lucide-react"
-import type { FeedItem } from "@repo/core"
-import { useVacancyStore } from "@/features/vacancies/vacancyStore"
+import { useUiSelectors } from "@/store/uiStore"
+import { useHotkeys } from "../hooks/useHotkeys"
 import styles from "./vacancyCard.module.css"
 
 const statusColors: Record<string, string> = {
@@ -12,31 +14,50 @@ const statusColors: Record<string, string> = {
   blocked: "bg-red-500",
 }
 
-export function VacancyCard({ item, isActive }: { item: FeedItem & { kind: "vacancy" }; isActive: boolean }) {
+const cycle: Record<string, string> = {
+  new: "applied",
+  applied: "skipped",
+  skipped: "blocked",
+  blocked: "new",
+}
+
+export function VacancyCard({
+  item,
+  isActive,
+}: {
+  item: FeedItem & { kind: "vacancy" }
+  isActive: boolean
+}) {
   const v = item
-  const status = useVacancyStore((s) => s.items.find((i) => i.id === v.id)?.status ?? "new")
-  const prevStatus = useRef(status)
-  const [secondsLeft, setSecondsLeft] = useState<number | null>(null)
+  const { drawerOpen } = useUiSelectors()
+  const storeStatus = useVacancyStore((s) => s.items.find((i) => i.id === v.id)?.status ?? "new")
+  const [pending, setPending] = useState<string | null>(null)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const displayStatus = pending ?? storeStatus
 
-  useEffect(() => {
-    if (prevStatus.current !== status) {
-      prevStatus.current = status
-      setSecondsLeft(10)
-    }
-  }, [status])
+  useHotkeys(
+    "KeyM",
+    () => {
+      const current = pending ?? storeStatus
+      const next = cycle[current] ?? "applied"
+      clearTimeout(timerRef.current)
+      setPending(next)
+      timerRef.current = setTimeout(() => {
+        setPending(null)
+        useVacancyStore.getState().setStatus(v.id, next)
+      }, 10_000)
+    },
+    [v.id, pending, storeStatus],
+    { enabled: isActive && !drawerOpen },
+  )
 
-  useEffect(() => {
-    if (secondsLeft === null || secondsLeft <= 0) {
-      setSecondsLeft(null)
-      return
-    }
-    const t = setTimeout(() => setSecondsLeft((p) => (p !== null && p > 1 ? p - 1 : null)), 1000)
-    return () => clearTimeout(t)
-  }, [secondsLeft])
+
 
   return (
     <Item className={cn(isActive && styles.active)} data-id={v.id}>
-      {status !== "new" && <div className={cn("w-2 h-2 rounded-full shrink-0 mt-1.5", statusColors[status])} />}
+      {displayStatus !== "new" && (
+        <div className={cn("w-2 h-2 rounded-full shrink-0 mt-1.5", statusColors[displayStatus])} />
+      )}
       <ItemMedia variant="icon">
         <ExternalLinkIcon />
       </ItemMedia>
@@ -50,10 +71,7 @@ export function VacancyCard({ item, isActive }: { item: FeedItem & { kind: "vaca
           {v.area && <span>{v.area}</span>}
         </div>
       </ItemContent>
-      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        {secondsLeft !== null && <span className="tabular-nums">{secondsLeft}s</span>}
-        <span>{v.publishedAt}</span>
-      </div>
+      <div className="text-xs text-muted-foreground">{v.publishedAt}</div>
     </Item>
   )
 }
