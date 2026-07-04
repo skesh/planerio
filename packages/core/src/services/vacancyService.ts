@@ -1,6 +1,6 @@
-import { apiFetch } from "../utils/apiFetch"
 import { getActiveJwt } from "../store/auth"
 import type { Vacancy } from "../types/types"
+import { apiFetch } from "../utils/apiFetch"
 
 export interface VacancyItem extends Vacancy {
   status: string

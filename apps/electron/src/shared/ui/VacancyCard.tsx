@@ -1,6 +1,6 @@
 import type { FeedItem } from "@repo/core"
 import { ExternalLinkIcon } from "lucide-react"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useVacancyStore } from "@/features/vacancies/vacancyStore"
 import { cn } from "@/shared/lib/utils"
 import { Item, ItemContent, ItemMedia, ItemTitle } from "@/shared/ui/item"
@@ -32,6 +32,7 @@ export function VacancyCard({
   const { drawerOpen } = useUiSelectors()
   const storeStatus = useVacancyStore((s) => s.items.find((i) => i.id === v.id)?.status ?? "new")
   const [pending, setPending] = useState<string | null>(null)
+  const pendingRef = useRef<string | null>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const displayStatus = pending ?? storeStatus
 
@@ -42,8 +43,10 @@ export function VacancyCard({
       const next = cycle[current] ?? "applied"
       clearTimeout(timerRef.current)
       setPending(next)
+      pendingRef.current = next
       timerRef.current = setTimeout(() => {
         setPending(null)
+        pendingRef.current = null
         useVacancyStore.getState().setStatus(v.id, next)
       }, 10_000)
     },
@@ -51,7 +54,15 @@ export function VacancyCard({
     { enabled: isActive && !drawerOpen },
   )
 
-
+  useEffect(
+    () => () => {
+      clearTimeout(timerRef.current)
+      if (pendingRef.current) {
+        useVacancyStore.getState().setStatus(v.id, pendingRef.current)
+      }
+    },
+    [],
+  )
 
   return (
     <Item className={cn(isActive && styles.active)} data-id={v.id}>

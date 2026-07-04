@@ -20,12 +20,7 @@ export const useVacancyStore = create<VacancyState>((set, get) => ({
     if (get().initialized) return
     set({ isLoading: true })
     const items = await loadVacancies()
-    const sorted = items.sort((a, b) => {
-      const da = a.publishedAt.split(".").reverse().join("")
-      const db = b.publishedAt.split(".").reverse().join("")
-      return db.localeCompare(da)
-    })
-    set({ items: sorted, isLoading: false, initialized: true })
+    set({ items, isLoading: false, initialized: true })
   },
 
   setStatus: (id: string, status: string) => {

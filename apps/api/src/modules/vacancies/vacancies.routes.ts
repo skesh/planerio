@@ -12,11 +12,17 @@ router.get("/", requireAuth, async (req, res) => {
     },
   })
 
-  const result = vacancies.map((v) => ({
-    ...v,
-    status: v.users[0]?.status ?? "new",
-    users: undefined,
-  }))
+  const result = vacancies
+    .map((v) => ({
+      ...v,
+      status: v.users[0]?.status ?? "new",
+      users: undefined,
+    }))
+    .sort((a, b) => {
+      const [d1, m1, y1] = a.publishedAt.split(".")
+      const [d2, m2, y2] = b.publishedAt.split(".")
+      return Number(`${y2}${m2}${d2}`) - Number(`${y1}${m1}${d1}`)
+    })
 
   res.json(result)
 })

@@ -9,7 +9,6 @@ import PageProject from "../pages/PageProject.tsx"
 import { SidebarInset, SidebarProvider } from "../shared/ui/sidebar.tsx"
 import { useUiSelectors } from "../store/uiStore.ts"
 import Footer from "../widgets/Footer.tsx"
-import { CommandMenu } from "../widgets/Menu.tsx"
 import { AppSidebar } from "../widgets/Sidebar/AppSidebar.tsx"
 
 function App() {
@@ -31,7 +30,6 @@ function App() {
         <SidebarProvider open={sidebarOpen} className="flex min-h-screen flex-col">
           <AppSidebar />
           <SidebarInset>
-            <CommandMenu />
             <Routes>
               <Route path="/" element={<PageHome />} />
               <Route path="/inbox" element={<PageInbox />} />

@@ -1,15 +1,17 @@
 import { create } from "zustand"
 import { useShallow } from "zustand/shallow"
 import {
-  loadRunners as fetchRunners,
   getRunner as fetchRunner,
-  runRunner as triggerRunner,
+  loadRunners as fetchRunners,
   type RunnerDTO,
+  runRunner as triggerRunner,
 } from "../services/runnerService"
 import { isRunnerExpired } from "../utils/schedule"
+import { getActiveJwt } from "./auth"
 
 export interface RunnerState {
   runners: RunnerDTO[]
+  initialized: boolean
   isUpdating: boolean
   loadRunners: () => Promise<void>
   triggerAndWait: (id: string, lastRunAt: string | null, schedule: string | null) => Promise<void>
@@ -18,29 +20,31 @@ export interface RunnerState {
 
 export const useRunnerStore = create<RunnerState>((set, get) => ({
   runners: [],
+  initialized: false,
   isUpdating: false,
 
   loadRunners: async () => {
+    if (get().initialized) return
+    if (!getActiveJwt()) return
     try {
       const runners = await fetchRunners()
-      set({ runners })
+      set({ runners, initialized: true })
     } catch (e) {
       console.error("[runnerStore] loadRunners error:", e)
     }
   },
 
   triggerAndWait: async (id, lastRunAt, schedule) => {
-    const shouldTrigger =
-      !lastRunAt || isRunnerExpired(lastRunAt, schedule)
+    const alreadyRunning = get().runners.find((r) => r.id === id)?.status === "running"
+    const shouldTrigger = !lastRunAt || isRunnerExpired(lastRunAt, schedule)
 
-    if (shouldTrigger) {
-      const runner = get().runners.find((r) => r.id === id)
-      if (runner?.status !== "running") {
-        try {
-          await triggerRunner(id)
-        } catch {
-          // 409 if scheduler already started it
-        }
+    if (!shouldTrigger && !alreadyRunning) return
+
+    if (shouldTrigger && !alreadyRunning) {
+      try {
+        await triggerRunner(id)
+      } catch {
+        // 409 if scheduler already started it
       }
     }
 
@@ -50,7 +54,9 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
       try {
         const r = await fetchRunner(id)
         set({
-          runners: get().runners.map((rr) => (rr.id === id ? { ...rr, status: r.status, lastRunAt: r.lastRunAt } : rr)),
+          runners: get().runners.map((rr) =>
+            rr.id === id ? { ...rr, status: r.status, lastRunAt: r.lastRunAt } : rr,
+          ),
         })
         if (r.status === "idle" || r.status === "error") break
       } catch {
@@ -60,7 +66,7 @@ export const useRunnerStore = create<RunnerState>((set, get) => ({
     set({ isUpdating: false })
   },
 
-  reset: () => set({ runners: [], isUpdating: false }),
+  reset: () => set({ runners: [], initialized: false, isUpdating: false }),
 }))
 
 export const useRunnerSelectors = () =>
