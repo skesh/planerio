@@ -62,5 +62,5 @@ export function useHotkeys(
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, deps)
+  }, [extra?.enabled, ...(deps ?? [])])
 }
