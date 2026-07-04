@@ -38,6 +38,8 @@ function fmtDate(iso: string): string {
   return `${day}.${month}.${year}`
 }
 
+const mergeUnique = (arr: string[] = [], val: string) => [...new Set([...arr, val])]
+
 export async function runHH(
   keywords: string[],
   _userId: string,
@@ -70,6 +72,11 @@ export async function runHH(
 
       const publishedAt = fmtDate(item.pubDate)
 
+      const existing = await prisma.vacancy.findUnique({
+        where: { externalSource_externalId: { externalSource: "hh-rss", externalId } },
+        select: { keywords: true },
+      })
+
       await prisma.vacancy.upsert({
         where: {
           externalSource_externalId: { externalSource: "hh-rss", externalId },
@@ -79,7 +86,7 @@ export async function runHH(
           area,
           salary,
           description: item.description,
-          keywords: { push: keyword },
+          keywords: { set: mergeUnique(existing?.keywords, keyword) },
         },
         create: {
           externalSource: "hh-rss",

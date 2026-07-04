@@ -9,7 +9,7 @@ export async function runHHRss(
   const keywords = (config.keywords as string[]) ?? []
   const blacklist = (config.blacklist as string[]) ?? []
 
-  console.log(`[hh-rss] запуск: keywords=${keywords.join(",")} blacklist=${blacklist.join(",")} time=${new Date().toISOString()}`)
+  console.log(`[hh-rss] запуск: keywords=${keywords.join(",")} blacklist=${blacklist.join(",")} time=${new Date().toUTCString()}`)
 
   if (keywords.length === 0) {
     throw new Error("keywords is required in config")
