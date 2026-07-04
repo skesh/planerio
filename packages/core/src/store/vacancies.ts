@@ -2,9 +2,6 @@ import { create } from "zustand"
 import { useShallow } from "zustand/shallow"
 import { loadVacancies, updateVacancyStatus, type VacancyItem } from "../services/vacancyService"
 
-let debounceTimer: ReturnType<typeof setTimeout> | null = null
-let pendingStatus: { id: string; status: string } | null = null
-
 export interface VacancyState {
   items: VacancyItem[]
   initialized: boolean
@@ -35,15 +32,7 @@ export const useVacancyStore = create<VacancyState>((set, get) => ({
     set((s) => ({
       items: s.items.map((i) => (i.id === id ? { ...i, status } : i)),
     }))
-
-    pendingStatus = { id, status }
-
-    if (debounceTimer) clearTimeout(debounceTimer)
-    debounceTimer = setTimeout(() => {
-      const ps = pendingStatus
-      pendingStatus = null
-      if (ps) updateVacancyStatus(ps.id, ps.status)
-    }, 10_000)
+    updateVacancyStatus(id, status)
   },
 
   reset: () => set({ initialized: false, items: [] }),
